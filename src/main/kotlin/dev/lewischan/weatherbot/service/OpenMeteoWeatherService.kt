@@ -13,7 +13,7 @@ class OpenMeteoWeatherService(
 
     override fun getWeather(location: Location): CurrentWeather {
         val response:String? = openMeteoRestClient.get()
-            .uri("")
+            .uri("/v1/forecast?latitude=1.340897&longitude=103.8811914&current=temperature_2m,relative_humidity_2m,apparent_temperature,is_day,precipitation,rain,showers,snowfall,weather_code,cloud_cover,pressure_msl,surface_pressure,wind_speed_10m,wind_direction_10m,wind_gusts_10m&timeformat=unixtime")
             .retrieve()
             .body<String>()
 

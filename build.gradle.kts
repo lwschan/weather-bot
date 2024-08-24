@@ -1,8 +1,8 @@
 plugins {
-    kotlin("jvm") version "1.9.+"
-    kotlin("plugin.spring") version "1.9.+"
+    kotlin("jvm") version "2.+"
+    kotlin("plugin.spring") version "2.+"
     id("org.springframework.boot") version "3.3.+"
-    id("io.spring.dependency-management") version "1.1.+"
+    id("io.spring.dependency-management") version "1.+"
 }
 
 java {
@@ -30,6 +30,7 @@ dependencyLocking {
 
 
 dependencies {
+    implementation("org.apache.httpcomponents.client5:httpclient5")
     implementation("org.springframework.boot:spring-boot-starter-actuator")
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
