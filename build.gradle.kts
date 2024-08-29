@@ -11,6 +11,7 @@ java {
     }
 }
 
+Suppress("UnstableApiUsage")
 configurations {
     compileOnly {
         extendsFrom(configurations.annotationProcessor.get())
@@ -27,7 +28,6 @@ dependencyLocking {
     lockAllConfigurations()
     lockMode = LockMode.STRICT
 }
-
 
 dependencies {
     implementation("org.apache.httpcomponents.client5:httpclient5")
