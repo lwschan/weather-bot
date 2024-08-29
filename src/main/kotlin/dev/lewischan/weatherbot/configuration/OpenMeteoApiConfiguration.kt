@@ -11,10 +11,10 @@ import org.springframework.web.client.RestClient
 
 @Configuration
 @EnableConfigurationProperties(OpenMeteoApiProperties::class)
-class OpenMeteoApiConfiguration {
+open class OpenMeteoApiConfiguration {
 
     @Bean
-    fun mappingJackson2HttpMessageConverter(): MappingJackson2HttpMessageConverter {
+    open fun mappingJackson2HttpMessageConverter(): MappingJackson2HttpMessageConverter {
         val snakeCaseObjectMapper = ObjectMapper()
             .setPropertyNamingStrategy(PropertyNamingStrategies.SNAKE_CASE)
 
@@ -22,7 +22,7 @@ class OpenMeteoApiConfiguration {
     }
 
     @Bean
-    fun openMeteoRestClient(
+    open fun openMeteoRestClient(
         openMeteoApiProperties: OpenMeteoApiProperties,
         mappingJackson2HttpMessageConverter: MappingJackson2HttpMessageConverter
     ): RestClient {
