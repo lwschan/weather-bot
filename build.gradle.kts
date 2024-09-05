@@ -11,7 +11,7 @@ java {
     }
 }
 
-Suppress("UnstableApiUsage")
+@Suppress("UnstableApiUsage")
 configurations {
     compileOnly {
         extendsFrom(configurations.annotationProcessor.get())
