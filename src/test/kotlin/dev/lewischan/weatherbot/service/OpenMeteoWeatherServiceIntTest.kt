@@ -11,7 +11,7 @@ class OpenMeteoWeatherServiceIntTest @Autowired constructor(
 
     @Test
     fun getWeatherShouldReturnCurrentWeather() {
-        openMeteoWeatherService.getWeather(Location("", ""))
+        openMeteoWeatherService.getWeather(Location("1.1", "1.2"))
     }
 
 }
