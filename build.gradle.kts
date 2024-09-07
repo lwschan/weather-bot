@@ -1,8 +1,8 @@
 plugins {
     kotlin("jvm") version libs.versions.kotlin.jvm
     kotlin("plugin.spring") version libs.versions.kotlin.plugin.spring
-    id("org.springframework.boot") version libs.versions.spring.boot
-    id("io.spring.dependency-management") version libs.versions.spring.dependency.management
+    alias(libs.plugins.spring.boot)
+    alias(libs.plugins.spring.dependency.management)
 }
 
 java {
@@ -30,27 +30,25 @@ dependencyLocking {
 }
 
 dependencies {
-    implementation("com.google.maps:google-maps-services:${libs.versions.google.maps.services.get()}")
-    implementation("org.apache.httpcomponents.client5:httpclient5")
-    implementation("org.springframework.boot:spring-boot-starter-actuator")
-    implementation("org.springframework.boot:spring-boot-starter-web")
-    implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
-    implementation("io.micrometer:micrometer-tracing-bridge-brave")
-    implementation("org.jetbrains.kotlin:kotlin-reflect")
+    implementation(libs.apache.http.components.client5)
+    implementation(libs.google.maps.services)
+    implementation(libs.jackson.module.kotlin)
+    implementation(libs.kotlin.reflect)
+    implementation(libs.micrometer.tracing.bridge.brave)
+    implementation(libs.slf4j.simple)
+    implementation(libs.spring.boot.starter.actuator)
+    implementation(libs.spring.boot.starter.web)
 
-    compileOnly("org.projectlombok:lombok")
+    developmentOnly(libs.spring.boot.devtools)
 
-    developmentOnly("org.springframework.boot:spring-boot-devtools")
+    runtimeOnly(libs.micrometer.registry.prometheus)
 
-    runtimeOnly("io.micrometer:micrometer-registry-prometheus")
+    annotationProcessor(libs.spring.boot.configuration.processor)
 
-    annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
-    annotationProcessor("org.projectlombok:lombok")
+    testImplementation(libs.kotlin.test.junit5)
+    testImplementation(libs.spring.boot.starter.test)
 
-    testImplementation("org.springframework.boot:spring-boot-starter-test")
-    testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
-
-    testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+    testRuntimeOnly(libs.junit.platform.launcher)
 }
 
 kotlin {
