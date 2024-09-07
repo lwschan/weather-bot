@@ -1,0 +1,10 @@
+services:
+  database:
+    container_name: db_weather_bot
+    image: postgres:15.6-alpine
+    ports:
+      - '5432'
+    environment:
+      - 'POSTGRES_DB=db_weather_bot'
+      - 'POSTGRES_USER=weather-bot'
+      - 'POSTGRES_PASSWORD=weather-bot'

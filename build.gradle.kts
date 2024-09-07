@@ -31,17 +31,20 @@ dependencyLocking {
 
 dependencies {
     implementation(libs.apache.http.components.client5)
+    implementation(libs.flyway.core)
+    implementation(libs.flyway.postgresql)
     implementation(libs.google.maps.services)
     implementation(libs.jackson.module.kotlin)
     implementation(libs.kotlin.reflect)
     implementation(libs.micrometer.tracing.bridge.brave)
-    implementation(libs.slf4j.simple)
     implementation(libs.spring.boot.starter.actuator)
+    implementation(libs.spring.boot.starter.jdbc)
     implementation(libs.spring.boot.starter.web)
 
     developmentOnly(libs.spring.boot.devtools)
 
     runtimeOnly(libs.micrometer.registry.prometheus)
+    runtimeOnly(libs.postgresql)
 
     annotationProcessor(libs.spring.boot.configuration.processor)
 
@@ -49,6 +52,8 @@ dependencies {
     testImplementation(libs.spring.boot.starter.test)
 
     testRuntimeOnly(libs.junit.platform.launcher)
+
+    testAndDevelopmentOnly(libs.spring.boot.docker.compose)
 }
 
 kotlin {

@@ -1,0 +1,6 @@
+CREATE TABLE IF NOT EXISTS users (
+    id BIGSERIAL PRIMARY KEY,
+    platform VARCHAR(255) NOT NULL,
+    platform_id BIGINT NOT NULL,
+    created_on TIMESTAMP NOT NULL
+)
