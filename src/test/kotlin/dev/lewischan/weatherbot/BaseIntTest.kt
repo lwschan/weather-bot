@@ -5,7 +5,7 @@ import org.junit.jupiter.api.TestInstance.Lifecycle
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.context.ActiveProfiles
 
-@SpringBootTest
+@SpringBootTest(classes = [WeatherBotApplication::class])
 @ActiveProfiles("test")
 @TestInstance(Lifecycle.PER_CLASS)
 abstract class BaseIntTest {

@@ -1,7 +1,7 @@
 package dev.lewischan.weatherbot.service
 
-import org.springframework.stereotype.Service
+import dev.lewischan.weatherbot.model.Location
 
 interface GeocodingService {
-    fun getLocation();
+    fun getLocation(addressQuery: String): Location?;
 }

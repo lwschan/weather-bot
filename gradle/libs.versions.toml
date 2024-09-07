@@ -6,6 +6,7 @@ kotlin-jvm = "2.+"
 kotlin-plugin-spring = "2.+"
 spring-boot = "3.3.+"
 spring-dependency-management = "1.+"
+wiremock = "3.+"
 
 [plugins]
 spring-boot = { id = "org.springframework.boot", version.ref = "spring-boot" }
@@ -37,6 +38,7 @@ spring-boot-configuration-processor = { module = "org.springframework.boot:sprin
 # testImplementation
 kotlin-test-junit5 = { module = "org.jetbrains.kotlin:kotlin-test-junit5" }
 spring-boot-starter-test = { module = "org.springframework.boot:spring-boot-starter-test" }
+wiremock = { module = "org.wiremock:wiremock-standalone", version.ref = "wiremock" }
 
 # testRuntimeOnly
 junit-platform-launcher = { module = "org.junit.platform:junit-platform-launcher" }
