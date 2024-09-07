@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import wiremock.org.eclipse.jetty.http.HttpStatus
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
+import kotlin.test.assertNull
 
 class GoogleMapsGeocodingServiceIntTest @Autowired constructor(
     private val googleMapsGeocodingService: GoogleMapsGeocodingService,
@@ -32,6 +33,12 @@ class GoogleMapsGeocodingServiceIntTest @Autowired constructor(
                     .withBody(testGeocodingResponse)
                     .withStatus(HttpStatus.OK_200))
         )
+        wireMockServer.stubFor(
+            get(urlEqualTo("/maps/api/geocode/json?key=AIzaTestKey&address=Random+Address"))
+                .willReturn(aResponse().withHeader("Content-Type", "application/json")
+                    .withBody("{\"results\":[],\"status\":\"ZERO_RESULTS\"}")
+                    .withStatus(HttpStatus.OK_200))
+        )
     }
 
     @AfterAll
@@ -47,4 +54,9 @@ class GoogleMapsGeocodingServiceIntTest @Autowired constructor(
         assertEquals(-0.9140249, location.longitude)
     }
 
+    @Test
+    fun getLocationShouldReturnNullWhenAddressNotFound() {
+        val location = googleMapsGeocodingService.getLocation("Random Address")
+        assertNull(location)
+    }
 }

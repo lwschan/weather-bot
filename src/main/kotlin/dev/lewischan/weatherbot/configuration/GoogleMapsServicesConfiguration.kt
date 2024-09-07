@@ -20,5 +20,4 @@ class GoogleMapsServicesConfiguration {
             .queryRateLimit(googleMapsServicesProperties.queryRateLimit)
             .build()
     }
-
 }
