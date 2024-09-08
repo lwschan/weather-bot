@@ -14,7 +14,7 @@ data class CurrentWeather(
     @JsonAlias("temperature_2m") val temperatureTwoMetres: Double,
     @JsonAlias("relative_humidity_2m") val relativeHumidityTwoMetres: Int,
     val apparentTemperature: Double,
-    val isDay: Int,
+    val isDay: Boolean,
     val precipitation: Double,
     val rain: Double,
     val showers: Double,
@@ -25,5 +25,5 @@ data class CurrentWeather(
     val surfacePressure: Double,
     @JsonAlias("wind_speed_10m") val windSpeedTenMetres: Double,
     @JsonAlias("wind_direction_10m")val windDirectionTenMetres: Int,
-    @JsonAlias("wind_gust_10m")val windGustTenMetres: Double
+    @JsonAlias("wind_gusts_10m")val windGustTenMetres: Double
 )

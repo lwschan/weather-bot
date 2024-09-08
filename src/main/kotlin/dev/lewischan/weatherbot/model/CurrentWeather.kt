@@ -5,5 +5,6 @@ import java.time.Instant
 data class CurrentWeather(
     val time: Instant,
     val temperature: Temperature,
-    val condition: String,
+    val feelsLikeTemperature: Temperature,
+    val condition: Condition,
 )
