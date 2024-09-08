@@ -1,8 +1,8 @@
 plugins {
-    kotlin("jvm") version "1.9.+"
-    kotlin("plugin.spring") version "1.9.+"
-    id("org.springframework.boot") version "3.3.+"
-    id("io.spring.dependency-management") version "1.1.+"
+    kotlin("jvm") version libs.versions.kotlin.jvm
+    kotlin("plugin.spring") version libs.versions.kotlin.plugin.spring
+    alias(libs.plugins.spring.boot)
+    alias(libs.plugins.spring.dependency.management)
 }
 
 java {
@@ -11,6 +11,7 @@ java {
     }
 }
 
+@Suppress("UnstableApiUsage")
 configurations {
     compileOnly {
         extendsFrom(configurations.annotationProcessor.get())
@@ -28,27 +29,32 @@ dependencyLocking {
     lockMode = LockMode.STRICT
 }
 
-
 dependencies {
-    implementation("org.springframework.boot:spring-boot-starter-actuator")
-    implementation("org.springframework.boot:spring-boot-starter-web")
-    implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
-    implementation("io.micrometer:micrometer-tracing-bridge-brave")
-    implementation("org.jetbrains.kotlin:kotlin-reflect")
+    implementation(libs.apache.http.components.client5)
+    implementation(libs.flyway.core)
+    implementation(libs.flyway.postgresql)
+    implementation(libs.google.maps.services)
+    implementation(libs.jackson.module.kotlin)
+    implementation(libs.kotlin.reflect)
+    implementation(libs.micrometer.tracing.bridge.brave)
+    implementation(libs.spring.boot.starter.actuator)
+    implementation(libs.spring.boot.starter.jdbc)
+    implementation(libs.spring.boot.starter.web)
 
-    compileOnly("org.projectlombok:lombok")
+    developmentOnly(libs.spring.boot.devtools)
 
-    developmentOnly("org.springframework.boot:spring-boot-devtools")
+    runtimeOnly(libs.micrometer.registry.prometheus)
+    runtimeOnly(libs.postgresql)
 
-    runtimeOnly("io.micrometer:micrometer-registry-prometheus")
+    annotationProcessor(libs.spring.boot.configuration.processor)
 
-    annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
-    annotationProcessor("org.projectlombok:lombok")
+    testImplementation(libs.kotlin.test.junit5)
+    testImplementation(libs.spring.boot.starter.test)
+    testImplementation(libs.wiremock)
 
-    testImplementation("org.springframework.boot:spring-boot-starter-test")
-    testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
+    testRuntimeOnly(libs.junit.platform.launcher)
 
-    testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+    testAndDevelopmentOnly(libs.spring.boot.docker.compose)
 }
 
 kotlin {

@@ -1,0 +1,47 @@
+# ORDER EVERYTHING ALPHABETICALLY
+
+[versions]
+google-maps-services = "2.+"
+kotlin-jvm = "2.+"
+kotlin-plugin-spring = "2.+"
+spring-boot = "3.3.+"
+spring-dependency-management = "1.+"
+wiremock = "3.+"
+
+[plugins]
+spring-boot = { id = "org.springframework.boot", version.ref = "spring-boot" }
+spring-dependency-management = { id = "io.spring.dependency-management", version.ref = "spring-dependency-management" }
+
+[libraries]
+# implementation
+apache-http-components-client5 = { module = "org.apache.httpcomponents.client5:httpclient5" }
+flyway-core = { module = "org.flywaydb:flyway-core" }
+flyway-postgresql = { module = "org.flywaydb:flyway-database-postgresql" }
+google-maps-services = { module = "com.google.maps:google-maps-services", version.ref = "google-maps-services" }
+jackson-module-kotlin = { module = "com.fasterxml.jackson.module:jackson-module-kotlin" }
+kotlin-reflect = { module = "org.jetbrains.kotlin:kotlin-reflect" }
+micrometer-tracing-bridge-brave = { module = "io.micrometer:micrometer-tracing-bridge-brave" }
+spring-boot-starter-actuator = { module = "org.springframework.boot:spring-boot-starter-actuator" }
+spring-boot-starter-jdbc = { module = "org.springframework.boot:spring-boot-starter-jdbc" }
+spring-boot-starter-web = { module = "org.springframework.boot:spring-boot-starter-web" }
+
+# developmentOnly
+spring-boot-devtools = { module = "org.springframework.boot:spring-boot-devtools" }
+
+# runtimeOnly
+micrometer-registry-prometheus = { module = "io.micrometer:micrometer-registry-prometheus" }
+postgresql = { module = "org.postgresql:postgresql" }
+
+# annotationProcessor
+spring-boot-configuration-processor = { module = "org.springframework.boot:spring-boot-configuration-processor" }
+
+# testImplementation
+kotlin-test-junit5 = { module = "org.jetbrains.kotlin:kotlin-test-junit5" }
+spring-boot-starter-test = { module = "org.springframework.boot:spring-boot-starter-test" }
+wiremock = { module = "org.wiremock:wiremock-standalone", version.ref = "wiremock" }
+
+# testRuntimeOnly
+junit-platform-launcher = { module = "org.junit.platform:junit-platform-launcher" }
+
+# testAndDevelopmentOnly
+spring-boot-docker-compose = { module = "org.springframework.boot:spring-boot-docker-compose" }

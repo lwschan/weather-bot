@@ -1,5 +1,3 @@
-rootProject.name = "weather-bot"
-
 dependencyResolutionManagement {
     @Suppress("UnstableApiUsage")
     repositories {
@@ -7,3 +5,5 @@ dependencyResolutionManagement {
         repositoriesMode = RepositoriesMode.FAIL_ON_PROJECT_REPOS
     }
 }
+
+rootProject.name = "weather-bot"
