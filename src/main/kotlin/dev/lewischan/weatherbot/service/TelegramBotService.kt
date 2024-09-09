@@ -6,7 +6,6 @@ import com.github.kotlintelegrambot.dispatch
 import com.github.kotlintelegrambot.dispatcher.command
 import dev.lewischan.weatherbot.configuration.TelegramBotProperties
 
-
 class TelegramBotService(
     private val telegramBotProperties: TelegramBotProperties
 ) {
@@ -15,12 +14,13 @@ class TelegramBotService(
         token = telegramBotProperties.apiToken
         dispatch {
             command("start") {
-                message.messageId
-                update.message.messageId
+
             }
         }
     }
 
-
+    fun start() {
+        telegramBot.startPolling()
+    }
 
 }
