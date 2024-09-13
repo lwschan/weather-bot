@@ -19,7 +19,7 @@ class TelegramBotController(
     fun webhook(
         @PathVariable botApiToken: String,
         @RequestBody update: Update
-    ): ResponseEntity<Void> {
+    ): ResponseEntity<Unit> {
         return ResponseEntity.ok().build()
     }
 

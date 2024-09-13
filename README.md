@@ -16,3 +16,9 @@ To update Gradle, use the command. You may optionally replace `latest` with a ve
 ```shell
 ./gradlew wrapper --gradle-version latest
 ```
+
+## Build Development Test Container
+
+```shell
+./gradlew build && docker build -g weather-bot:dev .
+```
