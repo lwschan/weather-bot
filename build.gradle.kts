@@ -36,6 +36,7 @@ dependencies {
     implementation(libs.google.maps.services)
     implementation(libs.jackson.module.kotlin)
     implementation(libs.kotlin.reflect)
+    implementation(libs.kotlin.telegram.bot)
     implementation(libs.micrometer.tracing.bridge.brave)
     implementation(libs.spring.boot.starter.actuator)
     implementation(libs.spring.boot.starter.jdbc)

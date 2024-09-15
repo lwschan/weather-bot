@@ -42,7 +42,7 @@ enum class Condition(
     companion object {
         fun fromWmoCodeAndIsDay(wmoCode: Int, isDay: Boolean): Condition {
             val conditionsMatched = entries.filter { it.wmoCode == wmoCode }
-            return conditionsMatched.firstOrNull() { it.isDay == null || it.isDay == isDay } ?: UNKNOWN
+            return conditionsMatched.firstOrNull { it.isDay == null || it.isDay == isDay } ?: UNKNOWN
         }
     }
 

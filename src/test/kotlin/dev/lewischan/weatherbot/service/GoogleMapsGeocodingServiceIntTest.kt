@@ -42,7 +42,7 @@ class GoogleMapsGeocodingServiceIntTest @Autowired constructor(
     }
 
     @AfterAll
-    fun logUnmatchedWireMockRequests() {
+    fun cleanup() {
         wireMockServer.stop()
     }
 

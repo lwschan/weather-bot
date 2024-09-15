@@ -4,6 +4,7 @@
 google-maps-services = "2.+"
 kotlin-jvm = "2.+"
 kotlin-plugin-spring = "2.+"
+kotlin-telegram-bot = "6.+"
 spring-boot = "3.3.+"
 spring-dependency-management = "1.+"
 wiremock = "3.+"
@@ -20,6 +21,7 @@ flyway-postgresql = { module = "org.flywaydb:flyway-database-postgresql" }
 google-maps-services = { module = "com.google.maps:google-maps-services", version.ref = "google-maps-services" }
 jackson-module-kotlin = { module = "com.fasterxml.jackson.module:jackson-module-kotlin" }
 kotlin-reflect = { module = "org.jetbrains.kotlin:kotlin-reflect" }
+kotlin-telegram-bot = { module = "io.github.kotlin-telegram-bot.kotlin-telegram-bot:telegram", version.ref = "kotlin-telegram-bot" }
 micrometer-tracing-bridge-brave = { module = "io.micrometer:micrometer-tracing-bridge-brave" }
 spring-boot-starter-actuator = { module = "org.springframework.boot:spring-boot-starter-actuator" }
 spring-boot-starter-jdbc = { module = "org.springframework.boot:spring-boot-starter-jdbc" }

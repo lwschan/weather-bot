@@ -3,6 +3,7 @@ package dev.lewischan.weatherbot.configuration
 import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.databind.PropertyNamingStrategies
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
 import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -15,9 +16,9 @@ import org.springframework.web.client.RestClient
 class OpenMeteoApiConfiguration {
 
     @Bean
+    @ConditionalOnMissingBean(name = ["openMeteoRestClient"])
     fun openMeteoRestClient(
-        openMeteoApiProperties: OpenMeteoApiProperties,
-        mappingJackson2HttpMessageConverter: MappingJackson2HttpMessageConverter
+        openMeteoApiProperties: OpenMeteoApiProperties
     ): RestClient {
         val snakeCaseObjectMapper = jacksonObjectMapper()
             .setPropertyNamingStrategy(PropertyNamingStrategies.SNAKE_CASE)
