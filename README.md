@@ -20,5 +20,5 @@ To update Gradle, use the command. You may optionally replace `latest` with a ve
 ## Build Development Test Container
 
 ```shell
-./gradlew build && docker build -g weather-bot:dev .
+./gradlew build && docker build -t weather-bot:dev .
 ```
