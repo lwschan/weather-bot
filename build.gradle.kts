@@ -38,6 +38,7 @@ dependencies {
     implementation(libs.kotlin.reflect)
     implementation(libs.kotlin.telegram.bot)
     implementation(libs.micrometer.tracing.bridge.brave)
+    implementation(libs.retrofit2)
     implementation(libs.spring.boot.starter.actuator)
     implementation(libs.spring.boot.starter.jdbc)
     implementation(libs.spring.boot.starter.web)

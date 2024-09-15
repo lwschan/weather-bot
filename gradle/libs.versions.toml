@@ -5,6 +5,7 @@ google-maps-services = "2.+"
 kotlin-jvm = "2.+"
 kotlin-plugin-spring = "2.+"
 kotlin-telegram-bot = "6.+"
+retrofit2 = "2.+"
 spring-boot = "3.3.+"
 spring-dependency-management = "1.+"
 wiremock = "3.+"
@@ -23,6 +24,7 @@ jackson-module-kotlin = { module = "com.fasterxml.jackson.module:jackson-module-
 kotlin-reflect = { module = "org.jetbrains.kotlin:kotlin-reflect" }
 kotlin-telegram-bot = { module = "io.github.kotlin-telegram-bot.kotlin-telegram-bot:telegram", version.ref = "kotlin-telegram-bot" }
 micrometer-tracing-bridge-brave = { module = "io.micrometer:micrometer-tracing-bridge-brave" }
+retrofit2 = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit2" }
 spring-boot-starter-actuator = { module = "org.springframework.boot:spring-boot-starter-actuator" }
 spring-boot-starter-jdbc = { module = "org.springframework.boot:spring-boot-starter-jdbc" }
 spring-boot-starter-web = { module = "org.springframework.boot:spring-boot-starter-web" }
