@@ -4,28 +4,46 @@ import com.github.kotlintelegrambot.Bot
 import com.github.kotlintelegrambot.bot
 import com.github.kotlintelegrambot.dispatch
 import com.github.kotlintelegrambot.dispatcher.command
-import com.github.kotlintelegrambot.entities.ChatId
-import com.github.kotlintelegrambot.entities.ParseMode
+import dev.lewischan.weatherbot.configuration.ApplicationStartupConfiguration
 import dev.lewischan.weatherbot.configuration.TelegramBotProperties
+import dev.lewischan.weatherbot.handler.CommandHandler
+import org.slf4j.LoggerFactory
 
-class TelegramBotService(
+class TelegramBotService {
+
+    private val logger = LoggerFactory.getLogger(ApplicationStartupConfiguration::class.java)
+
     private val telegramBotProperties: TelegramBotProperties
-) {
+    private val telegramBot: Bot
 
-    val telegramBot: Bot = bot {
-        token = telegramBotProperties.apiToken
-        dispatch {
-            command("start") {
-                bot.sendMessage(ChatId.fromId(message.chat.id), "Hello!", ParseMode.MARKDOWN_V2)
-            }
-        }
+    constructor(
+        telegramBotProperties: TelegramBotProperties,
+        commandHandlers: List<CommandHandler>
+    ) {
+        this.telegramBotProperties = telegramBotProperties
+        this.telegramBot = createTelegramBot(commandHandlers)
     }
 
     fun start() {
         if (telegramBotProperties.useWebhook) {
+            logger.info("Starting bot in webhook mode")
             telegramBot.startWebhook()
         } else {
+            logger.info("Starting bot in polling mode")
             telegramBot.startPolling()
+        }
+    }
+
+    private fun createTelegramBot(commandHandlers: List<CommandHandler>): Bot {
+        return bot {
+            token = telegramBotProperties.apiToken
+            dispatch {
+                commandHandlers.forEach {
+                    command(it.command) {
+                        it.handleCommand(bot, message)
+                    }
+                }
+            }
         }
     }
 
