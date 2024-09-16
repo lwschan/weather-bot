@@ -7,6 +7,7 @@ import com.github.kotlintelegrambot.dispatcher.command
 import dev.lewischan.weatherbot.configuration.ApplicationStartupConfiguration
 import dev.lewischan.weatherbot.configuration.TelegramBotProperties
 import dev.lewischan.weatherbot.handler.CommandHandler
+import jakarta.annotation.PreDestroy
 import org.slf4j.LoggerFactory
 
 class TelegramBotService {
@@ -34,12 +35,26 @@ class TelegramBotService {
         }
     }
 
+    @PreDestroy
+    fun stop() {
+        if (telegramBotProperties.useWebhook) {
+            logger.info("Stopping bot in webhook mode")
+            telegramBot.stopWebhook()
+        } else {
+            logger.info("Stopping bot in polling mode")
+            telegramBot.stopPolling()
+        }
+
+        telegramBot.logOut()
+    }
+
     private fun createTelegramBot(commandHandlers: List<CommandHandler>): Bot {
         return bot {
             token = telegramBotProperties.apiToken
             dispatch {
                 commandHandlers.forEach {
                     command(it.command) {
+                        logger.info("Handling command: ${it.command}")
                         it.handleCommand(bot, message)
                     }
                 }
