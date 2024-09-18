@@ -38,15 +38,15 @@ ENV_TELEGRAM_BOT_SERVER_HOSTNAME=telegram-bot-server-hostname
 ENV_TELEGRAM_BOT_USE_WEBHOOK=true-or-false
 ```
 
-## Build Development Test Image
+## Development Test Image
 
-To build a test image, you may use the following command.
+### Build Docker Image
 
 ```shell
 make build-dev-image
 ```
 
-## Run Development Test Container
+### Run Container
 
 Duplicate the [.env.example](/.env.example) file with the name `.env.development`, use the following command.
 
@@ -54,8 +54,20 @@ Duplicate the [.env.example](/.env.example) file with the name `.env.development
 make run-dev-container
 ```
 
-To remove the container, use the following command.
+### Stop Container
+
+```shell
+make stop-dev-container
+```
+
+### Delete Container
 
 ```shell
 make rm-dev-container
+```
+
+### Stop and Delete Container
+
+```shell
+make stop-rm-dev-container
 ```
