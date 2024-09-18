@@ -1,6 +1,6 @@
 services:
   database:
-    container_name: db_weather_bot
+    container_name: db-weather-bot
     image: postgres:15.6-alpine
     ports:
       - '5432'
