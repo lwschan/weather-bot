@@ -1,6 +1,25 @@
 # Weather Bot for Telegram
 
+## Dependency Management
+
+Dependencies are locked using gradle. To update a dependency, modify the version in 
+[/gradle/libs.versions.toml](/gradle/libs.versions.toml), and update the lock files using the following command.
+
+```shell
+./gradlew dependencies --write-locks
+```
+
+## Gradle
+
+To update Gradle, replace `$(NEW-VERSION)` with the version to update to.
+
+```shell
+make update-gradle new-version=$(NEW-VERSION)
+```
+
 ## Environment Variables
+
+These variables must be set for the bot to function normally.
 
 ```dotenv
 # Google Maps API Key
@@ -19,25 +38,24 @@ ENV_TELEGRAM_BOT_SERVER_HOSTNAME=telegram-bot-server-hostname
 ENV_TELEGRAM_BOT_USE_WEBHOOK=true-or-false
 ```
 
-## Dependency Management
+## Build Development Test Image
 
-Dependencies are locked using gradle. To update a dependency, modify the version in 
-[/gradle/libs.versions.toml](/gradle/libs.versions.toml), and update the lock files using the following command.
+To build a test image, you may use the following command.
 
 ```shell
-./gradlew dependencies --write-locks
+make build-dev-image
 ```
 
-## Gradle
+## Run Development Test Container
 
-To update Gradle, use the command. You may optionally replace `latest` with a version like `8.9`.
+Duplicate the [.env.example](/.env.example) file with the name `.env.development`, use the following command.
 
 ```shell
-./gradlew wrapper --gradle-version latest
+make run-dev-container
 ```
 
-## Build Development Test Container
+To remove the container, use the following command.
 
 ```shell
-./gradlew build && docker build -t weather-bot:dev .
+make rm-dev-container
 ```

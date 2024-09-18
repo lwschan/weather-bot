@@ -2,6 +2,7 @@
 
 # Variables
 GRADLEW = ./gradlew
+DEV-IMAGE-NAME = weather-bot-dev
 
 # Default target
 .PHONY: all
@@ -12,10 +13,30 @@ all: build
 build:
 	$(GRADLEW) build
 
-# Build development test container
-.PHONY: build-dev-container
-build-dev-container: build
+# Build development test image
+.PHONY: build-dev-image
+build-dev-image: build
 	docker build -t weather-bot:dev .
+
+# Run development test container
+.PHONY: run-dev-container
+run-dev-container:
+	docker run -it --env-file .env.development --name $(DEV-IMAGE-NAME) --detach weather-bot:dev
+
+# Stop development test container
+.PHONY: stop-dev-container
+stop-dev-container:
+	docker stop $(DEV-IMAGE-NAME)
+
+# Remove development test container
+.PHONY: rm-dev-container
+rm-dev-container:
+	docker rm $(DEV-IMAGE-NAME)
+
+# Stop and remove development test container
+.PHONY: stop-rm-dev-container
+stop-rm-dev-container:
+	docker stop $(DEV-IMAGE-NAME) && docker rm $(DEV-IMAGE-NAME)
 
 # Update dependencies
 .PHONY: update-dependencies
@@ -25,7 +46,7 @@ update-dependencies:
 # Update Gradle wrapper
 .PHONY: update-gradle
 update-gradle:
-	$(GRADLEW) wrapper --gradle-version latest
+	$(GRADLEW) wrapper --gradle-version $(new-version)
 
 # Help target to list all available commands
 .PHONY: help
