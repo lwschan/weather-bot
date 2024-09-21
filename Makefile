@@ -48,12 +48,18 @@ update-dependencies:
 update-gradle:
 	$(GRADLEW) wrapper --gradle-version $(new-version)
 
-# Help target to list all available commands
+# Help command to list available targets
 .PHONY: help
 help:
-	@echo "Makefile commands:"
-	@echo "  make build                - Build the project"
-	@echo "  make build-dev-container  - Build the development test container"
-	@echo "  make update-dependencies  - Update dependencies and write lock files"
-	@echo "  make update-gradle        - Update Gradle to the latest version"
-	@echo "  make help                 - Display this help message"
+	@echo "Usage: make [target]"
+	@echo
+	@echo "Targets:"
+	@echo "  all                      Build the project (default)"
+	@echo "  build                    Build the project using Gradle"
+	@echo "  build-dev-image          Build the development Docker image"
+	@echo "  run-dev-container        Run the development Docker container"
+	@echo "  stop-dev-container       Stop the development Docker container"
+	@echo "  rm-dev-container         Remove the development Docker container"
+	@echo "  stop-rm-dev-container    Stop and remove the development Docker container"
+	@echo "  update-dependencies      Update the project's dependencies"
+	@echo "  update-gradle            Update the Gradle wrapper version"
