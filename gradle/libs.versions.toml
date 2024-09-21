@@ -2,6 +2,7 @@
 
 [versions]
 google-maps-services = "2.+"
+kotest = "4.+"
 kotlin-jvm = "2.+"
 kotlin-plugin-spring = "2.+"
 kotlin-telegram-bot = "6.+"
@@ -40,6 +41,7 @@ postgresql = { module = "org.postgresql:postgresql" }
 spring-boot-configuration-processor = { module = "org.springframework.boot:spring-boot-configuration-processor" }
 
 # testImplementation
+kotest = { module = "io.kotest:kotest-runner-junit5", version.ref = "kotest" }
 kotlin-test-junit5 = { module = "org.jetbrains.kotlin:kotlin-test-junit5" }
 spring-boot-starter-test = { module = "org.springframework.boot:spring-boot-starter-test" }
 wiremock = { module = "org.wiremock:wiremock-standalone", version.ref = "wiremock" }
