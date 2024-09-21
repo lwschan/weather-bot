@@ -40,6 +40,12 @@ ENV_TELEGRAM_BOT_USE_WEBHOOK=true-or-false
 
 ## Development Test Image
 
+### Help
+
+```shell
+make help
+```
+
 ### Build Docker Image
 
 ```shell
