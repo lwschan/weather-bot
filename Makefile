@@ -1,7 +1,13 @@
 # Makefile for Weather Bot for Telegram
 
 # Variables
-GRADLEW = ./gradlew
+GRADLEW_UNIX = ./gradlew
+GRADLEW_WIN = gradlew.bat
+GRADLEW = $(GRADLEW_UNIX)
+ifeq ($(OS),Windows_NT)
+    GRADLEW = $(GRADLEW_WIN)
+endif
+
 DEV-IMAGE-NAME = weather-bot-dev
 
 # Default target
