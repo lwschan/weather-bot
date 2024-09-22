@@ -4,7 +4,6 @@ import com.github.kotlintelegrambot.Bot
 import com.github.kotlintelegrambot.bot
 import com.github.kotlintelegrambot.dispatch
 import com.github.kotlintelegrambot.dispatcher.command
-import dev.lewischan.weatherbot.configuration.ApplicationStartupConfiguration
 import dev.lewischan.weatherbot.configuration.TelegramBotProperties
 import dev.lewischan.weatherbot.handler.CommandHandler
 import jakarta.annotation.PreDestroy
@@ -12,7 +11,7 @@ import org.slf4j.LoggerFactory
 
 class TelegramBotService {
 
-    private val logger = LoggerFactory.getLogger(ApplicationStartupConfiguration::class.java)
+    private val logger = LoggerFactory.getLogger(this::class.java)
 
     private val telegramBotProperties: TelegramBotProperties
     private val telegramBot: Bot
@@ -27,10 +26,10 @@ class TelegramBotService {
 
     fun start() {
         if (telegramBotProperties.useWebhook) {
-            logger.info("Starting bot in webhook mode")
+            logger.info("Starting webhook")
             telegramBot.startWebhook()
         } else {
-            logger.info("Starting bot in polling mode")
+            logger.info("Starting polling")
             telegramBot.startPolling()
         }
     }
@@ -38,14 +37,12 @@ class TelegramBotService {
     @PreDestroy
     fun stop() {
         if (telegramBotProperties.useWebhook) {
-            logger.info("Stopping bot in webhook mode")
+            logger.info("Stopping webhook")
             telegramBot.stopWebhook()
         } else {
-            logger.info("Stopping bot in polling mode")
+            logger.info("Stopping polling")
             telegramBot.stopPolling()
         }
-
-        telegramBot.logOut()
     }
 
     private fun createTelegramBot(commandHandlers: List<CommandHandler>): Bot {
@@ -54,8 +51,7 @@ class TelegramBotService {
             dispatch {
                 commandHandlers.forEach {
                     command(it.command) {
-                        logger.info("Handling command: ${it.command}")
-                        it.handleCommand(bot, message)
+                        it.execute(bot, message)
                     }
                 }
             }
