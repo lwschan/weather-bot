@@ -20,7 +20,18 @@ configurations {
 
 buildscript {
     configurations.classpath {
-        resolutionStrategy.activateDependencyLocking()
+        resolutionStrategy {
+            activateDependencyLocking()
+
+            componentSelection {
+                all {
+                    val candidateVersion = candidate.version
+                    if (candidateVersion.contains("Beta") || candidateVersion.contains("Alpha") || candidateVersion.contains("RC")) {
+                        reject("Rejecting $candidateVersion as it's an excluded version")
+                    }
+                }
+            }
+        }
     }
 }
 
