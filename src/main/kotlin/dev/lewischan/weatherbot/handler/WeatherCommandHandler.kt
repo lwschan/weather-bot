@@ -25,7 +25,7 @@ class WeatherCommandHandler : CommandHandler() {
             return
         }
 
-        val text = "Weather command with $address"
+        val text = "Weather command $address"
         bot.sendMessage(
             chatId = ChatId.fromId(chatId),
             text = text,
