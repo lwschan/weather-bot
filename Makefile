@@ -19,6 +19,11 @@ all: build
 build:
 	$(GRADLEW) build
 
+# Run project in development mode
+.PHONY: dev-run
+dev-run:
+	SPRING_PROFILES_ACTIVE=development $(GRADLEW) bootRun
+
 # Build development test image
 .PHONY: build-dev-image
 build-dev-image: build
@@ -62,9 +67,10 @@ help:
 	@echo "Targets:"
 	@echo "  all                      Build the project (default)"
 	@echo "  build                    Build the project using Gradle"
+	@echo "  dev-run                  Run the project using Gradle"
 	@echo "  build-dev-image          Build the development Docker image"
-	@echo "  run-dev-container        Run the development Docker container"
-	@echo "  stop-dev-container       Stop the development Docker container"
+	@echo "  run-dev-container        Run the project using Docker container"
+	@echo "  stop-dev-container       Stop the Docker container"
 	@echo "  rm-dev-container         Remove the development Docker container"
 	@echo "  stop-rm-dev-container    Stop and remove the development Docker container"
 	@echo "  update-dependencies      Update the project's dependencies"
