@@ -67,7 +67,7 @@ help:
 	@echo "Targets:"
 	@echo "  all                      Build the project (default)"
 	@echo "  build                    Build the project using Gradle"
-	@echo "  dev-run                  Run the project using Gradle"
+	@echo "  dev-run                  Run the project in development mode using Gradle"
 	@echo "  build-dev-image          Build the development Docker image"
 	@echo "  run-dev-container        Run the project using Docker container"
 	@echo "  stop-dev-container       Stop the Docker container"
