@@ -26,7 +26,7 @@ class UserDefaultLocationRepositoryImpl(
             return { rs: ResultSet, _: Int -> UserDefaultLocation(
                 rs.getLong("id"),
                 rs.getLong("user_id"),
-                Location(rs.getDouble("latitude"), rs.getDouble("longitude"))
+                Location("", "", rs.getDouble("latitude"), rs.getDouble("longitude"))
             ) }
         }
     }

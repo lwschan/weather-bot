@@ -43,7 +43,7 @@ class OpenMeteoWeatherServiceIntTest @Autowired constructor(
 
     @Test
     fun getWeatherShouldReturnCurrentWeather() {
-        val currentWeather = openMeteoWeatherService.getWeather(Location(53.990129, -0.9140249))
+        val currentWeather = openMeteoWeatherService.getWeather(Location("", "", 53.990129, -0.9140249))
         assertNotNull(currentWeather)
         assertEquals(16.6, currentWeather.temperature.celsius)
         assertEquals(Condition.LIGHT_SHOWERS, currentWeather.condition)

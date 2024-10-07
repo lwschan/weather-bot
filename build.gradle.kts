@@ -44,6 +44,7 @@ dependencies {
     implementation(libs.apache.http.components.client5)
     implementation(libs.flyway.core)
     implementation(libs.flyway.postgresql)
+    implementation(libs.google.maps.places)
     implementation(libs.google.maps.services)
     implementation(libs.jackson.module.kotlin)
     implementation(libs.kotlin.reflect)

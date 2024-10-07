@@ -13,7 +13,7 @@ import kotlin.test.assertNotNull
 import kotlin.test.assertNull
 
 class GoogleMapsGeocodingServiceIntTest @Autowired constructor(
-    private val googleMapsGeocodingService: GoogleMapsGeocodingService,
+    private val googleMapsGeocodingService: GoogleMapsLocationService,
     private val wireMockServer: WireMockServer
 ) : BaseIntTest() {
 

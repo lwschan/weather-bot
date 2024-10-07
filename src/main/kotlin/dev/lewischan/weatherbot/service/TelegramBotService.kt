@@ -4,8 +4,10 @@ import com.github.kotlintelegrambot.Bot
 import com.github.kotlintelegrambot.bot
 import com.github.kotlintelegrambot.dispatch
 import com.github.kotlintelegrambot.dispatcher.command
+import com.github.kotlintelegrambot.dispatcher.inlineQuery
 import dev.lewischan.weatherbot.configuration.TelegramBotProperties
 import dev.lewischan.weatherbot.handler.CommandHandler
+import dev.lewischan.weatherbot.handler.InlineQueryHandler
 import jakarta.annotation.PreDestroy
 import org.slf4j.LoggerFactory
 
@@ -18,13 +20,16 @@ class TelegramBotService {
 
     constructor(
         telegramBotProperties: TelegramBotProperties,
-        commandHandlers: List<CommandHandler>
+        commandHandlers: List<CommandHandler>,
+        inlineQueryHandler: InlineQueryHandler
     ) {
         this.telegramBotProperties = telegramBotProperties
-        this.telegramBot = createTelegramBot(commandHandlers)
+        this.telegramBot = createTelegramBot(commandHandlers, inlineQueryHandler)
     }
 
     fun start() {
+        logger.info("Starting Telegram Weather Bot")
+
         if (telegramBotProperties.useWebhook) {
             logger.info("Starting webhook")
             telegramBot.startWebhook()
@@ -32,6 +37,8 @@ class TelegramBotService {
             logger.info("Starting polling")
             telegramBot.startPolling()
         }
+
+        logger.info("Telegram bot started successfully")
     }
 
     @PreDestroy
@@ -45,7 +52,10 @@ class TelegramBotService {
         }
     }
 
-    private fun createTelegramBot(commandHandlers: List<CommandHandler>): Bot {
+    private fun createTelegramBot(
+        commandHandlers: List<CommandHandler>,
+        inlineQueryHandler: InlineQueryHandler
+    ): Bot {
         return bot {
             token = telegramBotProperties.apiToken
             dispatch {
@@ -53,6 +63,9 @@ class TelegramBotService {
                     command(it.command) {
                         it.execute(bot, message)
                     }
+                }
+                inlineQuery {
+                    inlineQueryHandler.execute(bot, inlineQuery)
                 }
             }
         }

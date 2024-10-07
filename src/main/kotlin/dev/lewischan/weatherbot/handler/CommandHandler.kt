@@ -9,7 +9,7 @@ abstract class CommandHandler {
 
     protected abstract fun handleCommand(bot: Bot, message: Message)
 
-    private val logger = LoggerFactory.getLogger(javaClass)
+    protected val logger = LoggerFactory.getLogger(javaClass)
 
     fun execute(bot: Bot, message: Message) {
         logger.info("Handling Telegram bot command: $command for message: ${message.text}")

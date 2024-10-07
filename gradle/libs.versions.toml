@@ -1,6 +1,7 @@
 # ORDER EVERYTHING ALPHABETICALLY
 
 [versions]
+google-maps-places = "0.+"
 google-maps-services = "2.+"
 kotest = "4.+"
 kotlin-jvm = "2.+"
@@ -20,6 +21,7 @@ spring-dependency-management = { id = "io.spring.dependency-management", version
 apache-http-components-client5 = { module = "org.apache.httpcomponents.client5:httpclient5" }
 flyway-core = { module = "org.flywaydb:flyway-core" }
 flyway-postgresql = { module = "org.flywaydb:flyway-database-postgresql" }
+google-maps-places = { module = "com.google.maps:google-maps-places", version.ref = "google-maps-places" }
 google-maps-services = { module = "com.google.maps:google-maps-services", version.ref = "google-maps-services" }
 jackson-module-kotlin = { module = "com.fasterxml.jackson.module:jackson-module-kotlin" }
 kotlin-reflect = { module = "org.jetbrains.kotlin:kotlin-reflect" }

@@ -19,7 +19,7 @@ class UserDefaultLocationRepositoryIntTest @Autowired constructor(
         val user = userRepository.createUser(
             ExternalPlatform.TELEGRAM, externalUserId
         )
-        val savedUserDefaultLocation = userDefaultLocationRepository.save(user.id, Location(53.990129, -0.9140249))
+        val savedUserDefaultLocation = userDefaultLocationRepository.save(user.id, Location("", "", 53.990129, -0.9140249))
         val foundUserDefaultLocation = userDefaultLocationRepository.findByUserId(user.id)
 
         assertNotNull(foundUserDefaultLocation)
@@ -42,7 +42,7 @@ class UserDefaultLocationRepositoryIntTest @Autowired constructor(
         val user = userRepository.createUser(
             ExternalPlatform.TELEGRAM, externalUserId
         )
-        val userDefaultLocation = userDefaultLocationRepository.save(user.id, Location(53.990129, -0.9140249))
+        val userDefaultLocation = userDefaultLocationRepository.save(user.id, Location("", "", 53.990129, -0.9140249))
         assertNotNull(userDefaultLocation.id)
         assertEquals(userDefaultLocation.userId, user.id)
         assertEquals(53.990129, userDefaultLocation.location.latitude)
@@ -55,13 +55,13 @@ class UserDefaultLocationRepositoryIntTest @Autowired constructor(
         val user = userRepository.createUser(
             ExternalPlatform.TELEGRAM, externalUserId
         )
-        val userDefaultLocation = userDefaultLocationRepository.save(user.id, Location(53.990129, -0.9140249))
+        val userDefaultLocation = userDefaultLocationRepository.save(user.id, Location("", "", 53.990129, -0.9140249))
         assertNotNull(userDefaultLocation.id)
         assertEquals(userDefaultLocation.userId, user.id)
         assertEquals(53.990129, userDefaultLocation.location.latitude)
         assertEquals(-0.9140249, userDefaultLocation.location.longitude)
 
-        val updatedUserDefaultLocation = userDefaultLocationRepository.save(user.id, Location(35.7015871, 139.6885977))
+        val updatedUserDefaultLocation = userDefaultLocationRepository.save(user.id, Location("", "", 35.7015871, 139.6885977))
         assertNotNull(updatedUserDefaultLocation.id)
         assertEquals(userDefaultLocation.id, updatedUserDefaultLocation.id)
         assertEquals(userDefaultLocation.userId, updatedUserDefaultLocation.userId)
