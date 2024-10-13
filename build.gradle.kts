@@ -1,8 +1,8 @@
 plugins {
-    kotlin("jvm") version libs.versions.kotlin.jvm
-    kotlin("plugin.spring") version libs.versions.kotlin.plugin.spring
     alias(libs.plugins.spring.boot)
     alias(libs.plugins.spring.dependency.management)
+    kotlin("jvm") version libs.versions.kotlin.jvm
+    kotlin("plugin.spring") version libs.versions.kotlin.plugin.spring
 }
 
 java {
@@ -63,6 +63,8 @@ dependencies {
     annotationProcessor(libs.spring.boot.configuration.processor)
 
     testImplementation(libs.kotest)
+    testImplementation(libs.kotest.extensions.spring)
+    testImplementation(libs.kotest.framework.datatest)
     testImplementation(libs.kotlin.test.junit5)
     testImplementation(libs.spring.boot.starter.test)
     testImplementation(libs.wiremock)
@@ -78,7 +80,7 @@ kotlin {
     }
 }
 
-tasks.withType<Test> {
+tasks.withType<Test>().configureEach {
     useJUnitPlatform()
-    reports.junitXml.required.set(true)
+    reports.html.required.set(true)
 }

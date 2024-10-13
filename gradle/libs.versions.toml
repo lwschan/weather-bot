@@ -3,7 +3,8 @@
 [versions]
 google-maps-places = "0.+"
 google-maps-services = "2.+"
-kotest = "4.+"
+kotest = "5.9.+"
+kotest-extensions-spring = "1.3.+"
 kotlin-jvm = "2.+"
 kotlin-plugin-spring = "2.+"
 kotlin-telegram-bot = "6.+"
@@ -44,6 +45,8 @@ spring-boot-configuration-processor = { module = "org.springframework.boot:sprin
 
 # testImplementation
 kotest = { module = "io.kotest:kotest-runner-junit5", version.ref = "kotest" }
+kotest-extensions-spring = { module = "io.kotest.extensions:kotest-extensions-spring", version.ref = "kotest-extensions-spring" }
+kotest-framework-datatest = { module = "io.kotest:kotest-framework-datatest", version.ref = "kotest" }
 kotlin-test-junit5 = { module = "org.jetbrains.kotlin:kotlin-test-junit5" }
 spring-boot-starter-test = { module = "org.springframework.boot:spring-boot-starter-test" }
 wiremock = { module = "org.wiremock:wiremock-standalone", version.ref = "wiremock" }
