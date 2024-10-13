@@ -1,14 +1,11 @@
 package dev.lewischan.weatherbot.configuration
 
 import com.google.api.gax.core.FixedCredentialsProvider
-import com.google.api.gax.grpc.GrpcTransportChannel
-import com.google.api.gax.grpc.InstantiatingGrpcChannelProvider
 import com.google.api.gax.rpc.FixedHeaderProvider
 import com.google.auth.ApiKeyCredentials
 import com.google.maps.GeoApiContext
 import com.google.maps.places.v1.PlacesClient
 import com.google.maps.places.v1.PlacesSettings
-import dev.lewischan.weatherbot.service.GoogleMapsLocationService
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
 import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean
