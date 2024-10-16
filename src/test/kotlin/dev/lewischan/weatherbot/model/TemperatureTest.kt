@@ -1,29 +1,29 @@
 package dev.lewischan.weatherbot.model
 
-import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.DynamicTest
-import org.junit.jupiter.api.TestFactory
+import io.kotest.core.spec.style.FunSpec
+import io.kotest.datatest.withData
+import io.kotest.matchers.shouldBe
 
-class TemperatureTest {
+class TemperatureTest : FunSpec({
 
-    @TestFactory
-    fun testCelsiusToFahrenheit() = listOf(
-        30.4 to 86.72,
-        15.0 to 59.0,
-        15.23 to 59.41
-    ).map { (celsius, fahrenheit) ->
-        DynamicTest.dynamicTest("Celsius $celsius should be Fahrenheit $fahrenheit") {
-            assertEquals(fahrenheit, Temperature.celsius(celsius).fahrenheit)
+    context("Celsius should be converted to Fahrenheit correctly") {
+        withData(
+            30.4 to 86.72,
+            15.0 to 59.0,
+            15.23 to 59.41
+        ) { (celsius, fahrenheit) ->
+            Temperature.celsius(celsius).fahrenheit shouldBe fahrenheit
         }
     }
 
-    @TestFactory
-    fun testFahrenheitToCelsius() = listOf(
-        86.72 to 30.4,
-        212.0 to 100.0
-    ).map { (fahrenheit, celsius) ->
-        DynamicTest.dynamicTest("Fahrenheit $fahrenheit should be Celsius $celsius") {
-            assertEquals(celsius, Temperature.fahrenheit(fahrenheit).celsius)
+    context("Fahrenheit should be converted to Celsius correctly") {
+        withData(
+            86.72 to 30.4,
+            212.0 to 100.0
+        ) { (fahrenheit, celsius) ->
+            Temperature.fahrenheit(fahrenheit).celsius shouldBe celsius
+
         }
     }
-}
+
+})

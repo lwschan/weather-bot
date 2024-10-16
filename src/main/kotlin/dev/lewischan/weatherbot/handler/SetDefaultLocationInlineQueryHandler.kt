@@ -2,6 +2,7 @@ package dev.lewischan.weatherbot.handler
 
 import com.github.kotlintelegrambot.Bot
 import com.github.kotlintelegrambot.entities.InlineQuery
+import com.github.kotlintelegrambot.entities.ParseMode
 import com.github.kotlintelegrambot.entities.inlinequeryresults.InlineQueryResult
 import com.github.kotlintelegrambot.entities.inlinequeryresults.InputMessageContent
 import dev.lewischan.weatherbot.service.LocationService
@@ -30,12 +31,12 @@ class SetDefaultLocationInlineQueryHandler(
                 thumbWidth = 0,
                 thumbHeight = 0,
                 hideUrl = true,
-                inputMessageContent = InputMessageContent.Location(
-                    latitude = it.latitude.toFloat(),
-                    longitude = it.longitude.toFloat()
+                inputMessageContent = InputMessageContent.Text(
+                    messageText = "${it.name} ${it.formattedAddress}",
+                    parseMode = ParseMode.HTML
                 )
             )
         }
-        bot.answerInlineQuery(inlineQuery.id, queryResponse)
+        bot.answerInlineQuery(inlineQuery.id, queryResponse, cacheTime = 0, isPersonal = true)
     }
 }

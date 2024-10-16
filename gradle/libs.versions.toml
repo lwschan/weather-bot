@@ -1,6 +1,7 @@
 # ORDER EVERYTHING ALPHABETICALLY
 
 [versions]
+google-api-gax-grpc = "2.55.+"
 google-maps-places = "0.+"
 google-maps-services = "2.+"
 kotest = "5.9.+"
@@ -44,6 +45,7 @@ postgresql = { module = "org.postgresql:postgresql" }
 spring-boot-configuration-processor = { module = "org.springframework.boot:spring-boot-configuration-processor" }
 
 # testImplementation
+google-api-gax-grpc = { group = "com.google.api", name = "gax-grpc", version.ref = "google-api-gax-grpc" }
 kotest = { module = "io.kotest:kotest-runner-junit5", version.ref = "kotest" }
 kotest-extensions-spring = { module = "io.kotest.extensions:kotest-extensions-spring", version.ref = "kotest-extensions-spring" }
 kotest-framework-datatest = { module = "io.kotest:kotest-framework-datatest", version.ref = "kotest" }
