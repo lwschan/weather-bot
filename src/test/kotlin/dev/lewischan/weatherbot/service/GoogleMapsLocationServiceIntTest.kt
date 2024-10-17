@@ -2,18 +2,23 @@ package dev.lewischan.weatherbot.service
 
 import com.github.tomakehurst.wiremock.WireMockServer
 import com.github.tomakehurst.wiremock.client.WireMock.*
+import com.google.api.gax.grpc.testing.MockServiceHelper
+import com.google.maps.places.v1.MockPlaces
 import dev.lewischan.weatherbot.BaseIntTestNew
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNotBe
 import wiremock.org.eclipse.jetty.http.HttpStatus
+import java.util.*
 
 class GoogleMapsLocationServiceIntTest(
     private val googleMapsLocationService: GoogleMapsLocationService,
-    private val wireMockServer: WireMockServer
+    private val wireMockServer: WireMockServer,
+    private val mockPlacesServiceHelper: MockServiceHelper
 ) : BaseIntTestNew({
 
     beforeTest {
         wireMockServer.start()
+        mockPlacesServiceHelper.start()
 
         val testGeocodeResponse = javaClass.getResourceAsStream("/test-geocode-response.json")
             ?.bufferedReader()
@@ -42,6 +47,7 @@ class GoogleMapsLocationServiceIntTest(
 
     afterTest {
         wireMockServer.stop()
+        mockPlacesServiceHelper.stop()
     }
 
     test("geocode should convert the address to a location") {

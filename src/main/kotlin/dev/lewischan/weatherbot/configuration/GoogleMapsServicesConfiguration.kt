@@ -37,6 +37,7 @@ class GoogleMapsServicesConfiguration {
     }
 
     @Bean
+    @ConditionalOnMissingBean(name = ["placesClient"])
     fun placesClient(googleMapsServicesProperties: GoogleMapsServicesProperties): PlacesClient {
         val fieldMask = listOf(
             "places.id",

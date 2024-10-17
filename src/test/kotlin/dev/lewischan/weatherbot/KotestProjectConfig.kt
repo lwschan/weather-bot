@@ -5,7 +5,7 @@ import io.kotest.core.extensions.Extension
 import io.kotest.core.test.AssertionMode
 import io.kotest.extensions.spring.SpringExtension
 
-class TestProjectConfiguration : AbstractProjectConfig() {
+class KotestProjectConfig : AbstractProjectConfig() {
 
     override val parallelism: Int = 3
     override val assertionMode = AssertionMode.Error
