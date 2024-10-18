@@ -64,6 +64,7 @@ dependencies {
 
     testImplementation("${libs.google.api.gax.grpc.get()}:testlib")
     testImplementation("${libs.google.maps.places.get()}:tests")
+    testImplementation(libs.grpc.google.maps.places.v1)
     testImplementation(libs.kotest)
     testImplementation(libs.kotest.extensions.spring)
     testImplementation(libs.kotest.framework.datatest)

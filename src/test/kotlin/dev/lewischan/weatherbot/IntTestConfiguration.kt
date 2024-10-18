@@ -38,18 +38,18 @@ class IntTestConfiguration {
             .build()
     }
 
-//    @Bean
-//    fun mockPlacesService(): MockPlaces {
-//        val sss = MockPlacesImpl()
-//        return MockPlaces()
-//    }
+    @Bean
+    fun mockPlacesService(): MockPlaces {
+        return MockPlaces()
+    }
 
     @Bean
-    fun mockPlacesServiceHelper(mockPlacesService: MockPlaces?): MockServiceHelper {
+    fun mockPlacesServiceHelper(mockPlacesService: MockPlaces): MockServiceHelper {
         return MockServiceHelper(UUID.randomUUID().toString(), listOf(mockPlacesService))
     }
 
     @Bean
+    @Primary
     fun placesClient(mockPlacesServiceHelper: MockServiceHelper): PlacesClient {
         val grpcChannelProvider = mockPlacesServiceHelper.createChannelProvider()
         val placesSettings = PlacesSettings.newBuilder()

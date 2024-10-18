@@ -4,16 +4,18 @@ import com.github.tomakehurst.wiremock.WireMockServer
 import com.github.tomakehurst.wiremock.client.WireMock.*
 import com.google.api.gax.grpc.testing.MockServiceHelper
 import com.google.maps.places.v1.MockPlaces
+import com.google.maps.places.v1.SearchTextResponse
 import dev.lewischan.weatherbot.BaseIntTestNew
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNotBe
 import wiremock.org.eclipse.jetty.http.HttpStatus
-import java.util.*
+
 
 class GoogleMapsLocationServiceIntTest(
     private val googleMapsLocationService: GoogleMapsLocationService,
     private val wireMockServer: WireMockServer,
-    private val mockPlacesServiceHelper: MockServiceHelper
+    private val mockPlacesServiceHelper: MockServiceHelper,
+    private val mockPlaces: MockPlaces
 ) : BaseIntTestNew({
 
     beforeTest {
@@ -65,6 +67,14 @@ class GoogleMapsLocationServiceIntTest(
     }
 
     test("search should return a list of location") {
+        val expectedResponse =
+            SearchTextResponse.newBuilder()
+                .addAllPlaces(ArrayList())
+                .addAllRoutingSummaries(ArrayList())
+                .addAllContextualContents(ArrayList())
+                .build()
+        mockPlaces.addResponse(expectedResponse);
+
         val locations = googleMapsLocationService.search("Whataburger")
         locations.size shouldBe 10
     }

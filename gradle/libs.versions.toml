@@ -4,6 +4,7 @@
 google-api-gax-grpc = "2.55.+"
 google-maps-places = "0.+"
 google-maps-services = "2.+"
+grpc-google-maps-places-v1 = "0.23.+"
 kotest = "5.9.+"
 kotest-extensions-spring = "1.3.+"
 kotlin-jvm = "2.+"
@@ -45,7 +46,8 @@ postgresql = { module = "org.postgresql:postgresql" }
 spring-boot-configuration-processor = { module = "org.springframework.boot:spring-boot-configuration-processor" }
 
 # testImplementation
-google-api-gax-grpc = { group = "com.google.api", name = "gax-grpc", version.ref = "google-api-gax-grpc" }
+google-api-gax-grpc = { module = "com.google.api:gax-grpc", version.ref = "google-api-gax-grpc" }
+grpc-google-maps-places-v1 = { module = "com.google.maps.api.grpc:grpc-google-maps-places-v1", version.ref = "grpc-google-maps-places-v1" }
 kotest = { module = "io.kotest:kotest-runner-junit5", version.ref = "kotest" }
 kotest-extensions-spring = { module = "io.kotest.extensions:kotest-extensions-spring", version.ref = "kotest-extensions-spring" }
 kotest-framework-datatest = { module = "io.kotest:kotest-framework-datatest", version.ref = "kotest" }
