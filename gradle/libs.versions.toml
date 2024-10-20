@@ -1,10 +1,17 @@
 # ORDER EVERYTHING ALPHABETICALLY
 
 [versions]
+google-api-gax-grpc = "2.+"
+google-maps-places = "0.+"
 google-maps-services = "2.+"
+grpc-google-maps-places-v1 = "0.+"
+kotest = "5.9.+"
+kotest-extensions-spring = "1.3.+"
 kotlin-jvm = "2.+"
 kotlin-plugin-spring = "2.+"
 kotlin-telegram-bot = "6.+"
+mockk = "1.+"
+retrofit2 = "2.+"
 spring-boot = "3.3.+"
 spring-dependency-management = "1.+"
 wiremock = "3.+"
@@ -18,11 +25,13 @@ spring-dependency-management = { id = "io.spring.dependency-management", version
 apache-http-components-client5 = { module = "org.apache.httpcomponents.client5:httpclient5" }
 flyway-core = { module = "org.flywaydb:flyway-core" }
 flyway-postgresql = { module = "org.flywaydb:flyway-database-postgresql" }
+google-maps-places = { module = "com.google.maps:google-maps-places", version.ref = "google-maps-places" }
 google-maps-services = { module = "com.google.maps:google-maps-services", version.ref = "google-maps-services" }
 jackson-module-kotlin = { module = "com.fasterxml.jackson.module:jackson-module-kotlin" }
 kotlin-reflect = { module = "org.jetbrains.kotlin:kotlin-reflect" }
 kotlin-telegram-bot = { module = "io.github.kotlin-telegram-bot.kotlin-telegram-bot:telegram", version.ref = "kotlin-telegram-bot" }
 micrometer-tracing-bridge-brave = { module = "io.micrometer:micrometer-tracing-bridge-brave" }
+retrofit2 = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit2" }
 spring-boot-starter-actuator = { module = "org.springframework.boot:spring-boot-starter-actuator" }
 spring-boot-starter-jdbc = { module = "org.springframework.boot:spring-boot-starter-jdbc" }
 spring-boot-starter-web = { module = "org.springframework.boot:spring-boot-starter-web" }
@@ -38,7 +47,13 @@ postgresql = { module = "org.postgresql:postgresql" }
 spring-boot-configuration-processor = { module = "org.springframework.boot:spring-boot-configuration-processor" }
 
 # testImplementation
+google-api-gax-grpc = { module = "com.google.api:gax-grpc", version.ref = "google-api-gax-grpc" }
+grpc-google-maps-places-v1 = { module = "com.google.maps.api.grpc:grpc-google-maps-places-v1", version.ref = "grpc-google-maps-places-v1" }
+kotest = { module = "io.kotest:kotest-runner-junit5", version.ref = "kotest" }
+kotest-extensions-spring = { module = "io.kotest.extensions:kotest-extensions-spring", version.ref = "kotest-extensions-spring" }
+kotest-framework-datatest = { module = "io.kotest:kotest-framework-datatest", version.ref = "kotest" }
 kotlin-test-junit5 = { module = "org.jetbrains.kotlin:kotlin-test-junit5" }
+mockk = { module = "io.mockk:mockk", version.ref = "mockk"}
 spring-boot-starter-test = { module = "org.springframework.boot:spring-boot-starter-test" }
 wiremock = { module = "org.wiremock:wiremock-standalone", version.ref = "wiremock" }
 

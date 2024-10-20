@@ -2,9 +2,18 @@ package dev.lewischan.weatherbot.handler
 
 import com.github.kotlintelegrambot.Bot
 import com.github.kotlintelegrambot.entities.Message
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 
-interface CommandHandler {
-    val command: String
+abstract class CommandHandler {
+    abstract val command: String
 
-    fun handleCommand(bot: Bot, message: Message)
+    protected abstract fun handleCommand(bot: Bot, message: Message)
+
+    protected val logger: Logger = LoggerFactory.getLogger(javaClass)
+
+    fun execute(bot: Bot, message: Message) {
+        logger.info("Handling Telegram bot command: $command for message: ${message.text}")
+        handleCommand(bot, message)
+    }
 }

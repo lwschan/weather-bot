@@ -14,7 +14,6 @@ class ApplicationStartupConfiguration(
     private val logger = LoggerFactory.getLogger(ApplicationStartupConfiguration::class.java)
 
     override fun onApplicationEvent(event: ApplicationReadyEvent) {
-        logger.info("Starting Telegram Weather Bot")
         telegramBotService.start()
     }
 }

@@ -2,45 +2,41 @@ package dev.lewischan.weatherbot.repository
 
 import dev.lewischan.weatherbot.BaseIntTest
 import dev.lewischan.weatherbot.domain.ExternalPlatform
-import org.junit.jupiter.api.Test
-import org.springframework.beans.factory.annotation.Autowired
-import java.security.SecureRandom
-import kotlin.test.assertEquals
-import kotlin.test.assertNotNull
-import kotlin.test.assertNull
+import io.kotest.matchers.longs.shouldBeGreaterThan
+import io.kotest.matchers.shouldBe
+import io.kotest.matchers.shouldNotBe
+import java.util.*
 
-class UserRepositoryIntTest @Autowired constructor(
+class UserRepositoryIntTest(
     private val userRepository: UserRepository
-) : BaseIntTest() {
+) : BaseIntTest({
 
-    @Test
-    fun createUserShouldCreateUserSuccessfully() {
-        val externalUserId = SecureRandom().nextLong(0, 1000000000)
+    test("create user should create user successfully") {
+        val externalUserId = UUID.randomUUID()
         val user = userRepository.createUser(
             ExternalPlatform.TELEGRAM, externalUserId
         )
-        assertNotNull(user.id)
-        assertEquals(user.externalPlatform, ExternalPlatform.TELEGRAM)
-        assertEquals(user.externalUserId, externalUserId)
+        user.id shouldBeGreaterThan 0
+        user.externalPlatform shouldBe ExternalPlatform.TELEGRAM
+        user.externalUserId shouldBe externalUserId
     }
 
-    @Test
-    fun whenExistsFindUserByExternalUserIdShouldReturnUser() {
-        val externalUserId = SecureRandom().nextLong(0, 1000000000)
+    test("when exists findUserByExternalUserId should return user") {
+        val externalUserId = UUID.randomUUID()
         val createdUser = userRepository.createUser(
             ExternalPlatform.TELEGRAM, externalUserId
         )
-        val user = userRepository.findUserByExternalUserId(ExternalPlatform.TELEGRAM, externalUserId)
-        assertNotNull(user)
-        assertEquals(createdUser.id, user.id)
-        assertEquals(createdUser.externalPlatform, ExternalPlatform.TELEGRAM)
-        assertEquals(createdUser.externalUserId, user.externalUserId)
+        val user = userRepository.findByExternalUserId(ExternalPlatform.TELEGRAM, externalUserId)
+        user shouldNotBe null
+        user!!.id shouldBe createdUser.id
+        user.externalPlatform shouldBe createdUser.externalPlatform
+        user.externalUserId shouldBe createdUser.externalUserId
     }
 
-    @Test
-    fun whenNotExistFindUserByExternalUserIdShouldReturnNull() {
-        val userId = SecureRandom().nextLong(0, 1000000000)
-        val user = userRepository.findUserByExternalUserId(ExternalPlatform.TELEGRAM, userId)
-        assertNull(user)
+    test("when not exist findUserByExternalUserId should return null") {
+        val userId = UUID.randomUUID()
+        val user = userRepository.findByExternalUserId(ExternalPlatform.TELEGRAM, userId)
+        user shouldBe null
     }
-}
+
+})
