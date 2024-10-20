@@ -1,15 +1,16 @@
 # ORDER EVERYTHING ALPHABETICALLY
 
 [versions]
-google-api-gax-grpc = "2.55.+"
+google-api-gax-grpc = "2.+"
 google-maps-places = "0.+"
 google-maps-services = "2.+"
-grpc-google-maps-places-v1 = "0.23.+"
+grpc-google-maps-places-v1 = "0.+"
 kotest = "5.9.+"
 kotest-extensions-spring = "1.3.+"
 kotlin-jvm = "2.+"
 kotlin-plugin-spring = "2.+"
 kotlin-telegram-bot = "6.+"
+mockk = "1.+"
 retrofit2 = "2.+"
 spring-boot = "3.3.+"
 spring-dependency-management = "1.+"
@@ -52,6 +53,7 @@ kotest = { module = "io.kotest:kotest-runner-junit5", version.ref = "kotest" }
 kotest-extensions-spring = { module = "io.kotest.extensions:kotest-extensions-spring", version.ref = "kotest-extensions-spring" }
 kotest-framework-datatest = { module = "io.kotest:kotest-framework-datatest", version.ref = "kotest" }
 kotlin-test-junit5 = { module = "org.jetbrains.kotlin:kotlin-test-junit5" }
+mockk = { module = "io.mockk:mockk", version.ref = "mockk"}
 spring-boot-starter-test = { module = "org.springframework.boot:spring-boot-starter-test" }
 wiremock = { module = "org.wiremock:wiremock-standalone", version.ref = "wiremock" }
 

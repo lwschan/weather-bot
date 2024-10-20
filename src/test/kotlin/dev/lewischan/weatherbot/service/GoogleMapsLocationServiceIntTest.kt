@@ -2,26 +2,26 @@ package dev.lewischan.weatherbot.service
 
 import com.github.tomakehurst.wiremock.WireMockServer
 import com.github.tomakehurst.wiremock.client.WireMock.*
-import com.google.api.gax.grpc.testing.MockServiceHelper
 import com.google.maps.places.v1.MockPlaces
+import com.google.maps.places.v1.Place
+import com.google.maps.places.v1.PlacesClient
 import com.google.maps.places.v1.SearchTextResponse
-import dev.lewischan.weatherbot.BaseIntTestNew
+import com.google.type.LatLng
+import com.google.type.LocalizedText
+import dev.lewischan.weatherbot.BaseIntTest
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNotBe
+import io.mockk.verify
 import wiremock.org.eclipse.jetty.http.HttpStatus
-
 
 class GoogleMapsLocationServiceIntTest(
     private val googleMapsLocationService: GoogleMapsLocationService,
     private val wireMockServer: WireMockServer,
-    private val mockPlacesServiceHelper: MockServiceHelper,
-    private val mockPlaces: MockPlaces
-) : BaseIntTestNew({
+    private val mockPlaces: MockPlaces,
+    private val placesClient: PlacesClient
+) : BaseIntTest({
 
-    beforeTest {
-        wireMockServer.start()
-        mockPlacesServiceHelper.start()
-
+    beforeSpec {
         val testGeocodeResponse = javaClass.getResourceAsStream("/test-geocode-response.json")
             ?.bufferedReader()
             ?.readLines()
@@ -47,9 +47,8 @@ class GoogleMapsLocationServiceIntTest(
         )
     }
 
-    afterTest {
-        wireMockServer.stop()
-        mockPlacesServiceHelper.stop()
+    afterEach {
+        mockPlaces.reset()
     }
 
     test("geocode should convert the address to a location") {
@@ -66,17 +65,42 @@ class GoogleMapsLocationServiceIntTest(
         location shouldBe null
     }
 
-    test("search should return a list of location") {
-        val expectedResponse =
-            SearchTextResponse.newBuilder()
-                .addAllPlaces(ArrayList())
-                .addAllRoutingSummaries(ArrayList())
-                .addAllContextualContents(ArrayList())
-                .build()
-        mockPlaces.addResponse(expectedResponse);
+    test("search should be made with the right query") {
+        val expectedResponse = SearchTextResponse.newBuilder()
+            .addAllPlaces(emptyList())
+            .addAllRoutingSummaries(emptyList())
+            .addAllContextualContents(emptyList())
+            .build()
+        mockPlaces.addResponse(expectedResponse)
 
-        val locations = googleMapsLocationService.search("Whataburger")
-        locations.size shouldBe 10
+        val locations = googleMapsLocationService.search("Jewel Changi Airport")
+
+        verify(exactly = 1) {
+            placesClient.searchText(match { it.textQuery == "Jewel Changi Airport" })
+        }
+        locations.size shouldBe 0
+    }
+
+    test("search should convert Places to Location") {
+        val expectedPlace = Place.newBuilder()
+            .setDisplayName(LocalizedText.newBuilder().setText("Jewel Changi Airport"))
+            .setFormattedAddress("78 Airport Boulevard, Singapore 819666")
+            .setLocation(LatLng.newBuilder().setLatitude(1.3602148).setLongitude(103.9871849).build())
+            .build()
+        val expectedResponse = SearchTextResponse.newBuilder()
+            .addAllPlaces(listOf(expectedPlace))
+            .addAllRoutingSummaries(emptyList())
+            .addAllContextualContents(emptyList())
+            .build()
+        mockPlaces.addResponse(expectedResponse)
+
+        val locations = googleMapsLocationService.search("Jewel Changi Airport")
+
+        locations.size shouldBe 1
+        locations[0].name shouldBe "Jewel Changi Airport"
+        locations[0].formattedAddress shouldBe "78 Airport Boulevard, Singapore 819666"
+        locations[0].latitude shouldBe 1.3602148
+        locations[0].longitude shouldBe 103.9871849
     }
 
 })

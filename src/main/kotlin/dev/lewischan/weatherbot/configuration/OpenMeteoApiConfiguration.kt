@@ -16,7 +16,7 @@ import org.springframework.web.client.RestClient
 class OpenMeteoApiConfiguration {
 
     @Bean
-    @ConditionalOnMissingBean(name = ["openMeteoRestClient"])
+    @ConditionalOnMissingBean
     fun openMeteoRestClient(
         openMeteoApiProperties: OpenMeteoApiProperties
     ): RestClient {

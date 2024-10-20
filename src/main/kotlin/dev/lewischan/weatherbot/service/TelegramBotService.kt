@@ -11,19 +11,17 @@ import dev.lewischan.weatherbot.handler.InlineQueryHandler
 import jakarta.annotation.PreDestroy
 import org.slf4j.LoggerFactory
 
-class TelegramBotService {
+class TelegramBotService(
+    private val telegramBotProperties: TelegramBotProperties,
+    commandHandlers: List<CommandHandler>,
+    inlineQueryHandler: InlineQueryHandler
+) {
 
     private val logger = LoggerFactory.getLogger(this::class.java)
 
-    private val telegramBotProperties: TelegramBotProperties
     private val telegramBot: Bot
 
-    constructor(
-        telegramBotProperties: TelegramBotProperties,
-        commandHandlers: List<CommandHandler>,
-        inlineQueryHandler: InlineQueryHandler
-    ) {
-        this.telegramBotProperties = telegramBotProperties
+    init {
         this.telegramBot = createTelegramBot(commandHandlers, inlineQueryHandler)
     }
 

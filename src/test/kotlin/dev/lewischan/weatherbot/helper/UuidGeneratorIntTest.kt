@@ -1,20 +1,20 @@
 package dev.lewischan.weatherbot.helper
 
-import dev.lewischan.weatherbot.BaseIntTestNew
 import dev.lewischan.weatherbot.helper.UuidGenerator.Namespace
+import io.kotest.core.spec.style.FunSpec
 import io.kotest.datatest.withData
 import io.kotest.matchers.shouldBe
-import java.util.UUID
+import java.util.*
 
-class UuidGeneratorIntTest(
-    private val uuidGenerator: UuidGenerator
-) : BaseIntTestNew({
+class UuidGeneratorIntTest : FunSpec({
 
     data class UuidTestData(
         val namespace: Namespace,
         val givenValue: String,
         val expectedValue: UUID
     )
+
+    val uuidGenerator: UuidGenerator = UuidGenerator()
 
     context("UuidGenerator.v5 should return deterministic UUID given the same namespace and value") {
         withData(
@@ -29,8 +29,8 @@ class UuidGeneratorIntTest(
                 UUID.fromString("42926b0b-febf-5bcb-bbea-f16008c1bc8e")
             )
         ) { (namespace, value, expected) ->
-            val uuid1 = uuidGenerator.v5(Namespace.TELEGRAM, value)
-            val uuid2 = uuidGenerator.v5(Namespace.TELEGRAM, value)
+            val uuid1 = uuidGenerator.v5(namespace, value)
+            val uuid2 = uuidGenerator.v5(namespace, value)
             uuid1 shouldBe expected
             uuid2 shouldBe expected
         }

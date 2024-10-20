@@ -15,18 +15,8 @@ import org.springframework.context.annotation.Configuration
 @EnableConfigurationProperties(GoogleMapsServicesProperties::class)
 class GoogleMapsServicesConfiguration {
 
-    companion object {
-        val PLACES_API_FIELD_MASK = listOf(
-            "places.id",
-            "places.displayName",
-            "places.formattedAddress",
-            "places.shortFormattedAddress",
-            "places.location"
-        )
-    }
-
     @Bean
-    @ConditionalOnMissingBean(name = ["geoApiContext"])
+    @ConditionalOnMissingBean
     fun geoApiContext(
         googleMapsServicesProperties: GoogleMapsServicesProperties
     ): GeoApiContext {
@@ -37,7 +27,7 @@ class GoogleMapsServicesConfiguration {
     }
 
     @Bean
-    @ConditionalOnMissingBean(name = ["placesClient"])
+    @ConditionalOnMissingBean
     fun placesClient(googleMapsServicesProperties: GoogleMapsServicesProperties): PlacesClient {
         val fieldMask = listOf(
             "places.id",
