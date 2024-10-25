@@ -19,7 +19,7 @@ class TelegramBotController(
     @PostMapping("/{botApiToken}")
     fun webhook(
         @PathVariable botApiToken: String,
-//        @RequestBody update: Update
+        @RequestBody update: Update
     ): ResponseEntity<Unit> {
         if (botApiToken != telegramBotProperties.apiToken) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build()
