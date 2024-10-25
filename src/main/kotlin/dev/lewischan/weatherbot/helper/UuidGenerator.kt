@@ -8,18 +8,14 @@ import java.util.UUID
 @Component
 class UuidGenerator {
 
-    enum class Namespace(val value: UUID) {
-        TELEGRAM(UUID.fromString("b171e096-4e26-4730-a4b3-6114053d321b"))
-    }
-
-    fun v5(namespace: Namespace, value: String): UUID {
+    fun v5(namespace: UUID, value: String): UUID {
         val md: MessageDigest
         try {
             md = MessageDigest.getInstance("SHA-1")
         } catch (ex: NoSuchAlgorithmException) {
             throw InternalError("SHA-1 not supported", ex)
         }
-        md.update(toBytes(namespace.value))
+        md.update(toBytes(namespace))
         md.update(value.toByteArray())
         val bytes = md.digest()
         bytes[6] = ((bytes[6].toInt() and 0x0F) or 0x50).toByte() /* clear version; set to version 5 */

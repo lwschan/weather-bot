@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component
 @Component
 class StartCommandHandler : CommandHandler() {
     override val command = "start"
+    override val description = "Hello world!"
 
     override fun handleCommand(bot: Bot, message: Message) {
         val chatId = message.chat.id

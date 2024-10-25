@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory
 
 abstract class CommandHandler {
     abstract val command: String
+    abstract val description: String
 
     protected abstract fun handleCommand(bot: Bot, message: Message)
 

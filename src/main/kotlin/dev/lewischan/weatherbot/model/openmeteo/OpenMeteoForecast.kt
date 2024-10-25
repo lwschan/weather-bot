@@ -1,15 +1,18 @@
 package dev.lewischan.weatherbot.model.openmeteo
 
 import com.fasterxml.jackson.annotation.JsonAlias
+import java.time.Instant
+import java.time.ZoneId
 
 data class OpenMeteoForecast(
     val latitude: Double,
     val longitude: Double,
+    val timezone: ZoneId,
     val current: CurrentWeather
 )
 
 data class CurrentWeather(
-    val time: Long,
+    val time: Instant,
     val interval: Int,
     @JsonAlias("temperature_2m") val temperatureTwoMetres: Double,
     @JsonAlias("relative_humidity_2m") val relativeHumidityTwoMetres: Int,

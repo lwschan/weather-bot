@@ -45,6 +45,7 @@ dependencies {
     implementation(libs.flyway.postgresql)
     implementation(libs.google.maps.places)
     implementation(libs.google.maps.services)
+    implementation(libs.jackson.datatype.jsr310)
     implementation(libs.jackson.module.kotlin)
     implementation(libs.kotlin.reflect)
     implementation(libs.kotlin.telegram.bot)
@@ -70,6 +71,7 @@ dependencies {
     testImplementation(libs.kotlin.test.junit5)
     testImplementation(libs.mockk)
     testImplementation(libs.spring.boot.starter.test)
+    testImplementation(libs.spring.boot.starter.webflux)
     testImplementation(libs.wiremock)
 
     testRuntimeOnly(libs.junit.platform.launcher)

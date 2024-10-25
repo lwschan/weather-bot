@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component
 @Component
 class HelpCommandHandler : CommandHandler() {
     override val command = "help"
+    override val description = "Get help"
 
     override fun handleCommand(
         bot: Bot,

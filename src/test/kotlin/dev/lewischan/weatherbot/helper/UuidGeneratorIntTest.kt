@@ -1,6 +1,6 @@
 package dev.lewischan.weatherbot.helper
 
-import dev.lewischan.weatherbot.helper.UuidGenerator.Namespace
+import dev.lewischan.weatherbot.domain.ExternalPlatform
 import io.kotest.core.spec.style.FunSpec
 import io.kotest.datatest.withData
 import io.kotest.matchers.shouldBe
@@ -9,22 +9,22 @@ import java.util.*
 class UuidGeneratorIntTest : FunSpec({
 
     data class UuidTestData(
-        val namespace: Namespace,
+        val namespace: UUID,
         val givenValue: String,
         val expectedValue: UUID
     )
 
-    val uuidGenerator: UuidGenerator = UuidGenerator()
+    val uuidGenerator = UuidGenerator()
 
     context("UuidGenerator.v5 should return deterministic UUID given the same namespace and value") {
         withData(
             UuidTestData(
-                Namespace.TELEGRAM,
+                ExternalPlatform.TELEGRAM.id,
                 "129847128",
                 UUID.fromString("1bf95d21-9526-5522-913f-eac96db24953")
             ),
             UuidTestData(
-                Namespace.TELEGRAM,
+                ExternalPlatform.TELEGRAM.id,
                 "89174194",
                 UUID.fromString("42926b0b-febf-5bcb-bbea-f16008c1bc8e")
             )
