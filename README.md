@@ -6,7 +6,7 @@ Dependencies are locked using gradle. To update a dependency, modify the version
 [/gradle/libs.versions.toml](/gradle/libs.versions.toml), and update the lock files using the following command.
 
 ```shell
-./gradlew dependencies --write-locks
+make update-dependencies
 ```
 
 ## Gradle
