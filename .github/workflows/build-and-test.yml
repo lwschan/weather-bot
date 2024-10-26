@@ -63,7 +63,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: 'build'
-          path: $GITHUB_WORKSPACE/build
+          path: 'build'
 
       - name: SonarCloud Scan
         uses: sonarsource/sonarcloud-github-action@v3
