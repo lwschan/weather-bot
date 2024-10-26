@@ -54,6 +54,11 @@ class UserDefaultLocationRepositoryIntTest @Autowired constructor(
             updatedUserDefaultLocation.userId shouldBe savedUserDefaultLocation.userId
             updatedUserDefaultLocation.location shouldBeEqualUsingFields newDefaultLocation
         }
+
+        test("delete should delete the record") {
+            userDefaultLocationRepository.deleteForUser(user.id)
+            userDefaultLocationRepository.findByUserId(user.id) shouldBe null
+        }
     }
 
     test("when not exists, findByUserId should return null") {

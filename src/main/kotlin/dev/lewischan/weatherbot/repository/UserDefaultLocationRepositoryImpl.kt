@@ -39,7 +39,7 @@ class UserDefaultLocationRepositoryImpl(
     override fun deleteForUser(userId: Long) {
         jdbcClient.sql(DELETE_FOR_USER)
             .param("userId", userId)
-            .query()
+            .update()
     }
 
 
