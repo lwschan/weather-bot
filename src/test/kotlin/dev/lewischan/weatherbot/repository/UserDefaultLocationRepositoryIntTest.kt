@@ -62,7 +62,7 @@ class UserDefaultLocationRepositoryIntTest @Autowired constructor(
     }
 
     test("when not exists, findByUserId should return null") {
-        val userId = SecureRandom().nextLong(0, 1000000000)
+        val userId = SecureRandom().nextLong(0, Long.MAX_VALUE)
         val userDefaultLocation = userDefaultLocationRepository.findByUserId(userId)
         userDefaultLocation shouldBe null
     }

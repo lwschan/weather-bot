@@ -14,14 +14,14 @@ class TelegramUserServiceIntTest(
 ) : BaseIntTest({
 
     test("createUser should create a new user") {
-        val externalUserId = SecureRandom().nextLong(0, 1000000000)
+        val externalUserId = SecureRandom().nextLong(0, Long.MAX_VALUE)
         val user = telegramUserService.createUser(externalUserId)
         user.id shouldBeGreaterThan 0
         user.externalPlatform shouldBe ExternalPlatform.TELEGRAM
     }
 
     context("when user already exists") {
-        val externalUserId = SecureRandom().nextLong(0, 1000000000)
+        val externalUserId = SecureRandom().nextLong(0, Long.MAX_VALUE)
         val user = telegramUserService.createUser(externalUserId)
         user.id shouldBeGreaterThan 0
 
