@@ -4,20 +4,15 @@ import com.github.kotlintelegrambot.Bot
 import com.github.kotlintelegrambot.bot
 import com.github.kotlintelegrambot.dispatch
 import com.github.kotlintelegrambot.dispatcher.command
-import com.github.kotlintelegrambot.dispatcher.handlers.Handler
-import com.github.kotlintelegrambot.dispatcher.inlineQuery
 import com.github.kotlintelegrambot.entities.BotCommand
 import dev.lewischan.weatherbot.configuration.TelegramBotProperties
 import dev.lewischan.weatherbot.handler.CommandHandler
-import dev.lewischan.weatherbot.handler.InlineQueryHandler
 import jakarta.annotation.PreDestroy
 import org.slf4j.LoggerFactory
 
 class TelegramBot(
     private val telegramBotProperties: TelegramBotProperties,
-    commandHandlers: List<CommandHandler>,
-    inlineQueryHandler: InlineQueryHandler,
-    chosenInlineResulHandler: Handler
+    commandHandlers: List<CommandHandler>
 ) {
 
     private val logger = LoggerFactory.getLogger(this::class.java)
@@ -25,7 +20,7 @@ class TelegramBot(
     private val telegramBot: Bot
 
     init {
-        this.telegramBot = createTelegramBot(commandHandlers, inlineQueryHandler, chosenInlineResulHandler)
+        this.telegramBot = createTelegramBot(commandHandlers)
         registerCommands(commandHandlers)
     }
 
@@ -54,22 +49,14 @@ class TelegramBot(
         }
     }
 
-    private fun createTelegramBot(
-        commandHandlers: List<CommandHandler>,
-        inlineQueryHandler: InlineQueryHandler,
-        chosenInlineResulHandler: Handler
-    ): Bot {
+    private fun createTelegramBot(commandHandlers: List<CommandHandler>): Bot {
         return bot {
             token = telegramBotProperties.apiToken
             dispatch {
-                addHandler(chosenInlineResulHandler)
                 commandHandlers.forEach {
                     command(it.command) {
                         it.execute(bot, message)
                     }
-                }
-                inlineQuery {
-                    inlineQueryHandler.execute(bot, inlineQuery)
                 }
             }
         }
