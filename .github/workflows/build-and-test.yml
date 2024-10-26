@@ -29,32 +29,22 @@ jobs:
         java-version: '21'
         distribution: 'zulu'
 
-    # Configure Gradle for optimal use in GitHub Actions, including caching of downloaded dependencies.
-    # See: https://github.com/gradle/actions/blob/main/setup-gradle/README.md
     - name: Setup Gradle
       uses: gradle/actions/setup-gradle@v4
 
     - name: Build with Gradle Wrapper
       run: ./gradlew build
 
+    - name: SonarCloud Scan
+      uses: sonarsource/sonarcloud-github-action@v3
+      env:
+        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+
     - name: Publish Test Report
       uses: mikepenz/action-junit-report@v4
       if: success() || failure()
       with:
         report_paths: '**/build/test-results/test/TEST-*.xml'
-
-  sonarcloud:
-
-    runs-on: ubuntu-latest
-
-    steps:
-    - uses: actions/checkout@v4
-      with:
-        fetch-depth: 0
-    - name: SonarCloud Scan
-      uses: sonarsource/sonarcloud-github-action@v3
-      env:
-        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
   dependency-submission:
 
@@ -70,7 +60,5 @@ jobs:
         java-version: '21'
         distribution: 'zulu'
 
-    # Generates and submits a dependency graph, enabling Dependabot Alerts for all project dependencies.
-    # See: https://github.com/gradle/actions/blob/main/dependency-submission/README.md
     - name: Generate and submit dependency graph
       uses: gradle/actions/dependency-submission@v4
