@@ -11,7 +11,6 @@ java {
     targetCompatibility = JavaVersion.VERSION_21
 }
 
-@Suppress("UnstableApiUsage")
 configurations {
     compileOnly {
         extendsFrom(configurations.annotationProcessor.get())
