@@ -31,7 +31,7 @@ class OpenMeteoWeatherServiceIntTest @Autowired constructor(
     }
 
     test("get weather should return the current weather") {
-        val currentWeather = openMeteoWeatherService.getCurrentWeather(Location("", "", 1.3602148, 103.9871849))
+        val currentWeather = openMeteoWeatherService.getCurrentWeather(Location("", 1.3602148, 103.9871849))
         currentWeather shouldNotBe null
         currentWeather!!.temperature.celsius shouldBe 27.4
         currentWeather.condition shouldBe Condition.MAINLY_CLEAR

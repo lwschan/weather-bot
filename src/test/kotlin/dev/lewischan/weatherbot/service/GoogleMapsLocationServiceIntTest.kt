@@ -18,7 +18,7 @@ class GoogleMapsLocationServiceIntTest(
     private val googleMapsLocationService: GoogleMapsLocationService,
     private val wireMockServer: WireMockServer,
     private val mockPlaces: MockPlaces,
-    private val placesClient: PlacesClient
+    private val searchPlacesClient: PlacesClient
 ) : BaseIntTest({
 
     beforeSpec {
@@ -54,8 +54,7 @@ class GoogleMapsLocationServiceIntTest(
     test("geocode should convert the address to a location") {
         val location = googleMapsLocationService.geocode("Stamford Bridge, London")
         location shouldNotBe null
-        location?.name shouldBe "Stamford Bridge, York YO41, UK"
-        location?.formattedAddress shouldBe "Stamford Bridge, York YO41, UK"
+        location?.address shouldBe "Stamford Bridge, York YO41, UK"
         location?.latitude shouldBe 53.990129
         location?.longitude shouldBe -0.9140249
     }
@@ -76,7 +75,7 @@ class GoogleMapsLocationServiceIntTest(
         val locations = googleMapsLocationService.search("Jewel Changi Airport")
 
         verify(exactly = 1) {
-            placesClient.searchText(match { it.textQuery == "Jewel Changi Airport" })
+            searchPlacesClient.searchText(match { it.textQuery == "Jewel Changi Airport" })
         }
         locations.size shouldBe 0
     }
@@ -97,8 +96,7 @@ class GoogleMapsLocationServiceIntTest(
         val locations = googleMapsLocationService.search("Jewel Changi Airport")
 
         locations.size shouldBe 1
-        locations[0].name shouldBe "Jewel Changi Airport"
-        locations[0].formattedAddress shouldBe "78 Airport Boulevard, Singapore 819666"
+        locations[0].address shouldBe "78 Airport Boulevard, Singapore 819666"
         locations[0].latitude shouldBe 1.3602148
         locations[0].longitude shouldBe 103.9871849
     }

@@ -19,12 +19,9 @@ class WeatherCommandHandler(
     private val locationService: LocationService
 ) : CommandHandler() {
     override val command = "w"
-    override val description = "Get current weather"
+    override val description = "Get current weather, provide an address if this is not for your default location."
 
-    override fun handleCommand(
-        bot: Bot,
-        message: Message
-    ) {
+    override fun handleCommand(bot: Bot, message: Message) {
         val address = message.text!!.replace("/$command", "")
             .replace("@${bot.getMe().get().username}", "")
             .trim()
@@ -73,14 +70,14 @@ class WeatherCommandHandler(
         if (weather == null) {
             bot.sendMessage(
                 chatId = ChatId.fromId(message.chat.id),
-                text = "Encountered an error fetching the current weather for ${userDefaultLocation.location.name}.",
+                text = "Encountered an error fetching the current weather for ${userDefaultLocation.location.address}.",
                 replyToMessageId = message.messageId
             )
         }
 
         bot.sendMessage(
             chatId = ChatId.fromId(message.chat.id),
-            text = "${userDefaultLocation.location.name}\n${weather!!.condition.name}",
+            text = "${userDefaultLocation.location.address}\n${weather!!.condition.name}",
             parseMode = ParseMode.MARKDOWN_V2
         )
     }
@@ -111,7 +108,7 @@ class WeatherCommandHandler(
         bot.sendMessage(
             chatId = ChatId.fromId(message.chat.id),
             text = """
-                ${location.name}
+                ${location.address}
                 
                 $localisedTime
                 

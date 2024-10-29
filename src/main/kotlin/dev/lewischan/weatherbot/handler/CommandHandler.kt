@@ -15,6 +15,10 @@ abstract class CommandHandler {
 
     fun execute(bot: Bot, message: Message) {
         logger.info("Handling Telegram bot command: $command for message: ${message.text}")
-        handleCommand(bot, message)
+        try {
+            handleCommand(bot, message)
+        } catch (e: RuntimeException) {
+            logger.error(e.message, e)
+        }
     }
 }

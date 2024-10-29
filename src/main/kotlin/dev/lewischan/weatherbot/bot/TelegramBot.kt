@@ -1,10 +1,8 @@
 package dev.lewischan.weatherbot.bot
 
 import com.github.kotlintelegrambot.Bot
-import com.github.kotlintelegrambot.bot
-import com.github.kotlintelegrambot.dispatch
-import com.github.kotlintelegrambot.dispatcher.command
 import com.github.kotlintelegrambot.entities.BotCommand
+import com.github.kotlintelegrambot.entities.Update
 import dev.lewischan.weatherbot.configuration.TelegramBotProperties
 import dev.lewischan.weatherbot.handler.CommandHandler
 import jakarta.annotation.PreDestroy
@@ -12,16 +10,17 @@ import org.slf4j.LoggerFactory
 
 class TelegramBot(
     private val telegramBotProperties: TelegramBotProperties,
+    private val telegramBot: Bot,
     commandHandlers: List<CommandHandler>
 ) {
-
     private val logger = LoggerFactory.getLogger(this::class.java)
 
-    private val telegramBot: Bot
-
     init {
-        this.telegramBot = createTelegramBot(commandHandlers)
         registerCommands(commandHandlers)
+    }
+
+    suspend fun processUpdate(update: Update) {
+        telegramBot.processUpdate(update)
     }
 
     fun start() {
@@ -46,19 +45,6 @@ class TelegramBot(
         } else {
             logger.info("Stopping polling")
             telegramBot.stopPolling()
-        }
-    }
-
-    private fun createTelegramBot(commandHandlers: List<CommandHandler>): Bot {
-        return bot {
-            token = telegramBotProperties.apiToken
-            dispatch {
-                commandHandlers.forEach {
-                    command(it.command) {
-                        it.execute(bot, message)
-                    }
-                }
-            }
         }
     }
 

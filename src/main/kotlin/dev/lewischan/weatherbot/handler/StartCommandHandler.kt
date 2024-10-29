@@ -3,6 +3,7 @@ package dev.lewischan.weatherbot.handler
 import com.github.kotlintelegrambot.Bot
 import com.github.kotlintelegrambot.entities.ChatId
 import com.github.kotlintelegrambot.entities.Message
+import com.github.kotlintelegrambot.entities.ParseMode
 import org.springframework.stereotype.Component
 
 @Component
@@ -11,11 +12,16 @@ class StartCommandHandler : CommandHandler() {
     override val description = "Hello world!"
 
     override fun handleCommand(bot: Bot, message: Message) {
-        val chatId = message.chat.id
-        val text = "Welcome to the Weather Bot!"
+        val text = """
+            Hello! I am a weather bot!
+            
+            To find out what I can do, tap on /help@${bot.getMe().get().username!!}.
+        """.trimIndent()
+
         bot.sendMessage(
-            chatId = ChatId.fromId(chatId),
+            chatId = ChatId.fromId(message.chat.id),
             text = text,
+            parseMode = ParseMode.HTML
         )
     }
 }

@@ -16,7 +16,6 @@ class UserDefaultLocationServiceIntTest(
         val externalUserId = random.nextLong(1, Long.MAX_VALUE)
         val user = userService.createUser(externalUserId)
         val location = Location(
-            "Tokyo Tower",
             "4 Chome-2-8 Shibakoen, Minato City, Tokyo 105-0011, Japan",
             35.6585848,
             139.742858
@@ -25,23 +24,20 @@ class UserDefaultLocationServiceIntTest(
 
         test("the properties should be saved correctly for the user and location") {
             savedDefaultLocation.userId shouldBe user.id
-            savedDefaultLocation.location.name shouldBe location.name
-            savedDefaultLocation.location.formattedAddress shouldBe location.formattedAddress
+            savedDefaultLocation.location.address shouldBe location.address
             savedDefaultLocation.location.latitude shouldBe location.latitude
             savedDefaultLocation.location.longitude shouldBe location.longitude
         }
 
         test("should update default location for the user") {
             val newLocation = Location(
-                "London Eye",
                 "Riverside Building, County Hall, London SE1 7PB, United Kingdom",
                 51.5031896,
                 -0.1243901
             )
             val updatedDefaultLocation = userDefaultLocationService.save(user.id, newLocation)
             updatedDefaultLocation.userId shouldBe user.id
-            updatedDefaultLocation.location.name shouldBe newLocation.name
-            updatedDefaultLocation.location.formattedAddress shouldBe newLocation.formattedAddress
+            updatedDefaultLocation.location.address shouldBe newLocation.address
             updatedDefaultLocation.location.latitude shouldBe newLocation.latitude
             updatedDefaultLocation.location.longitude shouldBe newLocation.longitude
         }

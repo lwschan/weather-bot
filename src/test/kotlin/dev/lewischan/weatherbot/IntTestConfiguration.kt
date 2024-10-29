@@ -1,5 +1,6 @@
 package dev.lewischan.weatherbot
 
+import com.github.kotlintelegrambot.Bot
 import com.github.tomakehurst.wiremock.WireMockServer
 import com.google.api.gax.core.NoCredentialsProvider
 import com.google.api.gax.grpc.testing.MockServiceHelper
@@ -10,6 +11,8 @@ import com.google.maps.places.v1.PlacesSettings
 import dev.lewischan.weatherbot.configuration.GoogleMapsServicesProperties
 import dev.lewischan.weatherbot.configuration.OpenMeteoApiConfiguration
 import dev.lewischan.weatherbot.configuration.OpenMeteoApiProperties
+import io.mockk.MockK
+import io.mockk.mockk
 import io.mockk.spyk
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -46,7 +49,7 @@ class IntTestConfiguration {
     }
 
     @Bean
-    fun placesClient(mockPlacesServiceHelper: MockServiceHelper): PlacesClient {
+    fun searchPlacesClient(mockPlacesServiceHelper: MockServiceHelper): PlacesClient {
         val grpcChannelProvider = mockPlacesServiceHelper.createChannelProvider()
         val placesSettings = PlacesSettings.newBuilder()
             .setTransportChannelProvider(grpcChannelProvider)
@@ -60,5 +63,10 @@ class IntTestConfiguration {
         return OpenMeteoApiConfiguration().openMeteoRestClient(
             OpenMeteoApiProperties("http://localhost:$wireMockServerPort")
         )
+    }
+
+    @Bean
+    fun bot(): Bot {
+        return mockk<Bot>(relaxed = true)
     }
 }

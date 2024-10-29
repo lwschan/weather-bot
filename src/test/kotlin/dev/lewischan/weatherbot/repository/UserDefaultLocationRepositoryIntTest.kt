@@ -21,7 +21,6 @@ class UserDefaultLocationRepositoryIntTest @Autowired constructor(
             ExternalPlatform.TELEGRAM, externalUserId
         )
         val defaultLocation = Location(
-            "Jewel Changi Airport",
             "78 Airport Boulevard, Singapore 819666",
             1.3602148,
             103.9871849
@@ -44,7 +43,6 @@ class UserDefaultLocationRepositoryIntTest @Autowired constructor(
 
         test("save should upsert the record") {
             val newDefaultLocation = Location(
-                "Merlion Park",
                 "1 Fullerton Rd, Singapore 049213",
                 1.2867503,
                 103.8518123
