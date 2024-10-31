@@ -13,12 +13,18 @@ abstract class CommandHandler {
 
     protected val logger: Logger = LoggerFactory.getLogger(javaClass)
 
+    protected fun getCommandQuery(bot: Bot, message: Message): String? {
+        return message.text?.replace("/$command", "")
+            ?.replace("@${bot.getMe().get().username}", "")
+            ?.trim()
+    }
+
     fun execute(bot: Bot, message: Message) {
         logger.info("Handling Telegram bot command: $command for message: ${message.text}")
         try {
             handleCommand(bot, message)
-        } catch (e: RuntimeException) {
-            logger.error(e.message, e)
+        } catch (exception: RuntimeException) {
+            logger.error(exception.message, exception)
         }
     }
 }
