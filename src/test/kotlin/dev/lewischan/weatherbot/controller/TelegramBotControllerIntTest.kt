@@ -4,6 +4,7 @@ import com.github.kotlintelegrambot.Bot
 import com.github.kotlintelegrambot.entities.Update
 import dev.lewischan.weatherbot.BaseIntTest
 import dev.lewischan.weatherbot.configuration.TelegramBotProperties
+import io.kotest.core.annotation.DoNotParallelize
 import io.kotest.core.test.AssertionMode
 import io.mockk.clearMocks
 import io.mockk.coVerify
@@ -12,6 +13,7 @@ import org.springframework.test.web.reactive.server.WebTestClient
 import org.springframework.web.reactive.function.BodyInserters
 import java.security.SecureRandom
 
+@DoNotParallelize
 class TelegramBotControllerIntTest(
     private val webTestClient: WebTestClient,
     private val telegramBotProperties: TelegramBotProperties,

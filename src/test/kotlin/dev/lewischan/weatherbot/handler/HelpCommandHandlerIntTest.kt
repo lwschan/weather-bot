@@ -5,14 +5,17 @@ import com.github.kotlintelegrambot.entities.BotCommand
 import com.github.kotlintelegrambot.entities.ChatId
 import com.github.kotlintelegrambot.entities.Message
 import com.github.kotlintelegrambot.entities.ParseMode
+import com.github.kotlintelegrambot.types.TelegramBotResult
 import dev.lewischan.weatherbot.BaseIntTest
-import io.kotest.core.test.AssertionMode
+import io.kotest.core.annotation.DoNotParallelize
+import io.kotest.matchers.string.shouldContain
 import io.mockk.clearMocks
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
 import java.security.SecureRandom
 
+@DoNotParallelize
 class HelpCommandHandlerIntTest(
     private val helpCommandHandler: CommandHandler,
     private val bot: Bot,
@@ -22,10 +25,12 @@ class HelpCommandHandlerIntTest(
     val random = SecureRandom()
 
     beforeSpec {
-        every { bot.getMe().get().username } returns "test_bot"
-        every { bot.getMyCommands().get() } returns commandHandlers.map {
+        val commands: List<BotCommand> = commandHandlers.map {
             BotCommand(it.command, it.description)
-        }
+        }.toList()
+
+        every { bot.getMe().get().username } returns "test_bot"
+        every { bot.getMyCommands() } returns TelegramBotResult.Success(commands)
     }
 
     afterSpec {
@@ -44,13 +49,12 @@ class HelpCommandHandlerIntTest(
         test("Should return the correct response") {
             verify(exactly = 1) { bot.sendMessage(
                 chatId = ChatId.fromId(chatId),
-                text = any(),
+                text = match {
+                    it shouldContain "<b>Supported Commands</b>"
+                    true
+                },
                 parseMode = ParseMode.HTML
             ) }
         }
     }
-}) {
-    override fun assertionMode(): AssertionMode? {
-        return AssertionMode.None
-    }
-}
+})

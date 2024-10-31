@@ -14,7 +14,7 @@ class OpenMeteoWeatherService(
 
     override fun getCurrentWeather(location: Location): CurrentWeather? {
         val response:OpenMeteoForecast? = openMeteoRestClient.get()
-            .uri("/v1/forecast?latitude={latitude}&longitude={longitude}&current={current}&&daily={daily}&timeformat={timeFormat}&timezone={timezone}", mapOf(
+            .uri("/v1/forecast?latitude={latitude}&longitude={longitude}&current={current}&daily={daily}&timeformat={timeFormat}&timezone={timezone}", mapOf(
                 "latitude" to location.latitude,
                 "longitude" to location.longitude,
                 "current" to "temperature_2m,relative_humidity_2m,apparent_temperature,is_day,precipitation,rain,showers,snowfall,weather_code,cloud_cover,pressure_msl,surface_pressure,wind_speed_10m,wind_direction_10m,wind_gusts_10m",

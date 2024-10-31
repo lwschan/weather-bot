@@ -5,7 +5,7 @@ import com.github.kotlintelegrambot.entities.ChatId
 import com.github.kotlintelegrambot.entities.Message
 import com.github.kotlintelegrambot.entities.ParseMode
 import dev.lewischan.weatherbot.BaseIntTest
-import io.kotest.matchers.string.match
+import io.kotest.core.annotation.DoNotParallelize
 import io.kotest.matchers.string.shouldContain
 import io.mockk.clearMocks
 import io.mockk.every
@@ -13,6 +13,7 @@ import io.mockk.mockk
 import io.mockk.verify
 import java.security.SecureRandom
 
+@DoNotParallelize
 class StartCommandHandlerIntTest(
     private val startCommandHandler: CommandHandler,
     private val bot: Bot
