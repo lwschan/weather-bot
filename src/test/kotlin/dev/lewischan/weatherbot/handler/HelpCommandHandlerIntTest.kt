@@ -38,7 +38,7 @@ class HelpCommandHandlerIntTest(
     }
 
     context("when handle command is called with a valid message") {
-        val chatId = random.nextLong()
+        val chatId = random.nextLong(1, Long.MAX_VALUE)
 
         val message = mockk<Message>()
         every { message.chat.id } returns chatId

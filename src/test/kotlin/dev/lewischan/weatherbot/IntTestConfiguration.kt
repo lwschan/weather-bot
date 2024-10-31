@@ -29,6 +29,11 @@ class IntTestConfiguration {
         return WireMockServer(wireMockServerPort)
     }
 
+    @Bean(initMethod = "initMock")
+    fun wireMockServerConfiguration(wireMockServer: WireMockServer): WireMockServerConfiguration {
+        return WireMockServerConfiguration(wireMockServer)
+    }
+
     @Bean
     fun geoApiContext(googleMapsServicesProperties: GoogleMapsServicesProperties): GeoApiContext {
         return GeoApiContext.Builder()
