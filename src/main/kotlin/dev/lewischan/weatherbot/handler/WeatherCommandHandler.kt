@@ -22,21 +22,15 @@ class WeatherCommandHandler(
     override val description = "Get current weather, provide an address if this is not for your default location."
 
     override fun handleCommand(bot: Bot, message: Message) {
-        val address = message.text!!.replace("/$command", "")
-            .replace("@${bot.getMe().get().username}", "")
-            .trim()
+        val address = getCommandQuery(bot, message)
 
-        if (address.isEmpty()) {
-            handleWithDefaultLocation(bot, message)
-            return
-        }
-
-        logger.info("Handling weather command for address $address")
-
-        handleWithAddressSearch(bot, message, address)
+        if (address.isNullOrEmpty()) handleWithDefaultLocation(bot, message)
+        else handleWithAddressSearch(bot, message, address)
     }
 
     private fun handleWithDefaultLocation(bot: Bot, message: Message) {
+        logger.info("Handling weather command for default location")
+
         if (message.from == null) {
             bot.sendMessage(
                 chatId = ChatId.fromId(message.chat.id),
@@ -75,14 +69,27 @@ class WeatherCommandHandler(
             )
         }
 
+        val localisedTime = weather!!.time.format(DateTimeFormatter.ofPattern("dd MMM, hh:mm a"))
+
         bot.sendMessage(
             chatId = ChatId.fromId(message.chat.id),
-            text = "${userDefaultLocation.location.address}\n${weather!!.condition.name}",
-            parseMode = ParseMode.MARKDOWN_V2
-        )
+            text = """                
+                ${userDefaultLocation.location.address}
+                $localisedTime
+                
+                🌡️ <b>Temperature:</b> ${weather.temperature.celsius}°C | ${weather.temperature.fahrenheit}°F
+                💧 <b>Humidity:</b> ${weather.humidity}
+                🥵️ <b>Feels Like:</b> ${weather.feelsLikeTemperature.celsius}°C | ${weather.feelsLikeTemperature.fahrenheit}°F
+            """.trimIndent(),
+            parseMode = ParseMode.HTML
+        ).onError {
+            logger.error(it.toString())
+        }
     }
 
     private fun handleWithAddressSearch(bot: Bot, message: Message, address: String) {
+        logger.info("Handling weather command for address $address")
+
         val location = locationService.geocode(address)
         if (location == null) {
             bot.sendMessage(
@@ -108,15 +115,14 @@ class WeatherCommandHandler(
         bot.sendMessage(
             chatId = ChatId.fromId(message.chat.id),
             text = """
-                ${location.address}
+                **Weather Report**           
                 
+                ${location.address}
                 $localisedTime
                 
-                ```
-                | Temperature | ${weather.temperature.celsius}°C          | ${weather.temperature.fahrenheit}°F          |
-                | ----------- | ----------------------------------------- | -------------------------------------------- |
-                | Real Feel   | ${weather.feelsLikeTemperature.celsius}°C | ${weather.feelsLikeTemperature.fahrenheit}°F |
-                ```
+                🌡️ **Temperature:** ${weather.temperature.celsius}°C | ${weather.temperature.fahrenheit}°F
+                🌡️ **Feels Like:** ${weather.feelsLikeTemperature.celsius}°C | ${weather.feelsLikeTemperature.fahrenheit}°F
+                💧 **Humidity:** ${weather.humidity}
             """.trimIndent(),
             parseMode = ParseMode.MARKDOWN_V2
         )

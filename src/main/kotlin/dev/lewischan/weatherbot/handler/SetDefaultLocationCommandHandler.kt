@@ -28,9 +28,7 @@ class SetDefaultLocationCommandHandler(
             return
         }
 
-        val addressQuery = message.text!!.replace("/$command", "")
-            .replace("@${bot.getMe().get().username}", "")
-            .trim()
+        val addressQuery = getCommandQuery(bot, message)!!
 
         val geocodeLocation = locationService.geocode(addressQuery)
         if (geocodeLocation == null) {
