@@ -6,7 +6,7 @@ Dependencies are locked using gradle. To update a dependency, modify the version
 [/gradle/libs.versions.toml](/gradle/libs.versions.toml), and update the lock files using the following command.
 
 ```shell
-./gradlew dependencies --write-locks
+make update-dependencies
 ```
 
 ## Gradle
@@ -36,4 +36,5 @@ ENV_DB_PASSWORD=postgres-database-password
 ENV_TELEGRAM_BOT_API_TOKEN=telegram-bot-api-token
 ENV_TELEGRAM_BOT_SERVER_HOSTNAME=telegram-bot-server-hostname
 ENV_TELEGRAM_BOT_USE_WEBHOOK=true-or-false
+ENV_TELEGRAM_BOT_WEBHOOK_SECRET_TOKEN=secret-token
 ```

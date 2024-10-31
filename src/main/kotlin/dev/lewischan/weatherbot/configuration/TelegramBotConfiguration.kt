@@ -1,8 +1,13 @@
 package dev.lewischan.weatherbot.configuration
 
+import com.github.kotlintelegrambot.Bot
+import com.github.kotlintelegrambot.bot
+import com.github.kotlintelegrambot.dispatch
+import com.github.kotlintelegrambot.dispatcher.command
+import com.github.kotlintelegrambot.webhook
 import dev.lewischan.weatherbot.handler.CommandHandler
-import dev.lewischan.weatherbot.handler.InlineQueryHandler
-import dev.lewischan.weatherbot.service.TelegramBotService
+import dev.lewischan.weatherbot.bot.TelegramBot
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
 import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -12,11 +17,39 @@ import org.springframework.context.annotation.Configuration
 class TelegramBotConfiguration {
 
     @Bean
-    fun telegramBotService(
+    fun telegramBot(
         telegramBotProperties: TelegramBotProperties,
-        commandHandlers: List<CommandHandler>,
-        inlineQueryHandler: InlineQueryHandler
-    ): TelegramBotService {
-        return TelegramBotService(telegramBotProperties, commandHandlers, inlineQueryHandler)
+        bot: Bot,
+        commandHandlers: List<CommandHandler>
+    ): TelegramBot {
+        return TelegramBot(
+            telegramBotProperties,
+            bot,
+            commandHandlers
+        )
+    }
+
+    @Bean
+    @ConditionalOnMissingBean
+    fun bot(
+        telegramBotProperties: TelegramBotProperties,
+        commandHandlers: List<CommandHandler>
+    ): Bot {
+        return bot {
+            token = telegramBotProperties.apiToken
+            dispatch {
+                commandHandlers.forEach {
+                    command(it.command) {
+                        it.execute(bot, message)
+                    }
+                }
+            }
+            if (telegramBotProperties.useWebhook && telegramBotProperties.serverHostname != null) {
+                webhook {
+                    url = "https://${telegramBotProperties.serverHostname}/telegram-bot/${telegramBotProperties.apiToken}"
+                    secretToken = telegramBotProperties.webhookSecretToken
+                }
+            }
+        }
     }
 }

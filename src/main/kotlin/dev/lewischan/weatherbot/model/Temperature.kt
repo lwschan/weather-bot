@@ -2,7 +2,7 @@ package dev.lewischan.weatherbot.model
 
 import kotlin.math.round
 
-class Temperature private constructor(
+data class Temperature(
     val celsius: Double,
     val fahrenheit: Double,
 ) {

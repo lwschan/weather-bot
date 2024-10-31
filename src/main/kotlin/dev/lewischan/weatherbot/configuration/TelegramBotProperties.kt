@@ -6,5 +6,6 @@ import org.springframework.boot.context.properties.ConfigurationProperties
 data class TelegramBotProperties(
     val apiToken: String,
     val useWebhook: Boolean,
-    val serverHostname: String?
+    val serverHostname: String?,
+    val webhookSecretToken: String?
 )

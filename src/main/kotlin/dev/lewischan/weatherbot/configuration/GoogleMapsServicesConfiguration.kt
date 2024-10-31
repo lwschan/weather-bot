@@ -27,14 +27,34 @@ class GoogleMapsServicesConfiguration {
     }
 
     @Bean
-    @ConditionalOnMissingBean
-    fun placesClient(googleMapsServicesProperties: GoogleMapsServicesProperties): PlacesClient {
+    @ConditionalOnMissingBean(name = ["searchPlacesClient"])
+    fun searchPlacesClient(googleMapsServicesProperties: GoogleMapsServicesProperties): PlacesClient {
         val fieldMask = listOf(
             "places.id",
             "places.displayName",
             "places.formattedAddress",
             "places.shortFormattedAddress",
             "places.location"
+        ).joinToString(",")
+
+        val placesSettings = PlacesSettings.newBuilder()
+            .setTransportChannelProvider(PlacesSettings.defaultGrpcTransportProviderBuilder().build())
+            .setHeaderProvider(FixedHeaderProvider.create("X-Goog-FieldMask", fieldMask))
+            .setCredentialsProvider(FixedCredentialsProvider.create(ApiKeyCredentials.create(googleMapsServicesProperties.apiKey)))
+            .build()
+
+        return PlacesClient.create(placesSettings)
+    }
+
+    @Bean
+    @ConditionalOnMissingBean(name = ["getPlacesClient"])
+    fun getPlacesClient(googleMapsServicesProperties: GoogleMapsServicesProperties): PlacesClient {
+        val fieldMask = listOf(
+            "id",
+            "displayName",
+            "formattedAddress",
+            "shortFormattedAddress",
+            "location"
         ).joinToString(",")
 
         val placesSettings = PlacesSettings.newBuilder()

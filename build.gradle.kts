@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.spring.boot)
     alias(libs.plugins.spring.dependency.management)
+    jacoco
     kotlin("jvm") version libs.versions.kotlin.jvm
     kotlin("plugin.spring") version libs.versions.kotlin.plugin.spring
 }
@@ -10,7 +11,6 @@ java {
     targetCompatibility = JavaVersion.VERSION_21
 }
 
-@Suppress("UnstableApiUsage")
 configurations {
     compileOnly {
         extendsFrom(configurations.annotationProcessor.get())
@@ -45,9 +45,11 @@ dependencies {
     implementation(libs.flyway.postgresql)
     implementation(libs.google.maps.places)
     implementation(libs.google.maps.services)
+    implementation(libs.jackson.datatype.jsr310)
     implementation(libs.jackson.module.kotlin)
     implementation(libs.kotlin.reflect)
     implementation(libs.kotlin.telegram.bot)
+    implementation(libs.kotlinx.coroutines.reactor)
     implementation(libs.micrometer.tracing.bridge.brave)
     implementation(libs.retrofit2)
     implementation(libs.spring.boot.starter.actuator)
@@ -70,6 +72,7 @@ dependencies {
     testImplementation(libs.kotlin.test.junit5)
     testImplementation(libs.mockk)
     testImplementation(libs.spring.boot.starter.test)
+    testImplementation(libs.spring.boot.starter.webflux)
     testImplementation(libs.wiremock)
 
     testRuntimeOnly(libs.junit.platform.launcher)
@@ -85,4 +88,12 @@ kotlin {
 
 tasks.withType<Test>().configureEach {
     useJUnitPlatform()
+    finalizedBy(tasks.jacocoTestReport)
+}
+
+tasks.jacocoTestReport {
+    dependsOn(tasks.withType<Test>())
+    reports {
+        xml.required.set(true)
+    }
 }

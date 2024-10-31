@@ -16,6 +16,6 @@ class TelegramUserService(
     override val externalPlatform = ExternalPlatform.TELEGRAM
 
     override fun convertExternalUserId(externalUserId: Long): UUID {
-        return uuidGenerator.v5(UuidGenerator.Namespace.TELEGRAM, externalUserId.toString())
+        return uuidGenerator.v5(ExternalPlatform.TELEGRAM.id, externalUserId.toString())
     }
 }

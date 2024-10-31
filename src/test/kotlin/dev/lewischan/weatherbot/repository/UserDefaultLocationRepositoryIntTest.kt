@@ -21,7 +21,6 @@ class UserDefaultLocationRepositoryIntTest @Autowired constructor(
             ExternalPlatform.TELEGRAM, externalUserId
         )
         val defaultLocation = Location(
-            "Jewel Changi Airport",
             "78 Airport Boulevard, Singapore 819666",
             1.3602148,
             103.9871849
@@ -44,7 +43,6 @@ class UserDefaultLocationRepositoryIntTest @Autowired constructor(
 
         test("save should upsert the record") {
             val newDefaultLocation = Location(
-                "Merlion Park",
                 "1 Fullerton Rd, Singapore 049213",
                 1.2867503,
                 103.8518123
@@ -54,10 +52,15 @@ class UserDefaultLocationRepositoryIntTest @Autowired constructor(
             updatedUserDefaultLocation.userId shouldBe savedUserDefaultLocation.userId
             updatedUserDefaultLocation.location shouldBeEqualUsingFields newDefaultLocation
         }
+
+        test("delete should delete the record") {
+            userDefaultLocationRepository.deleteForUser(user.id)
+            userDefaultLocationRepository.findByUserId(user.id) shouldBe null
+        }
     }
 
     test("when not exists, findByUserId should return null") {
-        val userId = SecureRandom().nextLong(0, 1000000000)
+        val userId = SecureRandom().nextLong(0, Long.MAX_VALUE)
         val userDefaultLocation = userDefaultLocationRepository.findByUserId(userId)
         userDefaultLocation shouldBe null
     }
