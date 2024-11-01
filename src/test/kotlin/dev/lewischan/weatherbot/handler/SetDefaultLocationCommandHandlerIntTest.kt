@@ -89,6 +89,57 @@ class SetDefaultLocationCommandHandlerIntTest(
         }
     }
 
+    context("when command does not contain an address") {
+        val chatId = random.nextLong(1, Long.MAX_VALUE)
+        val messageId = random.nextLong(1, Long.MAX_VALUE)
+        val userId = random.nextLong(1, Long.MAX_VALUE)
+
+        val message = mockk<Message>()
+        every { message.chat.id } returns chatId
+        every { message.text } returns "/s"
+        every { message.messageId } returns messageId
+        every { message.from!!.id } returns userId
+
+        test("it should return an error message") {
+            setDefaultLocationCommandHandler.execute(bot, message)
+
+            verify(exactly = 1) { bot.sendMessage(
+                chatId = ChatId.fromId(chatId),
+                replyToMessageId = messageId,
+                text = match {
+                    it shouldBe "Include an address along with this command to set it as your default location for weather requests."
+                    true
+                }
+            ) }
+        }
+    }
+
+    context("when address is invalid") {
+        val chatId = random.nextLong(1, Long.MAX_VALUE)
+        val messageId = random.nextLong(1, Long.MAX_VALUE)
+        val userId = random.nextLong(1, Long.MAX_VALUE)
+        val addressQuery = "Random Address"
+
+        val message = mockk<Message>()
+        every { message.chat.id } returns chatId
+        every { message.text } returns "/s $addressQuery"
+        every { message.messageId } returns messageId
+        every { message.from!!.id } returns userId
+
+        test("it should return an invalid address error message") {
+            setDefaultLocationCommandHandler.execute(bot, message)
+
+            verify(exactly = 1) { bot.sendMessage(
+                chatId = ChatId.fromId(chatId),
+                replyToMessageId = messageId,
+                text = match {
+                    it shouldBe "Error: could not find a valid address for $addressQuery."
+                    true
+                }
+            ) }
+        }
+    }
+
 }) {
     override fun isolationMode(): IsolationMode = IsolationMode.InstancePerTest
 }

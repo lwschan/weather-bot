@@ -19,7 +19,9 @@ class SetDefaultLocationCommandHandler(
 
     override fun handleCommand(bot: Bot, message: Message) {
         val chatId = ChatId.fromId(message.chat.id)
-        if (message.text == null) {
+        val addressQuery = getCommandQuery(bot, message)
+
+        if (message.text == null || addressQuery.isNullOrBlank()) {
             bot.sendMessage(
                 chatId = chatId,
                 replyToMessageId = message.messageId,
@@ -27,8 +29,6 @@ class SetDefaultLocationCommandHandler(
             )
             return
         }
-
-        val addressQuery = getCommandQuery(bot, message)!!
 
         val geocodeLocation = locationService.geocode(addressQuery)
         if (geocodeLocation == null) {
