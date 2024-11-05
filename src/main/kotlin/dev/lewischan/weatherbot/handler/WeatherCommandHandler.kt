@@ -4,11 +4,14 @@ import com.github.kotlintelegrambot.Bot
 import com.github.kotlintelegrambot.entities.ChatId
 import com.github.kotlintelegrambot.entities.Message
 import com.github.kotlintelegrambot.entities.ParseMode
+import dev.lewischan.weatherbot.model.CurrentWeather
+import dev.lewischan.weatherbot.model.Location
 import dev.lewischan.weatherbot.service.LocationService
 import dev.lewischan.weatherbot.service.TelegramUserService
 import dev.lewischan.weatherbot.service.UserDefaultLocationService
 import dev.lewischan.weatherbot.service.WeatherService
 import org.springframework.stereotype.Component
+import sendMessageCustom
 import java.time.format.DateTimeFormatter
 
 @Component
@@ -67,24 +70,10 @@ class WeatherCommandHandler(
                 text = "Encountered an error fetching the current weather for ${userDefaultLocation.location.address}.",
                 replyToMessageId = message.messageId
             )
+            return
         }
 
-        val localisedTime = weather!!.time.format(DateTimeFormatter.ofPattern("dd MMM, hh:mm a"))
-
-        bot.sendMessage(
-            chatId = ChatId.fromId(message.chat.id),
-            text = """                
-                ${userDefaultLocation.location.address}
-                $localisedTime
-                
-                🌡️ <b>Temperature:</b> ${weather.temperature.celsius}°C | ${weather.temperature.fahrenheit}°F
-                💧 <b>Humidity:</b> ${weather.humidity}
-                🥵️ <b>Feels Like:</b> ${weather.feelsLikeTemperature.celsius}°C | ${weather.feelsLikeTemperature.fahrenheit}°F
-            """.trimIndent(),
-            parseMode = ParseMode.HTML
-        ).onError {
-            logger.error(it.toString())
-        }
+        sendCurrentWeatherMessage(bot, message, userDefaultLocation.location, weather)
     }
 
     private fun handleWithAddressSearch(bot: Bot, message: Message, address: String) {
@@ -110,19 +99,26 @@ class WeatherCommandHandler(
             return
         }
 
+        sendCurrentWeatherMessage(bot, message, location, weather)
+    }
+
+    private fun sendCurrentWeatherMessage(
+        bot: Bot,
+        message: Message,
+        location: Location,
+        weather: CurrentWeather
+    ) {
         val localisedTime = weather.time.format(DateTimeFormatter.ofPattern("dd MMM, hh:mm a"))
 
-        bot.sendMessage(
+        bot.sendMessageCustom(
             chatId = ChatId.fromId(message.chat.id),
             text = """
-                **Weather Report**           
-                
                 ${location.address}
                 $localisedTime
                 
-                🌡️ **Temperature:** ${weather.temperature.celsius}°C | ${weather.temperature.fahrenheit}°F
-                🌡️ **Feels Like:** ${weather.feelsLikeTemperature.celsius}°C | ${weather.feelsLikeTemperature.fahrenheit}°F
-                💧 **Humidity:** ${weather.humidity}
+                🌡️ <b>Temperature:</b> ${weather.temperature.celsius}°C | ${weather.temperature.fahrenheit}°F
+                💧 <b>Humidity:</b> ${weather.humidity}
+                🥵️ <b>Feels Like:</b> ${weather.feelsLikeTemperature.celsius}°C | ${weather.feelsLikeTemperature.fahrenheit}°F
             """.trimIndent(),
             parseMode = ParseMode.MARKDOWN_V2
         )

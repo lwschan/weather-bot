@@ -6,8 +6,6 @@ import com.github.kotlintelegrambot.entities.Message
 import dev.lewischan.weatherbot.BaseIntTest
 import dev.lewischan.weatherbot.service.TelegramUserService
 import dev.lewischan.weatherbot.service.UserDefaultLocationService
-import io.kotest.core.annotation.DoNotParallelize
-import io.kotest.core.spec.IsolationMode
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNotBe
 import io.mockk.clearMocks
@@ -16,7 +14,6 @@ import io.mockk.mockk
 import io.mockk.verify
 import java.security.SecureRandom
 
-@DoNotParallelize
 class SetDefaultLocationCommandHandlerIntTest(
     private val setDefaultLocationCommandHandler: CommandHandler,
     private val bot: Bot,
@@ -30,7 +27,7 @@ class SetDefaultLocationCommandHandlerIntTest(
         every { bot.getMe().get().username } returns "test_bot"
     }
 
-    afterSpec {
+    afterEach {
         clearMocks(bot)
     }
 
@@ -140,6 +137,4 @@ class SetDefaultLocationCommandHandlerIntTest(
         }
     }
 
-}) {
-    override fun isolationMode(): IsolationMode = IsolationMode.InstancePerTest
-}
+})
