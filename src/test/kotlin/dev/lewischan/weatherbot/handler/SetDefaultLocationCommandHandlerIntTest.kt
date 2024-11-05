@@ -23,7 +23,7 @@ class SetDefaultLocationCommandHandlerIntTest(
 
     val random = SecureRandom()
 
-    beforeSpec {
+    beforeEach {
         every { bot.getMe().get().username } returns "test_bot"
     }
 
@@ -66,10 +66,12 @@ class SetDefaultLocationCommandHandlerIntTest(
         }
 
         test("when user already exists, it should just save default location") {
-            val user = telegramUserService.createUser(userId)
+            val user = telegramUserService.findByExternalUserId(userId)
+            user shouldNotBe null
+
             setDefaultLocationCommandHandler.execute(bot, message)
 
-            val defaultLocation = userDefaultLocationService.findByUserId(user.id)
+            val defaultLocation = userDefaultLocationService.findByUserId(user!!.id)
             defaultLocation shouldNotBe null
             defaultLocation!!.location.address shouldBe "Stamford Bridge, York YO41, UK"
             defaultLocation.location.latitude shouldBe 53.990129

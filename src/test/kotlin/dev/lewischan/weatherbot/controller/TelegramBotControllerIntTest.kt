@@ -1,6 +1,5 @@
 package dev.lewischan.weatherbot.controller
 
-
 import com.github.kotlintelegrambot.Bot
 import com.github.kotlintelegrambot.entities.Update
 import dev.lewischan.weatherbot.BaseIntTest
