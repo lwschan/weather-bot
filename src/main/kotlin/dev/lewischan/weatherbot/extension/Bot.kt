@@ -1,3 +1,5 @@
+package dev.lewischan.weatherbot.extension
+
 import com.github.kotlintelegrambot.Bot
 import com.github.kotlintelegrambot.entities.ChatId
 import com.github.kotlintelegrambot.entities.Message
@@ -5,12 +7,9 @@ import com.github.kotlintelegrambot.entities.ParseMode
 import com.github.kotlintelegrambot.entities.ReplyMarkup
 import com.github.kotlintelegrambot.types.TelegramBotResult
 import dev.lewischan.weatherbot.error.TelegramBotSendMessageException
-import java.util.Optional
-
-fun <T> Optional<T>.unwrap(): T? = orElse(null)
 
 @SuppressWarnings("kotlin:S107")
-fun Bot.sendMessageCustom(
+fun Bot.replyMessage(
     chatId: ChatId,
     text: String,
     parseMode: ParseMode? = null,

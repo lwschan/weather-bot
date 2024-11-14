@@ -1,10 +1,10 @@
 package dev.lewischan.weatherbot.repository
 
 import dev.lewischan.weatherbot.domain.UserDefaultLocation
+import dev.lewischan.weatherbot.extension.unwrap
 import dev.lewischan.weatherbot.model.Location
 import org.springframework.jdbc.core.simple.JdbcClient
 import org.springframework.stereotype.Component
-import unwrap
 import java.sql.ResultSet
 
 @Component

@@ -4,6 +4,7 @@ import com.github.kotlintelegrambot.Bot
 import com.github.kotlintelegrambot.entities.ChatId
 import com.github.kotlintelegrambot.entities.Message
 import com.github.kotlintelegrambot.entities.ParseMode
+import dev.lewischan.weatherbot.extension.replyMessage
 import dev.lewischan.weatherbot.model.CurrentWeather
 import dev.lewischan.weatherbot.model.Location
 import dev.lewischan.weatherbot.service.LocationService
@@ -11,7 +12,6 @@ import dev.lewischan.weatherbot.service.TelegramUserService
 import dev.lewischan.weatherbot.service.UserDefaultLocationService
 import dev.lewischan.weatherbot.service.WeatherService
 import org.springframework.stereotype.Component
-import sendMessageCustom
 import java.time.format.DateTimeFormatter
 
 @Component
@@ -110,7 +110,7 @@ class WeatherCommandHandler(
     ) {
         val localisedTime = weather.time.format(DateTimeFormatter.ofPattern("dd MMM, hh:mm a"))
 
-        bot.sendMessageCustom(
+        bot.replyMessage(
             chatId = ChatId.fromId(message.chat.id),
             text = """
                 ${location.address}
@@ -120,7 +120,7 @@ class WeatherCommandHandler(
                 💧 <b>Humidity:</b> ${weather.humidity}
                 🥵️ <b>Feels Like:</b> ${weather.feelsLikeTemperature.celsius}°C | ${weather.feelsLikeTemperature.fahrenheit}°F
             """.trimIndent(),
-            parseMode = ParseMode.MARKDOWN_V2
+            parseMode = ParseMode.HTML
         )
     }
 
