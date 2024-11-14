@@ -11,6 +11,7 @@ java {
     targetCompatibility = JavaVersion.VERSION_21
 }
 
+@Suppress("UnstableApiUsage")
 configurations {
     compileOnly {
         extendsFrom(configurations.annotationProcessor.get())
@@ -49,9 +50,7 @@ dependencies {
     implementation(libs.jackson.module.kotlin)
     implementation(libs.kotlin.reflect)
     implementation(libs.kotlin.telegram.bot)
-    implementation(libs.kotlinx.coroutines.reactor)
     implementation(libs.micrometer.tracing.bridge.brave)
-    implementation(libs.retrofit2)
     implementation(libs.spring.boot.starter.actuator)
     implementation(libs.spring.boot.starter.jdbc)
     implementation(libs.spring.boot.starter.web)
