@@ -22,7 +22,11 @@ buildscript {
     configurations.classpath {
         resolutionStrategy {
             activateDependencyLocking()
+        }
+    }
 
+    configurations.all {
+        resolutionStrategy {
             componentSelection {
                 all {
                     val candidateVersion = candidate.version
@@ -95,4 +99,12 @@ tasks.jacocoTestReport {
     reports {
         xml.required.set(true)
     }
+}
+
+tasks.jar {
+    enabled = false
+}
+
+tasks.bootJar {
+    archiveFileName.set("${project.name}-service.jar")
 }
