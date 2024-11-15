@@ -35,7 +35,7 @@ class WeatherCommandHandler(
         logger.info("Handling weather command for default location")
 
         if (message.from == null) {
-            bot.sendMessage(
+            bot.replyMessage(
                 chatId = ChatId.fromId(message.chat.id),
                 text = "Encountered an unexpected error.",
                 replyToMessageId = message.messageId
@@ -45,7 +45,7 @@ class WeatherCommandHandler(
 
         val user = telegramUserService.findByExternalUserId(message.from!!.id)
         if (user == null) {
-            bot.sendMessage(
+            bot.replyMessage(
                 chatId = ChatId.fromId(message.chat.id),
                 text = "You do not have a default location, either use the command with an address query or set a default location.",
                 replyToMessageId = message.messageId
@@ -55,7 +55,7 @@ class WeatherCommandHandler(
 
         val userDefaultLocation = userDefaultLocationService.findByUserId(user.id)
         if (userDefaultLocation == null) {
-            bot.sendMessage(
+            bot.replyMessage(
                 chatId = ChatId.fromId(message.chat.id),
                 text = "You do not have a default location, either use the command with an address query or set a default location.",
                 replyToMessageId = message.messageId
@@ -65,7 +65,7 @@ class WeatherCommandHandler(
 
         val weather = weatherService.getCurrentWeather(userDefaultLocation.location)
         if (weather == null) {
-            bot.sendMessage(
+            bot.replyMessage(
                 chatId = ChatId.fromId(message.chat.id),
                 text = "Encountered an error fetching the current weather for ${userDefaultLocation.location.address}.",
                 replyToMessageId = message.messageId
@@ -81,7 +81,7 @@ class WeatherCommandHandler(
 
         val location = locationService.geocode(address)
         if (location == null) {
-            bot.sendMessage(
+            bot.replyMessage(
                 chatId = ChatId.fromId(message.chat.id),
                 text = "Could not find a valid address for $address.",
                 replyToMessageId = message.messageId
@@ -91,7 +91,7 @@ class WeatherCommandHandler(
 
         val weather = weatherService.getCurrentWeather(location)
         if (weather == null) {
-            bot.sendMessage(
+            bot.replyMessage(
                 chatId = ChatId.fromId(message.chat.id),
                 text = "Could not find the current weather for $address.",
                 replyToMessageId = message.messageId

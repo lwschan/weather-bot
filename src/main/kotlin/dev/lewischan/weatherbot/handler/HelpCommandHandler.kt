@@ -5,6 +5,7 @@ import com.github.kotlintelegrambot.entities.BotCommand
 import com.github.kotlintelegrambot.entities.ChatId
 import com.github.kotlintelegrambot.entities.Message
 import com.github.kotlintelegrambot.entities.ParseMode
+import dev.lewischan.weatherbot.extension.replyMessage
 import org.springframework.stereotype.Component
 
 @Component
@@ -31,7 +32,7 @@ class HelpCommandHandler : CommandHandler() {
             
         """.trimIndent() + commandDescriptions.joinToString("\n")
 
-        bot.sendMessage(
+        bot.replyMessage(
             chatId = ChatId.fromId(message.chat.id),
             text = text,
             parseMode = ParseMode.HTML
