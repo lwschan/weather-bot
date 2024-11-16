@@ -2,9 +2,9 @@ package dev.lewischan.weatherbot.repository
 
 import dev.lewischan.weatherbot.domain.ExternalPlatform
 import dev.lewischan.weatherbot.domain.User
+import dev.lewischan.weatherbot.extension.unwrap
 import org.springframework.jdbc.core.simple.JdbcClient
 import org.springframework.stereotype.Component
-import unwrap
 import java.sql.ResultSet
 import java.util.*
 

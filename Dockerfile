@@ -12,6 +12,9 @@ RUN java -Djarmode=tools -jar application.jar extract --layers --destination ext
 # This is the runtime container
 FROM azul/zulu-openjdk-alpine:21-jre-headless
 WORKDIR /application
+# Create a non-root user and group
+# Set permissions for the non-root user
+RUN addgroup -S appgroup && adduser -S appuser -G appgroup && chown -R appuser:appgroup /application
 # Copy the extracted jar contents from the builder container into the working directory in the runtime container
 # Every copy step creates a new docker layer
 # This allows docker to only pull the changes it really needs
@@ -19,6 +22,8 @@ COPY --from=builder /builder/extracted/dependencies/ ./
 COPY --from=builder /builder/extracted/spring-boot-loader/ ./
 COPY --from=builder /builder/extracted/snapshot-dependencies/ ./
 COPY --from=builder /builder/extracted/application/ ./
+# Switch to the non-root user
+USER appuser
 # Start the application jar - this is not the uber jar used by the builder
 # This jar only contains application code and references to the extracted jar files
 # This layout is efficient to start up and CDS friendly

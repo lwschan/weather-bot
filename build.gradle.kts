@@ -11,6 +11,7 @@ java {
     targetCompatibility = JavaVersion.VERSION_21
 }
 
+@Suppress("UnstableApiUsage")
 configurations {
     compileOnly {
         extendsFrom(configurations.annotationProcessor.get())
@@ -21,7 +22,11 @@ buildscript {
     configurations.classpath {
         resolutionStrategy {
             activateDependencyLocking()
+        }
+    }
 
+    configurations.all {
+        resolutionStrategy {
             componentSelection {
                 all {
                     val candidateVersion = candidate.version
@@ -49,9 +54,7 @@ dependencies {
     implementation(libs.jackson.module.kotlin)
     implementation(libs.kotlin.reflect)
     implementation(libs.kotlin.telegram.bot)
-    implementation(libs.kotlinx.coroutines.reactor)
     implementation(libs.micrometer.tracing.bridge.brave)
-    implementation(libs.retrofit2)
     implementation(libs.spring.boot.starter.actuator)
     implementation(libs.spring.boot.starter.jdbc)
     implementation(libs.spring.boot.starter.web)
@@ -70,6 +73,7 @@ dependencies {
     testImplementation(libs.kotest.extensions.spring)
     testImplementation(libs.kotest.framework.datatest)
     testImplementation(libs.kotlin.test.junit5)
+    testImplementation(libs.kotlinx.coroutines.reactor)
     testImplementation(libs.mockk)
     testImplementation(libs.spring.boot.starter.test)
     testImplementation(libs.spring.boot.starter.webflux)
@@ -96,4 +100,12 @@ tasks.jacocoTestReport {
     reports {
         xml.required.set(true)
     }
+}
+
+tasks.jar {
+    enabled = false
+}
+
+tasks.bootJar {
+    archiveFileName.set("${project.name}-service.jar")
 }

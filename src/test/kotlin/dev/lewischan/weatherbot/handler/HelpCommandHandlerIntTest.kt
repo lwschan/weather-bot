@@ -7,7 +7,6 @@ import com.github.kotlintelegrambot.entities.Message
 import com.github.kotlintelegrambot.entities.ParseMode
 import com.github.kotlintelegrambot.types.TelegramBotResult
 import dev.lewischan.weatherbot.BaseIntTest
-import io.kotest.core.annotation.DoNotParallelize
 import io.kotest.matchers.string.shouldContain
 import io.mockk.clearMocks
 import io.mockk.every
@@ -15,7 +14,6 @@ import io.mockk.mockk
 import io.mockk.verify
 import java.security.SecureRandom
 
-@DoNotParallelize
 class HelpCommandHandlerIntTest(
     private val helpCommandHandler: CommandHandler,
     private val bot: Bot,
@@ -33,7 +31,7 @@ class HelpCommandHandlerIntTest(
         every { bot.getMyCommands() } returns TelegramBotResult.Success(commands)
     }
 
-    afterSpec {
+    afterEach {
         clearMocks(bot)
     }
 

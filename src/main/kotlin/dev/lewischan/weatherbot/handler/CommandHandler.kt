@@ -23,7 +23,7 @@ abstract class CommandHandler {
         logger.info("Handling Telegram bot command: $command for message: ${message.text}")
         try {
             handleCommand(bot, message)
-        } catch (exception: RuntimeException) {
+        } catch (exception: Exception) {
             logger.error(exception.message, exception)
         }
     }

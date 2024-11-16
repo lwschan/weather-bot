@@ -5,14 +5,12 @@ google-api-gax-grpc = "2.+"
 google-maps-places = "0.+"
 google-maps-services = "2.+"
 grpc-google-maps-places-v1 = "0.+"
-kotest = "5.9.+"
-kotest-extensions-spring = "1.3.+"
+kotest = "5.+"
+kotest-extensions-spring = "1.+"
 kotlin-jvm = "2.+"
 kotlin-plugin-spring = "2.+"
 kotlin-telegram-bot = "6.+"
-kotlinx-coroutines-reactor = "1.9.+"
 mockk = "1.+"
-retrofit2 = "2.+"
 spring-boot = "3.3.+"
 spring-dependency-management = "1.+"
 wiremock = "3.+"
@@ -32,9 +30,7 @@ jackson-datatype-jsr310 = { module = "com.fasterxml.jackson.datatype:jackson-dat
 jackson-module-kotlin = { module = "com.fasterxml.jackson.module:jackson-module-kotlin" }
 kotlin-reflect = { module = "org.jetbrains.kotlin:kotlin-reflect" }
 kotlin-telegram-bot = { module = "io.github.kotlin-telegram-bot.kotlin-telegram-bot:telegram", version.ref = "kotlin-telegram-bot" }
-kotlinx-coroutines-reactor = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-reactor", version.ref = "kotlinx-coroutines-reactor" }
 micrometer-tracing-bridge-brave = { module = "io.micrometer:micrometer-tracing-bridge-brave" }
-retrofit2 = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit2" }
 spring-boot-starter-actuator = { module = "org.springframework.boot:spring-boot-starter-actuator" }
 spring-boot-starter-jdbc = { module = "org.springframework.boot:spring-boot-starter-jdbc" }
 spring-boot-starter-web = { module = "org.springframework.boot:spring-boot-starter-web" }
@@ -56,6 +52,7 @@ kotest = { module = "io.kotest:kotest-runner-junit5", version.ref = "kotest" }
 kotest-extensions-spring = { module = "io.kotest.extensions:kotest-extensions-spring", version.ref = "kotest-extensions-spring" }
 kotest-framework-datatest = { module = "io.kotest:kotest-framework-datatest", version.ref = "kotest" }
 kotlin-test-junit5 = { module = "org.jetbrains.kotlin:kotlin-test-junit5" }
+kotlinx-coroutines-reactor = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-reactor" }
 mockk = { module = "io.mockk:mockk", version.ref = "mockk"}
 spring-boot-starter-test = { module = "org.springframework.boot:spring-boot-starter-test" }
 spring-boot-starter-webflux = { module = "org.springframework.boot:spring-boot-starter-webflux" }

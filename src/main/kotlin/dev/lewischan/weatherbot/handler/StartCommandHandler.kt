@@ -4,6 +4,7 @@ import com.github.kotlintelegrambot.Bot
 import com.github.kotlintelegrambot.entities.ChatId
 import com.github.kotlintelegrambot.entities.Message
 import com.github.kotlintelegrambot.entities.ParseMode
+import dev.lewischan.weatherbot.extension.replyMessage
 import org.springframework.stereotype.Component
 
 @Component
@@ -18,7 +19,7 @@ class StartCommandHandler : CommandHandler() {
             To find out what I can do, tap on /help@${bot.getMe().get().username!!}.
         """.trimIndent()
 
-        bot.sendMessage(
+        bot.replyMessage(
             chatId = ChatId.fromId(message.chat.id),
             text = text,
             parseMode = ParseMode.HTML
