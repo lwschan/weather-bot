@@ -73,6 +73,7 @@ dependencies {
     testImplementation(libs.kotest.extensions.spring)
     testImplementation(libs.kotest.framework.datatest)
     testImplementation(libs.kotlin.test.junit5)
+    testImplementation(libs.kotlinx.coroutines.reactor)
     testImplementation(libs.mockk)
     testImplementation(libs.spring.boot.starter.test)
     testImplementation(libs.spring.boot.starter.webflux)
