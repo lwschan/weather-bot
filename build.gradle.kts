@@ -54,10 +54,12 @@ dependencies {
     implementation(libs.jackson.module.kotlin)
     implementation(libs.kotlin.reflect)
     implementation(libs.kotlin.telegram.bot)
+    implementation(libs.kotlinx.coroutines.reactor)
     implementation(libs.micrometer.tracing.bridge.brave)
     implementation(libs.spring.boot.starter.actuator)
     implementation(libs.spring.boot.starter.jdbc)
     implementation(libs.spring.boot.starter.web)
+    implementation(libs.spring.boot.starter.webflux)
 
     developmentOnly(libs.spring.boot.devtools)
 
@@ -73,10 +75,8 @@ dependencies {
     testImplementation(libs.kotest.extensions.spring)
     testImplementation(libs.kotest.framework.datatest)
     testImplementation(libs.kotlin.test.junit5)
-    testImplementation(libs.kotlinx.coroutines.reactor)
     testImplementation(libs.mockk)
     testImplementation(libs.spring.boot.starter.test)
-    testImplementation(libs.spring.boot.starter.webflux)
     testImplementation(libs.wiremock)
 
     testRuntimeOnly(libs.junit.platform.launcher)

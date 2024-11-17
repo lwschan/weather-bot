@@ -2,7 +2,6 @@ package dev.lewischan.weatherbot.bot
 
 import com.github.kotlintelegrambot.Bot
 import com.github.kotlintelegrambot.entities.BotCommand
-import com.github.kotlintelegrambot.entities.Update
 import dev.lewischan.weatherbot.configuration.TelegramBotProperties
 import dev.lewischan.weatherbot.handler.CommandHandler
 import jakarta.annotation.PreDestroy
@@ -19,7 +18,7 @@ class TelegramBot(
         registerCommands(commandHandlers)
     }
 
-    suspend fun processUpdate(update: Update) {
+    suspend fun processUpdate(update: String) {
         telegramBot.processUpdate(update)
     }
 

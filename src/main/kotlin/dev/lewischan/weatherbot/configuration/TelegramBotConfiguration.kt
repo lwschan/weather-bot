@@ -46,7 +46,7 @@ class TelegramBotConfiguration {
             }
             if (telegramBotProperties.useWebhook && telegramBotProperties.serverHostname != null) {
                 webhook {
-                    url = "https://${telegramBotProperties.serverHostname}/telegram-bot/${telegramBotProperties.apiToken}"
+                    url = "https://${telegramBotProperties.serverHostname}/telegram/${telegramBotProperties.apiToken}"
                     secretToken = telegramBotProperties.webhookSecretToken
                 }
             }
