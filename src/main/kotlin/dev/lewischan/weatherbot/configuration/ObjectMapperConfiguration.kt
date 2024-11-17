@@ -19,7 +19,7 @@ class ObjectMapperConfiguration {
     fun mappingJackson2HttpMessageConverter(
         objectMapper: ObjectMapper
     ): MappingJackson2HttpMessageConverter {
-        val mappingJackson2HttpMessageConverter = MappingJackson2HttpMessageConverter();
+        val mappingJackson2HttpMessageConverter = MappingJackson2HttpMessageConverter()
 
         mappingJackson2HttpMessageConverter.objectMapper = objectMapper
 
