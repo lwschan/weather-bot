@@ -22,7 +22,7 @@ class TelegramBotController(
         @PathVariable botApiToken: String,
         @RequestBody update: String
     ): ResponseEntity<Unit> {
-        logger.info("Handling webhook request for Telegram")
+        logger.info("Handling webhook request for Telegram on thread ${Thread.currentThread().name}")
 
         if (botApiToken != telegramBotProperties.apiToken) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build()
