@@ -1,0 +1,155 @@
+name: Build, Test and Publish
+
+on:
+  push:
+    branches: [ 'main' ]
+  pull_request:
+    branches: [ 'main' ]
+
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository }}
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      checks: write
+
+    steps:
+    - uses: actions/checkout@v4
+    - name: Setup JDK 21
+      uses: actions/setup-java@v4
+      with:
+        java-version: '21'
+        distribution: 'zulu'
+
+    - name: Setup Gradle
+      uses: gradle/actions/setup-gradle@v4
+
+    - name: Build with Gradle Wrapper
+      run: ./gradlew build
+
+    - name: Upload Build Artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: 'build'
+        path: 'build'
+        if-no-files-found: 'error'
+        retention-days: 1
+
+    - name: Publish Test Report
+      uses: mikepenz/action-junit-report@v4
+      if: success() || failure()
+      with:
+        report_paths: '**/build/test-results/test/TEST-*.xml'
+
+  sonarcloud:
+
+    runs-on: ubuntu-latest
+    needs: build
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Download Build Artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: 'build'
+          path: 'build'
+
+      - name: SonarCloud Scan
+        uses: sonarsource/sonarcloud-github-action@v3
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+
+  publish-container:
+
+    runs-on: ubuntu-latest
+    needs: build
+
+    permissions:
+      contents: read
+      packages: write
+      attestations: write
+      id-token: write
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+        
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+        
+      - name: Download Build Artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: 'build'
+          path: 'build'
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Docker Metadata
+        id: docker-metadata
+        uses: docker/metadata-action@v5
+        with:
+          images: |
+            ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          tags: |
+            type=sha,prefix=,suffix=${{ github.event_name == 'pull_request' && '-SNAPSHOT' || '' }},format=short
+
+      - name: Build and Push Container
+        id: build-push
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          push: ${{ github.ref == 'refs/heads/main' || contains(github.event.pull_request.labels.*.name, 'publish-container') }}
+          platforms: linux/arm64
+          tags: ${{ steps.docker-metadata.outputs.tags }}
+          labels: ${{ steps.docker-metadata.outputs.labels }}
+          build-args: |
+            DOCKER_METADATA_OUTPUT_JSON
+
+      - name: Output Container Build Summary
+        if: ${{ github.ref == 'refs/heads/main' || contains(github.event.pull_request.labels.*.name, 'publish-container') }}
+        run: |
+          CONTAINER_BUILD_SUMMARY=$'# Container Build Summary\n## Version\n${{ steps.docker-metadata.outputs.tags }}'
+          echo "$CONTAINER_BUILD_SUMMARY" >> $GITHUB_STEP_SUMMARY
+
+      - name: Generate Artifact Attestation
+        uses: actions/attest-build-provenance@v1
+        if: ${{ github.ref == 'refs/heads/main' || contains(github.event.pull_request.labels.*.name, 'publish-container') }}
+        with:
+          subject-name: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME}}
+          subject-digest: ${{ steps.build-push.outputs.digest }}
+          push-to-registry: true
+
+  dependency-submission:
+
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+    - uses: actions/checkout@v4
+    - name: Set up JDK 21
+      uses: actions/setup-java@v4
+      with:
+        java-version: '21'
+        distribution: 'zulu'
+
+    - name: Generate and Submit Dependency Graph
+      uses: gradle/actions/dependency-submission@v4
