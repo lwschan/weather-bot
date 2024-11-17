@@ -7,7 +7,7 @@ import io.kotest.extensions.spring.SpringExtension
 
 class KotestProjectConfig : AbstractProjectConfig() {
 
-    override val parallelism: Int = 3
+    override val parallelism: Int = 1
     override val assertionMode = AssertionMode.Error
 
     override fun extensions(): List<Extension> = super.extensions() + listOf(
