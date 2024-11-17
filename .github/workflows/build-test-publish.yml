@@ -102,7 +102,7 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Docker Metadata action
+      - name: Docker Metadata
         id: docker-metadata
         uses: docker/metadata-action@v5
         with:
@@ -111,7 +111,7 @@ jobs:
           tags: |
             type=sha,prefix=,suffix=${{ github.event_name == 'pull_request' && '-SNAPSHOT' || '' }},format=short
 
-      - name: Build and push
+      - name: Build and Push Container
         id: build-push
         uses: docker/build-push-action@v6
         with:
@@ -123,12 +123,19 @@ jobs:
           build-args: |
             DOCKER_METADATA_OUTPUT_JSON
 
-      - name: Generate artifact attestation
+      - name: Generate Artifact Attestation
         uses: actions/attest-build-provenance@v1
+        if: ${{ github.ref == 'refs/heads/main' || contains(github.event.pull_request.labels.*.name, 'publish-container') }}
         with:
           subject-name: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME}}
           subject-digest: ${{ steps.build-push.outputs.digest }}
           push-to-registry: true
+
+      - name: Output Container Build Summary
+        if: ${{ github.ref == 'refs/heads/main' || contains(github.event.pull_request.labels.*.name, 'publish-container') }}
+        run: |
+          CONTAINER_BUILD_SUMMARY=$'# Container\n${{ steps.docker-metadata.outputs.tags }}'
+          echo "CONTAINER_BUILD_SUMMARY" >> $GITHUB_STEP_SUMMARY
 
   dependency-submission:
 
@@ -144,5 +151,5 @@ jobs:
         java-version: '21'
         distribution: 'zulu'
 
-    - name: Generate and submit dependency graph
+    - name: Generate and Submit Dependency Graph
       uses: gradle/actions/dependency-submission@v4
