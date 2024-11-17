@@ -1,6 +1,5 @@
 package dev.lewischan.weatherbot.controller
 
-import com.github.kotlintelegrambot.entities.Update
 import dev.lewischan.weatherbot.bot.TelegramBot
 import dev.lewischan.weatherbot.configuration.TelegramBotProperties
 import org.slf4j.Logger
@@ -21,7 +20,7 @@ class TelegramBotController(
     @PostMapping("/{botApiToken}")
     suspend fun webhook(
         @PathVariable botApiToken: String,
-        @RequestBody update: Update
+        @RequestBody update: String
     ): ResponseEntity<Unit> {
         logger.info("Handling webhook request for Telegram")
 
