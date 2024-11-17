@@ -69,6 +69,10 @@ jobs:
     needs: build
 
     steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
         
@@ -98,6 +102,7 @@ jobs:
       - name: Build and push
         uses: docker/build-push-action@v6
         with:
+          context: .
           push: false
           platforms: linux/arm64
           build-args: |
