@@ -86,7 +86,7 @@ jobs:
         uses: docker/metadata-action@v5
         with:
           tags: |
-            type=sha
+            type=sha,prefix=,suffix=,format=short
             
   dependency-submission:
 
