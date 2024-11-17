@@ -1,5 +1,6 @@
 package dev.lewischan.weatherbot.configuration
 
+import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.PropertyNamingStrategies
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
@@ -14,6 +15,7 @@ class ObjectMapperConfiguration {
 
     private val snakeCaseObjectMapper = jacksonObjectMapper()
         .setPropertyNamingStrategy(PropertyNamingStrategies.SNAKE_CASE)
+        .configure(DeserializationFeature.READ_ENUMS_USING_TO_STRING, true)
 
     @Bean
     fun mappingJackson2HttpMessageConverter(
