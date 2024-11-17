@@ -103,7 +103,7 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           context: .
-          push: false
+          push: ${{ github.ref == 'refs/heads/main' || contains(github.event.pull_request.labels.*.name, 'publish-container') }}
           platforms: linux/arm64
           build-args: |
             DOCKER_METADATA_OUTPUT_JSON
