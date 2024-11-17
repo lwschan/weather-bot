@@ -37,8 +37,8 @@ class TelegramBotControllerIntTest(
             .accept(MediaType.APPLICATION_JSON)
             .exchange().expectStatus().isOk()
 
-        coVerify(exactly = 1) { bot.processUpdate(match<Update> {
-            it.updateId == updateId
+        coVerify(exactly = 1) { bot.processUpdate(match<String> {
+            it.contains(updateId.toString())
         }) }
     }
 
@@ -50,7 +50,7 @@ class TelegramBotControllerIntTest(
             .accept(MediaType.APPLICATION_JSON)
             .exchange().expectStatus().isUnauthorized()
 
-        coVerify(exactly = 0) { bot.processUpdate(any(Update::class)) }
+        coVerify(exactly = 0) { bot.processUpdate(any(String::class)) }
     }
 
 }) {
