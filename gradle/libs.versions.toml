@@ -34,6 +34,7 @@ micrometer-tracing-bridge-brave = { module = "io.micrometer:micrometer-tracing-b
 spring-boot-starter-actuator = { module = "org.springframework.boot:spring-boot-starter-actuator" }
 spring-boot-starter-jdbc = { module = "org.springframework.boot:spring-boot-starter-jdbc" }
 spring-boot-starter-web = { module = "org.springframework.boot:spring-boot-starter-web" }
+spring-boot-starter-webflux = { module = "org.springframework.boot:spring-boot-starter-webflux" }
 
 # developmentOnly
 spring-boot-devtools = { module = "org.springframework.boot:spring-boot-devtools" }
@@ -55,7 +56,6 @@ kotlin-test-junit5 = { module = "org.jetbrains.kotlin:kotlin-test-junit5" }
 kotlinx-coroutines-reactor = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-reactor" }
 mockk = { module = "io.mockk:mockk", version.ref = "mockk"}
 spring-boot-starter-test = { module = "org.springframework.boot:spring-boot-starter-test" }
-spring-boot-starter-webflux = { module = "org.springframework.boot:spring-boot-starter-webflux" }
 wiremock = { module = "org.wiremock:wiremock-standalone", version.ref = "wiremock" }
 
 # testRuntimeOnly
