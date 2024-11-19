@@ -108,17 +108,30 @@ class WeatherCommandHandler(
         location: Location,
         weather: CurrentWeather
     ) {
-        val localisedTime = weather.time.format(DateTimeFormatter.ofPattern("dd MMM, hh:mm a"))
+        val localisedTime = weather.time.format(DateTimeFormatter.ofPattern("dd MMM, h:mm a"))
+
+        val feelsLikeEmoji = when (weather.feelsLikeTemperature.celsius) {
+            in Double.MIN_VALUE..-10.0 -> "🥶"
+            in -10.0..0.0 -> "❄️"
+            in 0.1..15.0 -> "🌬️"
+            in 15.1..25.0 -> "🙂"
+            in 25.1..35.0 -> "☀️"
+            in 35.1..40.0 -> "🥵"
+            else -> "🔥"
+        }
 
         bot.replyMessage(
             chatId = ChatId.fromId(message.chat.id),
             text = """
                 ${location.address}
-                $localisedTime
+                
+                ${weather.condition.value}
                 
                 🌡️ <b>Temperature:</b> ${weather.temperature.celsius}°C | ${weather.temperature.fahrenheit}°F
                 💧 <b>Humidity:</b> ${weather.humidity}
-                🥵️ <b>Feels Like:</b> ${weather.feelsLikeTemperature.celsius}°C | ${weather.feelsLikeTemperature.fahrenheit}°F
+                $feelsLikeEmoji️ <b>Feels Like:</b> ${weather.feelsLikeTemperature.celsius}°C | ${weather.feelsLikeTemperature.fahrenheit}°F
+                
+                <i>$localisedTime</i>
             """.trimIndent(),
             parseMode = ParseMode.HTML
         )
