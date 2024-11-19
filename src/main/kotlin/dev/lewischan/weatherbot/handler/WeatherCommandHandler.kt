@@ -108,17 +108,19 @@ class WeatherCommandHandler(
         location: Location,
         weather: CurrentWeather
     ) {
-        val localisedTime = weather.time.format(DateTimeFormatter.ofPattern("dd MMM, hh:mm a"))
+        val localisedTime = weather.time.format(DateTimeFormatter.ofPattern("dd MMM, h:mm a"))
 
         bot.replyMessage(
             chatId = ChatId.fromId(message.chat.id),
             text = """
                 ${location.address}
-                $localisedTime
+                ${weather.condition.value}
                 
                 🌡️ <b>Temperature:</b> ${weather.temperature.celsius}°C | ${weather.temperature.fahrenheit}°F
                 💧 <b>Humidity:</b> ${weather.humidity}
                 🥵️ <b>Feels Like:</b> ${weather.feelsLikeTemperature.celsius}°C | ${weather.feelsLikeTemperature.fahrenheit}°F
+                
+                <i>$localisedTime</i>
             """.trimIndent(),
             parseMode = ParseMode.HTML
         )
