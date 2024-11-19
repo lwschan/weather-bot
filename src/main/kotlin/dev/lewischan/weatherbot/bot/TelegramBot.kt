@@ -38,11 +38,9 @@ class TelegramBot(
 
     @PreDestroy
     fun stop() {
-        if (telegramBotProperties.useWebhook) {
-            logger.info("Stopping webhook")
-            telegramBot.stopWebhook()
-        } else {
-            logger.info("Stopping polling")
+        logger.info("Stopping bot")
+
+        if (!telegramBotProperties.useWebhook) {
             telegramBot.stopPolling()
         }
     }
