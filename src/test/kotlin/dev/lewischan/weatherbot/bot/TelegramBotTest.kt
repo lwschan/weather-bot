@@ -27,7 +27,7 @@ class TelegramBotTest : FunSpec({
         }
 
         telegramBot.stop()
-        verify(exactly = 1) {
+        verify(exactly = 0) {
             bot.stopWebhook()
         }
     }
