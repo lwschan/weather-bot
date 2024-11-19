@@ -114,6 +114,7 @@ class WeatherCommandHandler(
             chatId = ChatId.fromId(message.chat.id),
             text = """
                 ${location.address}
+                
                 ${weather.condition.value}
                 
                 🌡️ <b>Temperature:</b> ${weather.temperature.celsius}°C | ${weather.temperature.fahrenheit}°F
