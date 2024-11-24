@@ -7,5 +7,6 @@ data class CurrentWeather(
     val temperature: Temperature,
     val feelsLikeTemperature: Temperature,
     val condition: Condition,
-    val humidity: Humidity
+    val humidity: Humidity,
+    val dailyWeather: DailyWeather
 )

@@ -8,7 +8,7 @@ import com.github.kotlintelegrambot.entities.ReplyMarkup
 import com.github.kotlintelegrambot.types.TelegramBotResult
 import dev.lewischan.weatherbot.error.TelegramBotSendMessageException
 
-@SuppressWarnings("kotlin:S107")
+@Suppress("kotlin:S107")
 fun Bot.replyMessage(
     chatId: ChatId,
     text: String,

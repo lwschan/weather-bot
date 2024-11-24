@@ -29,12 +29,32 @@ class OpenMeteoWeatherService(
     }
 
     fun currentWeatherMapper(openMeteoForecast: OpenMeteoForecast): CurrentWeather {
+        val today = ZonedDateTime.ofInstant(openMeteoForecast.current.time, openMeteoForecast.timezone)
+        val todayIndex = openMeteoForecast.daily.time.indexOfFirst { instant ->
+            ZonedDateTime.ofInstant(instant, openMeteoForecast.timezone).toLocalDate() == today.toLocalDate()
+        }
+        val todayHigh = openMeteoForecast.daily.temperatureTwoMetresMax[todayIndex]
+        val todayLow = openMeteoForecast.daily.temperatureTwoMetresMin[todayIndex]
+        val todayFeelsLikeHigh = openMeteoForecast.daily.apparentTemperatureMax[todayIndex]
+        val todayFeelsLikeLow = openMeteoForecast.daily.apparentTemperatureMin[todayIndex]
+
         return CurrentWeather(
-            time = ZonedDateTime.ofInstant(openMeteoForecast.current.time, openMeteoForecast.timezone),
+            time = today,
             temperature = Temperature.celsius(openMeteoForecast.current.temperatureTwoMetres),
             feelsLikeTemperature = Temperature.celsius(openMeteoForecast.current.apparentTemperature),
             condition = Condition.fromWmoCodeAndIsDay(openMeteoForecast.current.weatherCode, openMeteoForecast.current.isDay),
-            humidity = Humidity(openMeteoForecast.current.relativeHumidityTwoMetres)
+            humidity = Humidity(openMeteoForecast.current.relativeHumidityTwoMetres),
+            dailyWeather = DailyWeather(
+                date = today.toLocalDate(),
+                dailyTemperature = DailyTemperature(
+                    low = Temperature.celsius(todayLow),
+                    high = Temperature.celsius(todayHigh)
+                ),
+                dailyFeelsLikeTemperature = DailyTemperature(
+                    low = Temperature.celsius(todayFeelsLikeLow),
+                    high = Temperature.celsius(todayFeelsLikeHigh)
+                )
+            )
         )
     }
 
