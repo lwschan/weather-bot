@@ -7,12 +7,12 @@ import com.github.kotlintelegrambot.entities.ParseMode
 import dev.lewischan.weatherbot.extension.replyMessage
 import dev.lewischan.weatherbot.model.CurrentWeather
 import dev.lewischan.weatherbot.model.Location
+import dev.lewischan.weatherbot.model.Temperature
 import dev.lewischan.weatherbot.service.LocationService
 import dev.lewischan.weatherbot.service.TelegramUserService
 import dev.lewischan.weatherbot.service.UserDefaultLocationService
 import dev.lewischan.weatherbot.service.WeatherService
 import org.springframework.stereotype.Component
-import java.time.format.DateTimeFormatter
 
 @Component
 class WeatherCommandHandler(
@@ -108,9 +108,33 @@ class WeatherCommandHandler(
         location: Location,
         weather: CurrentWeather
     ) {
-        val localisedTime = weather.time.format(DateTimeFormatter.ofPattern("dd MMM, h:mm a"))
+        val dailyWeather = weather.dailyWeather
 
-        val feelsLikeEmoji = when (weather.feelsLikeTemperature.celsius) {
+        val weatherText = """
+            ${location.address}
+            
+            <code>${weather.condition.emoji} ${weather.condition.value}</code>
+            <code>${weather.temperature.celsius}°C / ${weather.temperature.fahrenheit}°F</code>
+
+            <b>Feels Like:</b> ${weather.feelsLikeTemperature.celsius}°C / ${weather.feelsLikeTemperature.fahrenheit}°F ${getTemperatureEmoji(weather.feelsLikeTemperature)}
+            <b>Humidity:</b> ${weather.humidity} 💧
+            <blockquote expandable>
+            <b>H:</b> ${dailyWeather.dailyTemperature.high.celsius}°C / ${dailyWeather.dailyTemperature.high.fahrenheit}°F
+            <b>L:</b> ${dailyWeather.dailyTemperature.low.celsius}°C / ${dailyWeather.dailyTemperature.low.fahrenheit}°F
+            <b>Feels Like H:</b> ${dailyWeather.dailyFeelsLikeTemperature.high.celsius}°C / ${dailyWeather.dailyFeelsLikeTemperature.high.fahrenheit}°F ${getTemperatureEmoji(dailyWeather.dailyFeelsLikeTemperature.high)}
+            <b>Feels Like L:</b> ${dailyWeather.dailyFeelsLikeTemperature.low.celsius}°C / ${dailyWeather.dailyFeelsLikeTemperature.low.fahrenheit}°F ${getTemperatureEmoji(dailyWeather.dailyFeelsLikeTemperature.low)}
+            </blockquote>
+        """.trimIndent()
+
+        bot.replyMessage(
+            chatId = ChatId.fromId(message.chat.id),
+            text = weatherText,
+            parseMode = ParseMode.HTML
+        )
+    }
+
+    fun getTemperatureEmoji(temperature: Temperature): String{
+        return when (temperature.celsius) {
             in Double.MIN_VALUE..-10.0 -> "🥶"
             in -10.0..0.0 -> "❄️"
             in 0.1..15.0 -> "🌬️"
@@ -119,22 +143,6 @@ class WeatherCommandHandler(
             in 35.1..40.0 -> "🥵"
             else -> "🔥"
         }
-
-        bot.replyMessage(
-            chatId = ChatId.fromId(message.chat.id),
-            text = """
-                ${location.address}
-                
-                ${weather.condition.value}
-                
-                🌡️ <b>Temperature:</b> ${weather.temperature.celsius}°C | ${weather.temperature.fahrenheit}°F
-                💧 <b>Humidity:</b> ${weather.humidity}
-                $feelsLikeEmoji️ <b>Feels Like:</b> ${weather.feelsLikeTemperature.celsius}°C | ${weather.feelsLikeTemperature.fahrenheit}°F
-                
-                <i>$localisedTime</i>
-            """.trimIndent(),
-            parseMode = ParseMode.HTML
-        )
     }
 
 
