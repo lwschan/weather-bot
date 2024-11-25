@@ -53,7 +53,9 @@ class OpenMeteoWeatherService(
                 dailyFeelsLikeTemperature = DailyTemperature(
                     low = Temperature.celsius(todayFeelsLikeLow),
                     high = Temperature.celsius(todayFeelsLikeHigh)
-                )
+                ),
+                sunrise = ZonedDateTime.ofInstant(openMeteoForecast.daily.sunrise[todayIndex], openMeteoForecast.timezone),
+                sunset = ZonedDateTime.ofInstant(openMeteoForecast.daily.sunset[todayIndex], openMeteoForecast.timezone)
             )
         )
     }

@@ -13,6 +13,9 @@ import dev.lewischan.weatherbot.service.TelegramUserService
 import dev.lewischan.weatherbot.service.UserDefaultLocationService
 import dev.lewischan.weatherbot.service.WeatherService
 import org.springframework.stereotype.Component
+import java.time.Instant
+import java.time.ZonedDateTime
+import java.time.format.DateTimeFormatter
 
 @Component
 class WeatherCommandHandler(
@@ -121,8 +124,14 @@ class WeatherCommandHandler(
             <blockquote expandable>
             <b>H:</b> ${dailyWeather.dailyTemperature.high.celsius}°C / ${dailyWeather.dailyTemperature.high.fahrenheit}°F
             <b>L:</b> ${dailyWeather.dailyTemperature.low.celsius}°C / ${dailyWeather.dailyTemperature.low.fahrenheit}°F
+            
+            <b>Sunrise:</b> ${dailyWeather.sunrise.format(timeFormatter)}
+            <b>Sunset:</b> ${dailyWeather.sunset.format(timeFormatter)}
+            
             <b>Feels Like H:</b> ${dailyWeather.dailyFeelsLikeTemperature.high.celsius}°C / ${dailyWeather.dailyFeelsLikeTemperature.high.fahrenheit}°F ${getTemperatureEmoji(dailyWeather.dailyFeelsLikeTemperature.high)}
             <b>Feels Like L:</b> ${dailyWeather.dailyFeelsLikeTemperature.low.celsius}°C / ${dailyWeather.dailyFeelsLikeTemperature.low.fahrenheit}°F ${getTemperatureEmoji(dailyWeather.dailyFeelsLikeTemperature.low)}
+            
+            <i>${ZonedDateTime.ofInstant(Instant.now(), weather.time.zone).format(datetimeFormatter)}</i>
             </blockquote>
         """.trimIndent()
 
@@ -145,5 +154,9 @@ class WeatherCommandHandler(
         }
     }
 
+    companion object {
+        val timeFormatter: DateTimeFormatter = DateTimeFormatter.ofPattern("h:mm a")
+        val datetimeFormatter: DateTimeFormatter = DateTimeFormatter.ofPattern("dd MMM, h:mm a")
+    }
 
 }
