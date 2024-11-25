@@ -144,7 +144,7 @@ class WeatherCommandHandler(
 
     fun getTemperatureEmoji(temperature: Temperature): String{
         return when (temperature.celsius) {
-            in Double.MIN_VALUE..-10.0 -> "🥶"
+            in Double.NEGATIVE_INFINITY..-10.0 -> "🥶"
             in -10.0..0.0 -> "❄️"
             in 0.1..15.0 -> "🌬️"
             in 15.1..25.0 -> "🙂"
