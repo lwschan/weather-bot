@@ -117,10 +117,11 @@ jobs:
         with:
           context: .
           push: ${{ github.ref == 'refs/heads/main' || contains(github.event.pull_request.labels.*.name, 'publish-container') }}
-          platforms: linux/arm64
+          platforms: linux/amd64, linux/arm64
           tags: ${{ steps.docker-metadata.outputs.tags }}
+          labels: ${{ steps.docker-metadata.outputs.labels }}
           annotations: ${{ steps.docker-metadata.outputs.annotations }}
-          provenance: false
+          outputs: type=registry
           build-args: |
             DOCKER_METADATA_OUTPUT_JSON
 
