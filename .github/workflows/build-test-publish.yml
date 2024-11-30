@@ -110,8 +110,6 @@ jobs:
             ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
           tags: |
             type=sha,prefix=,suffix=${{ github.event_name == 'pull_request' && '-SNAPSHOT' || '' }},format=short
-        env:
-          DOCKER_METADATA_ANNOTATIONS_LEVELS: manifest,index
 
       - name: Build and Push Container
         id: build-push
@@ -121,6 +119,7 @@ jobs:
           push: ${{ github.ref == 'refs/heads/main' || contains(github.event.pull_request.labels.*.name, 'publish-container') }}
           platforms: linux/arm64
           tags: ${{ steps.docker-metadata.outputs.tags }}
+          annotations: ${{ steps.docker-metadata.outputs.annotations }}
           labels: ${{ steps.docker-metadata.outputs.labels }}
           build-args: |
             DOCKER_METADATA_OUTPUT_JSON
