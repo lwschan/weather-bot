@@ -110,8 +110,6 @@ jobs:
             ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
           tags: |
             type=sha,prefix=,suffix=${{ github.event_name == 'pull_request' && '-SNAPSHOT' || '' }},format=short
-        env:
-          DOCKER_METADATA_ANNOTATIONS_LEVELS: manifest,index
 
       - name: Build and Push Container
         id: build-push
