@@ -120,6 +120,7 @@ jobs:
           platforms: linux/arm64
           tags: ${{ steps.docker-metadata.outputs.tags }}
           annotations: ${{ steps.docker-metadata.outputs.annotations }}
+          provenance: false
           build-args: |
             DOCKER_METADATA_OUTPUT_JSON
 
