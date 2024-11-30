@@ -124,8 +124,6 @@ jobs:
           annotations: ${{ steps.docker-metadata.outputs.annotations }}
           build-args: |
             DOCKER_METADATA_OUTPUT_JSON
-          outputs: |
-            
 
       - name: Output Container Build Summary
         if: ${{ github.ref == 'refs/heads/main' || contains(github.event.pull_request.labels.*.name, 'publish-container') }}
