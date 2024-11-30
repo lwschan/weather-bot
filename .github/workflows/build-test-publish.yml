@@ -121,7 +121,7 @@ jobs:
           tags: ${{ steps.docker-metadata.outputs.tags }}
           labels: ${{ steps.docker-metadata.outputs.labels }}
           annotations: ${{ steps.docker-metadata.outputs.annotations }}
-          provenance: true
+          provenance: false
           build-args: |
             DOCKER_METADATA_OUTPUT_JSON
 
