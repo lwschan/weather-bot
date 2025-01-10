@@ -5,5 +5,6 @@ import org.springframework.boot.context.properties.bind.ConstructorBinding
 
 @ConfigurationProperties(prefix = "open-meteo-api")
 data class OpenMeteoApiProperties @ConstructorBinding constructor(
-    val baseUrl: String
+    val weatherApiBaseUrl: String,
+    val airQualityApiBaseUrl: String
 )

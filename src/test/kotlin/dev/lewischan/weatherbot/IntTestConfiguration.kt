@@ -64,8 +64,11 @@ class IntTestConfiguration {
 
     @Bean
     fun openMeteoRestClient(): RestClient {
-        return OpenMeteoApiConfiguration().openMeteoRestClient(
-            OpenMeteoApiProperties("http://localhost:$wireMockServerPort")
+        return OpenMeteoApiConfiguration().openMeteoWeatherRestClient(
+            OpenMeteoApiProperties(
+                "http://localhost:$wireMockServerPort",
+                "http://localhost:$wireMockServerPort"
+            )
         )
     }
 

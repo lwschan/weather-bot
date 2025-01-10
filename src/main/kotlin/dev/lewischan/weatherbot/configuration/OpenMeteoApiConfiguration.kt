@@ -4,7 +4,6 @@ import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.databind.PropertyNamingStrategies
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
-import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
 import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -17,10 +16,20 @@ import org.springframework.web.client.RestClient
 class OpenMeteoApiConfiguration {
 
     @Bean
-    @ConditionalOnMissingBean
-    fun openMeteoRestClient(
+    fun openMeteoWeatherRestClient(
         openMeteoApiProperties: OpenMeteoApiProperties
     ): RestClient {
+        return createRestClient(openMeteoApiProperties.weatherApiBaseUrl)
+    }
+
+    @Bean
+    fun openMeteoAirQualityRestClient(
+        openMeteoApiProperties: OpenMeteoApiProperties
+    ): RestClient {
+        return createRestClient(openMeteoApiProperties.airQualityApiBaseUrl)
+    }
+
+    private fun createRestClient(baseUrl: String): RestClient {
         val snakeCaseObjectMapper = jacksonObjectMapper()
             .setPropertyNamingStrategy(PropertyNamingStrategies.SNAKE_CASE)
             .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
@@ -28,10 +37,10 @@ class OpenMeteoApiConfiguration {
 
         return RestClient.builder()
             .requestFactory(HttpComponentsClientHttpRequestFactory())
-            .baseUrl(openMeteoApiProperties.baseUrl)
+            .baseUrl(baseUrl)
             .messageConverters { converters -> run {
-                    converters.removeIf { it is MappingJackson2HttpMessageConverter }
-                    converters.add(MappingJackson2HttpMessageConverter(snakeCaseObjectMapper))
+                converters.removeIf { it is MappingJackson2HttpMessageConverter }
+                converters.add(MappingJackson2HttpMessageConverter(snakeCaseObjectMapper))
             } }
             .build()
     }

@@ -5,6 +5,7 @@ import com.github.kotlintelegrambot.entities.ChatId
 import com.github.kotlintelegrambot.entities.Message
 import com.github.kotlintelegrambot.entities.ParseMode
 import dev.lewischan.weatherbot.extension.replyMessage
+import dev.lewischan.weatherbot.model.CurrentAirQuality
 import dev.lewischan.weatherbot.model.CurrentWeather
 import dev.lewischan.weatherbot.model.Location
 import dev.lewischan.weatherbot.model.Temperature
@@ -76,7 +77,9 @@ class WeatherCommandHandler(
             return
         }
 
-        sendCurrentWeatherMessage(bot, message, userDefaultLocation.location, weather)
+        val airQuality = weatherService.getCurrentAirQuality(userDefaultLocation.location)
+
+        sendCurrentWeatherMessage(bot, message, userDefaultLocation.location, weather, airQuality)
     }
 
     private fun handleWithAddressSearch(bot: Bot, message: Message, address: String) {
@@ -102,16 +105,27 @@ class WeatherCommandHandler(
             return
         }
 
-        sendCurrentWeatherMessage(bot, message, location, weather)
+        val airQuality = weatherService.getCurrentAirQuality(location)
+
+        sendCurrentWeatherMessage(bot, message, location, weather, airQuality)
     }
 
     private fun sendCurrentWeatherMessage(
         bot: Bot,
         message: Message,
         location: Location,
-        weather: CurrentWeather
+        weather: CurrentWeather,
+        airQuality: CurrentAirQuality?
     ) {
         val dailyWeather = weather.dailyWeather
+
+        val airQualityText = airQuality?.let { """
+            <b>AQI (US / EU):</b> ${it.usAqi} / ${it.europeanAqi}
+            <b>PM 2.5:</b> ${it.pmTwoPointFive} μg/m³
+            <b>PM 10:</b> ${it.pmTen} μg/m³
+            <b>UV Index:</b> ${it.uvIndex}
+            <b>UV Index Clear Sky:</b> ${it.uvIndexClearSky}    
+        """.trimStart().trimEnd() } ?: ""
 
         val weatherText = """
             ${location.address}
@@ -125,11 +139,13 @@ class WeatherCommandHandler(
             <b>H:</b> ${dailyWeather.dailyTemperature.high.celsius}°C / ${dailyWeather.dailyTemperature.high.fahrenheit}°F
             <b>L:</b> ${dailyWeather.dailyTemperature.low.celsius}°C / ${dailyWeather.dailyTemperature.low.fahrenheit}°F
             
+            <b>Feels Like H:</b> ${dailyWeather.dailyFeelsLikeTemperature.high.celsius}°C / ${dailyWeather.dailyFeelsLikeTemperature.high.fahrenheit}°F ${getTemperatureEmoji(dailyWeather.dailyFeelsLikeTemperature.high)}
+            <b>Feels Like L:</b> ${dailyWeather.dailyFeelsLikeTemperature.low.celsius}°C / ${dailyWeather.dailyFeelsLikeTemperature.low.fahrenheit}°F ${getTemperatureEmoji(dailyWeather.dailyFeelsLikeTemperature.low)}
+            
             <b>Sunrise:</b> ${dailyWeather.sunrise.format(timeFormatter)}
             <b>Sunset:</b> ${dailyWeather.sunset.format(timeFormatter)}
             
-            <b>Feels Like H:</b> ${dailyWeather.dailyFeelsLikeTemperature.high.celsius}°C / ${dailyWeather.dailyFeelsLikeTemperature.high.fahrenheit}°F ${getTemperatureEmoji(dailyWeather.dailyFeelsLikeTemperature.high)}
-            <b>Feels Like L:</b> ${dailyWeather.dailyFeelsLikeTemperature.low.celsius}°C / ${dailyWeather.dailyFeelsLikeTemperature.low.fahrenheit}°F ${getTemperatureEmoji(dailyWeather.dailyFeelsLikeTemperature.low)}
+            $airQualityText
             
             <i>${ZonedDateTime.ofInstant(Instant.now(), weather.time.zone).format(datetimeFormatter)}</i>
             </blockquote>
