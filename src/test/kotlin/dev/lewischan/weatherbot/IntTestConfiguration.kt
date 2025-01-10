@@ -2,7 +2,6 @@ package dev.lewischan.weatherbot
 
 import com.github.kotlintelegrambot.Bot
 import com.github.tomakehurst.wiremock.WireMockServer
-import com.github.tomakehurst.wiremock.client.WireMock
 import com.google.api.gax.core.NoCredentialsProvider
 import com.google.api.gax.grpc.testing.MockServiceHelper
 import com.google.maps.GeoApiContext
