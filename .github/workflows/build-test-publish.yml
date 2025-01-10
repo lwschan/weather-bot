@@ -41,7 +41,7 @@ jobs:
         retention-days: 1
 
     - name: Publish Test Report
-      uses: mikepenz/action-junit-report@v4
+      uses: mikepenz/action-junit-report@v5
       if: success() || failure()
       with:
         report_paths: '**/build/test-results/test/TEST-*.xml'
@@ -62,8 +62,8 @@ jobs:
           name: 'build'
           path: 'build'
 
-      - name: SonarCloud Scan
-        uses: sonarsource/sonarcloud-github-action@v3
+      - name: SonarQube Scan
+        uses: SonarSource/sonarqube-scan-action@v4
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
@@ -147,6 +147,7 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
+
     - name: Set up JDK 21
       uses: actions/setup-java@v4
       with:
