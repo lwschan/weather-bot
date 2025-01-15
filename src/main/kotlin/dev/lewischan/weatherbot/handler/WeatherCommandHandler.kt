@@ -77,7 +77,7 @@ class WeatherCommandHandler(
             return
         }
 
-        val airQuality = weatherService.getCurrentAirQuality(userDefaultLocation.location)
+        val airQuality = getAirQuality(userDefaultLocation.location)
 
         sendCurrentWeatherMessage(bot, message, userDefaultLocation.location, weather, airQuality)
     }
@@ -105,7 +105,7 @@ class WeatherCommandHandler(
             return
         }
 
-        val airQuality = weatherService.getCurrentAirQuality(location)
+        val airQuality = getAirQuality(location)
 
         sendCurrentWeatherMessage(bot, message, location, weather, airQuality)
     }
@@ -125,7 +125,7 @@ class WeatherCommandHandler(
             <b>PM 10:</b> ${it.pmTen} μg/m³
             <b>UV Index:</b> ${it.uvIndex}
             <b>UV Index Clear Sky:</b> ${it.uvIndexClearSky}    
-        """.trimStart().trimEnd() } ?: ""
+        """.trimStart().trimEnd() } ?: "<i>No air quality data available</i>"
 
         val weatherText = """
             ${location.address}
@@ -158,7 +158,7 @@ class WeatherCommandHandler(
         )
     }
 
-    fun getTemperatureEmoji(temperature: Temperature): String{
+    private fun getTemperatureEmoji(temperature: Temperature): String{
         return when (temperature.celsius) {
             in Double.NEGATIVE_INFINITY..-10.0 -> "🥶"
             in -10.0..0.0 -> "❄️"
@@ -167,6 +167,15 @@ class WeatherCommandHandler(
             in 25.1..35.0 -> "☀️"
             in 35.1..40.0 -> "🥵"
             else -> "🔥"
+        }
+    }
+
+    private fun getAirQuality(location: Location): CurrentAirQuality? {
+        try {
+            return weatherService.getCurrentAirQuality(location)
+        } catch (exception: Exception) {
+            logger.error("Error fetching air quality for location $location", exception)
+            return null
         }
     }
 

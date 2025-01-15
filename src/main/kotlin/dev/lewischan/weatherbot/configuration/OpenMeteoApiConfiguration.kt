@@ -10,6 +10,7 @@ import org.springframework.context.annotation.Configuration
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter
 import org.springframework.web.client.RestClient
+import java.time.Duration
 
 @Configuration
 @EnableConfigurationProperties(OpenMeteoApiProperties::class)
@@ -35,8 +36,13 @@ class OpenMeteoApiConfiguration {
             .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
             .registerModule(JavaTimeModule())
 
+        val requestFactory = HttpComponentsClientHttpRequestFactory()
+        requestFactory.setReadTimeout(Duration.ofSeconds(3))
+        requestFactory.setConnectTimeout(Duration.ofSeconds(3))
+        requestFactory.setConnectionRequestTimeout(Duration.ofSeconds(3))
+
         return RestClient.builder()
-            .requestFactory(HttpComponentsClientHttpRequestFactory())
+            .requestFactory(requestFactory)
             .baseUrl(baseUrl)
             .messageConverters { converters -> run {
                 converters.removeIf { it is MappingJackson2HttpMessageConverter }
