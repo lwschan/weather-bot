@@ -1,6 +1,14 @@
 package dev.lewischan.weatherbot.service
 
-import dev.lewischan.weatherbot.model.*
+import dev.lewischan.weatherbot.model.Condition
+import dev.lewischan.weatherbot.model.CurrentAirQuality
+import dev.lewischan.weatherbot.model.CurrentWeather
+import dev.lewischan.weatherbot.model.DailyTemperature
+import dev.lewischan.weatherbot.model.DailyWeather
+import dev.lewischan.weatherbot.model.Humidity
+import dev.lewischan.weatherbot.model.Location
+import dev.lewischan.weatherbot.model.Temperature
+import dev.lewischan.weatherbot.model.openmeteo.OpenMeteoAirQuality
 import dev.lewischan.weatherbot.model.openmeteo.OpenMeteoForecast
 import org.springframework.stereotype.Service
 import org.springframework.web.client.RestClient
@@ -9,11 +17,12 @@ import java.time.ZonedDateTime
 
 @Service
 class OpenMeteoWeatherService(
-    private val openMeteoRestClient: RestClient
+    private val openMeteoWeatherRestClient: RestClient,
+    private val openMeteoAirQualityRestClient: RestClient
 ) : WeatherService {
 
     override fun getCurrentWeather(location: Location): CurrentWeather? {
-        val response:OpenMeteoForecast? = openMeteoRestClient.get()
+        val response:OpenMeteoForecast? = openMeteoWeatherRestClient.get()
             .uri("/v1/forecast?latitude={latitude}&longitude={longitude}&current={current}&daily={daily}&timeformat={timeFormat}&timezone={timezone}", mapOf(
                 "latitude" to location.latitude,
                 "longitude" to location.longitude,
@@ -26,6 +35,21 @@ class OpenMeteoWeatherService(
             .body<OpenMeteoForecast>()
 
         return response?.let { currentWeatherMapper(it) }
+    }
+
+    override fun getCurrentAirQuality(location: Location): CurrentAirQuality? {
+        val response = openMeteoAirQualityRestClient.get()
+            .uri("/v1/air-quality?latitude={latitude}&longitude={longitude}&current={current}&timeformat={timeFormat}&timezone={timezone}", mapOf(
+                "latitude" to location.latitude,
+                "longitude" to location.longitude,
+                "current" to "european_aqi,us_aqi,pm10,pm2_5,carbon_monoxide,nitrogen_dioxide,sulphur_dioxide,ozone,aerosol_optical_depth,dust,uv_index,uv_index_clear_sky,ammonia,alder_pollen,birch_pollen,grass_pollen,mugwort_pollen,olive_pollen",
+                "timeFormat" to "unixtime",
+                "timezone" to "auto"
+            ))
+            .retrieve()
+            .body<OpenMeteoAirQuality>()
+
+        return response?.let { currentAirQualityMapper(it) }
     }
 
     fun currentWeatherMapper(openMeteoForecast: OpenMeteoForecast): CurrentWeather {
@@ -53,8 +77,24 @@ class OpenMeteoWeatherService(
                 dailyFeelsLikeTemperature = DailyTemperature(
                     low = Temperature.celsius(todayFeelsLikeLow),
                     high = Temperature.celsius(todayFeelsLikeHigh)
-                )
+                ),
+                sunrise = ZonedDateTime.ofInstant(openMeteoForecast.daily.sunrise[todayIndex], openMeteoForecast.timezone),
+                sunset = ZonedDateTime.ofInstant(openMeteoForecast.daily.sunset[todayIndex], openMeteoForecast.timezone)
             )
+        )
+    }
+
+    fun currentAirQualityMapper(openMeteoAirQuality: OpenMeteoAirQuality): CurrentAirQuality {
+        val today = ZonedDateTime.ofInstant(openMeteoAirQuality.current.time, openMeteoAirQuality.timezone)
+
+        return CurrentAirQuality(
+            today,
+            openMeteoAirQuality.current.europeanAqi,
+            openMeteoAirQuality.current.usAqi,
+            openMeteoAirQuality.current.uvIndex,
+            openMeteoAirQuality.current.uvIndexClearSky,
+            openMeteoAirQuality.current.pmTwoPointFive,
+            openMeteoAirQuality.current.pmTen,
         )
     }
 

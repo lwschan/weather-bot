@@ -11,7 +11,7 @@ kotlin-jvm = "2.+"
 kotlin-plugin-spring = "2.+"
 kotlin-telegram-bot = "6.+"
 mockk = "1.+"
-spring-boot = "3.3.+"
+spring-boot = "3.+"
 spring-dependency-management = "1.+"
 wiremock = "3.+"
 

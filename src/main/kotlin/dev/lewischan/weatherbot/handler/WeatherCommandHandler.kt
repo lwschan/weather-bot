@@ -5,6 +5,7 @@ import com.github.kotlintelegrambot.entities.ChatId
 import com.github.kotlintelegrambot.entities.Message
 import com.github.kotlintelegrambot.entities.ParseMode
 import dev.lewischan.weatherbot.extension.replyMessage
+import dev.lewischan.weatherbot.model.CurrentAirQuality
 import dev.lewischan.weatherbot.model.CurrentWeather
 import dev.lewischan.weatherbot.model.Location
 import dev.lewischan.weatherbot.model.Temperature
@@ -13,6 +14,9 @@ import dev.lewischan.weatherbot.service.TelegramUserService
 import dev.lewischan.weatherbot.service.UserDefaultLocationService
 import dev.lewischan.weatherbot.service.WeatherService
 import org.springframework.stereotype.Component
+import java.time.Instant
+import java.time.ZonedDateTime
+import java.time.format.DateTimeFormatter
 
 @Component
 class WeatherCommandHandler(
@@ -73,7 +77,9 @@ class WeatherCommandHandler(
             return
         }
 
-        sendCurrentWeatherMessage(bot, message, userDefaultLocation.location, weather)
+        val airQuality = getAirQuality(userDefaultLocation.location)
+
+        sendCurrentWeatherMessage(bot, message, userDefaultLocation.location, weather, airQuality)
     }
 
     private fun handleWithAddressSearch(bot: Bot, message: Message, address: String) {
@@ -99,16 +105,27 @@ class WeatherCommandHandler(
             return
         }
 
-        sendCurrentWeatherMessage(bot, message, location, weather)
+        val airQuality = getAirQuality(location)
+
+        sendCurrentWeatherMessage(bot, message, location, weather, airQuality)
     }
 
     private fun sendCurrentWeatherMessage(
         bot: Bot,
         message: Message,
         location: Location,
-        weather: CurrentWeather
+        weather: CurrentWeather,
+        airQuality: CurrentAirQuality?
     ) {
         val dailyWeather = weather.dailyWeather
+
+        val airQualityText = airQuality?.let { """
+            <b>AQI (US / EU):</b> ${it.usAqi} / ${it.europeanAqi}
+            <b>PM 2.5:</b> ${it.pmTwoPointFive} μg/m³
+            <b>PM 10:</b> ${it.pmTen} μg/m³
+            <b>UV Index:</b> ${it.uvIndex}
+            <b>UV Index Clear Sky:</b> ${it.uvIndexClearSky}    
+        """.trimStart().trimEnd() } ?: "<i>No air quality data available</i>"
 
         val weatherText = """
             ${location.address}
@@ -121,8 +138,16 @@ class WeatherCommandHandler(
             <blockquote expandable>
             <b>H:</b> ${dailyWeather.dailyTemperature.high.celsius}°C / ${dailyWeather.dailyTemperature.high.fahrenheit}°F
             <b>L:</b> ${dailyWeather.dailyTemperature.low.celsius}°C / ${dailyWeather.dailyTemperature.low.fahrenheit}°F
+            
             <b>Feels Like H:</b> ${dailyWeather.dailyFeelsLikeTemperature.high.celsius}°C / ${dailyWeather.dailyFeelsLikeTemperature.high.fahrenheit}°F ${getTemperatureEmoji(dailyWeather.dailyFeelsLikeTemperature.high)}
             <b>Feels Like L:</b> ${dailyWeather.dailyFeelsLikeTemperature.low.celsius}°C / ${dailyWeather.dailyFeelsLikeTemperature.low.fahrenheit}°F ${getTemperatureEmoji(dailyWeather.dailyFeelsLikeTemperature.low)}
+            
+            <b>Sunrise:</b> ${dailyWeather.sunrise.format(timeFormatter)}
+            <b>Sunset:</b> ${dailyWeather.sunset.format(timeFormatter)}
+            
+            $airQualityText
+            
+            <i>${ZonedDateTime.ofInstant(Instant.now(), weather.time.zone).format(datetimeFormatter)}</i>
             </blockquote>
         """.trimIndent()
 
@@ -133,9 +158,9 @@ class WeatherCommandHandler(
         )
     }
 
-    fun getTemperatureEmoji(temperature: Temperature): String{
+    private fun getTemperatureEmoji(temperature: Temperature): String{
         return when (temperature.celsius) {
-            in Double.MIN_VALUE..-10.0 -> "🥶"
+            in Double.NEGATIVE_INFINITY..-10.0 -> "🥶"
             in -10.0..0.0 -> "❄️"
             in 0.1..15.0 -> "🌬️"
             in 15.1..25.0 -> "🙂"
@@ -145,5 +170,18 @@ class WeatherCommandHandler(
         }
     }
 
+    private fun getAirQuality(location: Location): CurrentAirQuality? {
+        try {
+            return weatherService.getCurrentAirQuality(location)
+        } catch (exception: Exception) {
+            logger.error("Error fetching air quality for location $location", exception)
+            return null
+        }
+    }
+
+    companion object {
+        val timeFormatter: DateTimeFormatter = DateTimeFormatter.ofPattern("h:mm a")
+        val datetimeFormatter: DateTimeFormatter = DateTimeFormatter.ofPattern("dd MMM, h:mm a")
+    }
 
 }

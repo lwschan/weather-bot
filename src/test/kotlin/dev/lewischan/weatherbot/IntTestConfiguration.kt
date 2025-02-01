@@ -9,23 +9,23 @@ import com.google.maps.places.v1.MockPlaces
 import com.google.maps.places.v1.PlacesClient
 import com.google.maps.places.v1.PlacesSettings
 import dev.lewischan.weatherbot.configuration.GoogleMapsServicesProperties
-import dev.lewischan.weatherbot.configuration.OpenMeteoApiConfiguration
-import dev.lewischan.weatherbot.configuration.OpenMeteoApiProperties
 import io.mockk.mockk
 import io.mockk.spyk
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
-import org.springframework.test.util.TestSocketUtils
-import org.springframework.web.client.RestClient
 import java.util.*
 
 @Configuration
 class IntTestConfiguration {
 
-    private val wireMockServerPort: Int = TestSocketUtils.findAvailableTcpPort()
+    @Bean
+    fun wireMockServerPort(@Value("\${wiremock.port}") wireMockPort: Int): Int {
+        return wireMockPort
+    }
 
     @Bean(initMethod = "start", destroyMethod = "stop")
-    fun wireMockServer(): WireMockServer {
+    fun wireMockServer(wireMockServerPort: Int): WireMockServer {
         return WireMockServer(wireMockServerPort)
     }
 
@@ -35,7 +35,10 @@ class IntTestConfiguration {
     }
 
     @Bean
-    fun geoApiContext(googleMapsServicesProperties: GoogleMapsServicesProperties): GeoApiContext {
+    fun geoApiContext(
+        googleMapsServicesProperties: GoogleMapsServicesProperties,
+        wireMockServerPort: Int
+    ): GeoApiContext {
         return GeoApiContext.Builder()
             .apiKey(googleMapsServicesProperties.apiKey)
             .baseUrlOverride("http://localhost:$wireMockServerPort")
@@ -60,13 +63,6 @@ class IntTestConfiguration {
             .setCredentialsProvider(NoCredentialsProvider.create())
             .build()
         return spyk(PlacesClient.create(placesSettings))
-    }
-
-    @Bean
-    fun openMeteoRestClient(): RestClient {
-        return OpenMeteoApiConfiguration().openMeteoRestClient(
-            OpenMeteoApiProperties("http://localhost:$wireMockServerPort")
-        )
     }
 
     @Bean
