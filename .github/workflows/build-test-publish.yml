@@ -132,7 +132,7 @@ jobs:
           echo "$CONTAINER_BUILD_SUMMARY" >> $GITHUB_STEP_SUMMARY
 
       - name: Generate Artifact Attestation
-        uses: actions/attest-build-provenance@v1
+        uses: actions/attest-build-provenance@v2
         if: ${{ github.ref == 'refs/heads/main' || contains(github.event.pull_request.labels.*.name, 'publish-container') }}
         with:
           subject-name: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME}}
