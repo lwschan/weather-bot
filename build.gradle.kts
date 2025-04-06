@@ -45,9 +45,9 @@ configurations {
     all {
         resolutionStrategy {
             componentSelection {
-                all {
+                all allComponentSelection@ {
                     if (candidate.group == "com.google.guava" && candidate.module == "listenablefuture") {
-                        return@all
+                        return@allComponentSelection
                     }
                     if (Regex("(?i)Beta|Alpha|RC|M").containsMatchIn(candidate.version)) {
                         reject("Rejecting ${candidate.version} as it's an excluded version")
