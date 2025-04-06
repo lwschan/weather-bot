@@ -108,7 +108,10 @@ tasks.withType<Test>().configureEach {
     useJUnitPlatform()
     finalizedBy(tasks.jacocoTestReport)
 
-    jvmArgs = listOf("-javaagent:${configurations.testRuntimeClasspath.get().find { it.name.contains("mockito-core") }}")
+    jvmArgs = listOf(
+        "-javaagent:${configurations.testRuntimeClasspath.get().find { it.name.contains("mockito-core") }}",
+        "-javaagent:${configurations.testRuntimeClasspath.get().find { it.name.contains("byte-buddy-agent") }}",
+    )
 }
 
 tasks.jacocoTestReport {
