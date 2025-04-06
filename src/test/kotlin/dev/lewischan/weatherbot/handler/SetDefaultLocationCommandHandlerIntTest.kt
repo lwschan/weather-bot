@@ -44,7 +44,7 @@ class SetDefaultLocationCommandHandlerIntTest(
         every { message.from!!.id } returns userId
 
         test("it should create user and save default location") {
-            setDefaultLocationCommandHandler.execute(bot, message)
+            setDefaultLocationCommandHandler.execute(message)
 
             val user = telegramUserService.findByExternalUserId(userId)
             user shouldNotBe null
@@ -69,7 +69,7 @@ class SetDefaultLocationCommandHandlerIntTest(
             val user = telegramUserService.findByExternalUserId(userId)
             user shouldNotBe null
 
-            setDefaultLocationCommandHandler.execute(bot, message)
+            setDefaultLocationCommandHandler.execute(message)
 
             val defaultLocation = userDefaultLocationService.findByUserId(user!!.id)
             defaultLocation shouldNotBe null
@@ -100,7 +100,7 @@ class SetDefaultLocationCommandHandlerIntTest(
         every { message.from!!.id } returns userId
 
         test("it should return an error message") {
-            setDefaultLocationCommandHandler.execute(bot, message)
+            setDefaultLocationCommandHandler.execute(message)
 
             verify(exactly = 1) { bot.sendMessage(
                 chatId = ChatId.fromId(chatId),
@@ -126,7 +126,7 @@ class SetDefaultLocationCommandHandlerIntTest(
         every { message.from!!.id } returns userId
 
         test("it should return an invalid address error message") {
-            setDefaultLocationCommandHandler.execute(bot, message)
+            setDefaultLocationCommandHandler.execute(message)
 
             verify(exactly = 1) { bot.sendMessage(
                 chatId = ChatId.fromId(chatId),

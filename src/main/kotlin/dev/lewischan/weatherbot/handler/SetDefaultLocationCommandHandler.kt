@@ -1,6 +1,5 @@
 package dev.lewischan.weatherbot.handler
 
-import com.github.kotlintelegrambot.Bot
 import com.github.kotlintelegrambot.entities.ChatId
 import com.github.kotlintelegrambot.entities.Message
 import dev.lewischan.weatherbot.extension.replyMessage
@@ -18,12 +17,12 @@ class SetDefaultLocationCommandHandler(
     override val command: String = "s"
     override val description: String = "Set a default weather location"
 
-    override fun handleCommand(bot: Bot, message: Message) {
+    override fun handleCommand(message: Message) {
         val chatId = ChatId.fromId(message.chat.id)
-        val addressQuery = getCommandQuery(bot, message)
+        val addressQuery = getCommandQuery(message)
 
         if (message.text == null || addressQuery.isNullOrBlank()) {
-            bot.replyMessage(
+            getBot().replyMessage(
                 chatId = chatId,
                 replyToMessageId = message.messageId,
                 text = "Include an address along with this command to set it as your default location for weather requests."
@@ -33,7 +32,7 @@ class SetDefaultLocationCommandHandler(
 
         val geocodeLocation = locationService.geocode(addressQuery)
         if (geocodeLocation == null) {
-            bot.replyMessage(
+            getBot().replyMessage(
                 chatId = chatId,
                 replyToMessageId = message.messageId,
                 text = "Error: could not find a valid address for $addressQuery."
@@ -46,7 +45,7 @@ class SetDefaultLocationCommandHandler(
             ?: telegramUserService.createUser(externalUserId)
 
         userDefaultLocationService.save(user.id, geocodeLocation)
-        bot.replyMessage(
+        getBot().replyMessage(
             chatId = chatId,
             replyToMessageId = message.messageId,
             text = "Saved ${geocodeLocation.address} as your default location."

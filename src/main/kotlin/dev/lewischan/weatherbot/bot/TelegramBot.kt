@@ -9,7 +9,7 @@ import org.slf4j.LoggerFactory
 
 class TelegramBot(
     private val telegramBotProperties: TelegramBotProperties,
-    private val telegramBot: Bot,
+    private val bot: Bot,
     commandHandlers: List<CommandHandler>
 ) {
     private val logger = LoggerFactory.getLogger(this::class.java)
@@ -19,7 +19,7 @@ class TelegramBot(
     }
 
     suspend fun processUpdate(update: String) {
-        telegramBot.processUpdate(update)
+        bot.processUpdate(update)
     }
 
     fun start() {
@@ -27,10 +27,10 @@ class TelegramBot(
 
         if (telegramBotProperties.useWebhook) {
             logger.info("Starting webhook")
-            telegramBot.startWebhook()
+            bot.startWebhook()
         } else {
             logger.info("Starting polling")
-            telegramBot.startPolling()
+            bot.startPolling()
         }
 
         logger.info("Telegram bot started successfully")
@@ -41,12 +41,12 @@ class TelegramBot(
         logger.info("Stopping bot")
 
         if (!telegramBotProperties.useWebhook) {
-            telegramBot.stopPolling()
+            bot.stopPolling()
         }
     }
 
     private fun registerCommands(commandHandlers: List<CommandHandler>) {
-        telegramBot.setMyCommands(
+        bot.setMyCommands(
             commandHandlers.stream().map {
                 BotCommand(it.command, it.description)
             }.toList()

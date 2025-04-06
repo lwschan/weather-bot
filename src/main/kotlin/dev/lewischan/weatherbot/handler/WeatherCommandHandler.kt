@@ -28,11 +28,11 @@ class WeatherCommandHandler(
     override val command = "w"
     override val description = "Get current weather, provide an address if this is not for your default location."
 
-    override fun handleCommand(bot: Bot, message: Message) {
-        val address = getCommandQuery(bot, message)
+    override fun handleCommand(message: Message) {
+        val address = getCommandQuery(message)
 
-        if (address.isNullOrEmpty()) handleWithDefaultLocation(bot, message)
-        else handleWithAddressSearch(bot, message, address)
+        if (address.isNullOrEmpty()) handleWithDefaultLocation(getBot(), message)
+        else handleWithAddressSearch(getBot(), message, address)
     }
 
     private fun handleWithDefaultLocation(bot: Bot, message: Message) {

@@ -42,7 +42,7 @@ class HelpCommandHandlerIntTest(
         every { message.chat.id } returns chatId
         every { message.text } returns ""
 
-        helpCommandHandler.execute(bot, message)
+        helpCommandHandler.execute(message)
 
         test("Should return the correct response") {
             verify(exactly = 1) { bot.sendMessage(
