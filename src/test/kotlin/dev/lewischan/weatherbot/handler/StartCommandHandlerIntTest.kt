@@ -34,7 +34,7 @@ class StartCommandHandlerIntTest(
         every { message.chat.id } returns chatId
         every { message.text } returns ""
 
-        startCommandHandler.execute(bot, message)
+        startCommandHandler.execute(message)
 
         verify(exactly = 1) { bot.sendMessage(
             chatId = ChatId.fromId(chatId),

@@ -11,11 +11,9 @@ java {
     targetCompatibility = JavaVersion.VERSION_21
 }
 
-@Suppress("UnstableApiUsage")
-configurations {
-    compileOnly {
-        extendsFrom(configurations.annotationProcessor.get())
-    }
+dependencyLocking {
+    lockAllConfigurations()
+    lockMode = LockMode.STRICT
 }
 
 buildscript {
@@ -29,9 +27,8 @@ buildscript {
         resolutionStrategy {
             componentSelection {
                 all {
-                    val candidateVersion = candidate.version
-                    if (candidateVersion.contains("Beta") || candidateVersion.contains("Alpha") || candidateVersion.contains("RC")) {
-                        reject("Rejecting $candidateVersion as it's an excluded version")
+                    if (Regex("(?i)Beta|Alpha|RC|M").containsMatchIn(candidate.version)) {
+                        reject("Rejecting ${candidate.version} as it's an excluded version")
                     }
                 }
             }
@@ -39,9 +36,26 @@ buildscript {
     }
 }
 
-dependencyLocking {
-    lockAllConfigurations()
-    lockMode = LockMode.STRICT
+@Suppress("UnstableApiUsage")
+configurations {
+    compileOnly {
+        extendsFrom(configurations.annotationProcessor.get())
+    }
+
+    all {
+        resolutionStrategy {
+            componentSelection {
+                all allComponentSelection@ {
+                    if (candidate.group == "com.google.guava" && candidate.module == "listenablefuture") {
+                        return@allComponentSelection
+                    }
+                    if (Regex("(?i)Beta|Alpha|RC|M").containsMatchIn(candidate.version)) {
+                        reject("Rejecting ${candidate.version} as it's an excluded version")
+                    }
+                }
+            }
+        }
+    }
 }
 
 dependencies {
@@ -93,6 +107,11 @@ kotlin {
 tasks.withType<Test>().configureEach {
     useJUnitPlatform()
     finalizedBy(tasks.jacocoTestReport)
+
+    jvmArgs = listOf(
+        "-javaagent:${configurations.testRuntimeClasspath.get().find { it.name.contains("mockito-core") }}",
+        "-javaagent:${configurations.testRuntimeClasspath.get().find { it.name.contains("byte-buddy-agent") }}",
+    )
 }
 
 tasks.jacocoTestReport {

@@ -1,6 +1,5 @@
 package dev.lewischan.weatherbot.handler
 
-import com.github.kotlintelegrambot.Bot
 import com.github.kotlintelegrambot.entities.BotCommand
 import com.github.kotlintelegrambot.entities.ChatId
 import com.github.kotlintelegrambot.entities.Message
@@ -13,9 +12,9 @@ class HelpCommandHandler : CommandHandler() {
     override val command = "help"
     override val description = "Get help"
 
-    override fun handleCommand(bot: Bot, message: Message) {
-        val botCommands = bot.getMyCommands().get()
-        val botUsername = bot.getMe().get().username!!
+    override fun handleCommand(message: Message) {
+        val botCommands = getBot().getMyCommands().get()
+        val botUsername = getBot().getMe().get().username!!
 
         val commandDescriptions = botCommands.filter { it.command != command }
             .sortedWith(
@@ -32,7 +31,7 @@ class HelpCommandHandler : CommandHandler() {
             
         """.trimIndent() + commandDescriptions.joinToString("\n")
 
-        bot.replyMessage(
+        getBot().replyMessage(
             chatId = ChatId.fromId(message.chat.id),
             text = text,
             parseMode = ParseMode.HTML
