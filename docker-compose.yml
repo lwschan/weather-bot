@@ -1,7 +1,7 @@
 services:
   database:
     container_name: db-weather-bot
-    image: postgres:15.8-alpine
+    image: postgres:17.4-alpine
     ports:
       - '5432'
     environment:
