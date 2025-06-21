@@ -1,0 +1,26 @@
+spring:
+  docker:
+    compose:
+      enabled: true
+      skip:
+        in-tests: false
+      file: docker-compose.yml
+
+wiremock:
+  port: 8080
+
+ENV_DB_NAME: db_weather_bot
+ENV_DB_HOST: localhost
+ENV_DB_PORT: 5432
+ENV_DB_USERNAME: weather-bot
+ENV_DB_PASSWORD: weather-bot
+
+ENV_GOOGLE_MAPS_PLATFORM_API_KEY: AIzaTestKey
+
+ENV_TELEGRAM_BOT_API_TOKEN: 123456789:ABCDEFGHIJKLMNOPQRSTUVWXYZ123456
+ENV_TELEGRAM_BOT_SERVER_HOSTNAME: localhost
+ENV_TELEGRAM_BOT_USE_WEBHOOK: true
+ENV_TELEGRAM_BOT_WEBHOOK_SECRET_TOKEN: 6879e9ec-063e-4e9f-be47-d1982bf340fa
+
+ENV_OPEN_METEO_WEATHER_API_BASE_URL: http://localhost:${wiremock.port}
+ENV_OPEN_METEO_AIR_QUALITY_API_BASE_URL: http://localhost:${wiremock.port}
