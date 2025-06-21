@@ -36,7 +36,6 @@ buildscript {
     }
 }
 
-@Suppress("UnstableApiUsage")
 configurations {
     compileOnly {
         extendsFrom(configurations.annotationProcessor.get())
