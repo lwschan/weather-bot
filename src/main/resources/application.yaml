@@ -9,6 +9,21 @@ logging:
     com.google: INFO
     dev.lewischan.weatherbot: INFO
 
+management:
+  endpoint:
+    health:
+      probes:
+        enabled: true
+      group:
+        readiness:
+          include: readinessState,botReadinessIndicator
+  health:
+    livenessState:
+      enabled: true
+    readinessState:
+      enabled: true
+
+
 open-meteo-api:
   weather-api-base-url: ${ENV_OPEN_METEO_WEATHER_API_BASE_URL}
   air-quality-api-base-url: ${ENV_OPEN_METEO_AIR_QUALITY_API_BASE_URL}
