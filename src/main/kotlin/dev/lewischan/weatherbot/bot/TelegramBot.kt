@@ -10,12 +10,14 @@ import org.slf4j.LoggerFactory
 class TelegramBot(
     private val telegramBotProperties: TelegramBotProperties,
     private val bot: Bot,
-    commandHandlers: List<CommandHandler>
+    commandHandlers: List<CommandHandler>,
+    var status: Status = Status.NOT_READY
 ) {
     private val logger = LoggerFactory.getLogger(this::class.java)
 
     init {
         registerCommands(commandHandlers)
+        setBotStatus(Status.READY)
     }
 
     suspend fun processUpdate(update: String) {
@@ -40,6 +42,8 @@ class TelegramBot(
     fun stop() {
         logger.info("Stopping bot")
 
+        setBotStatus(Status.OFFLINE)
+
         if (!telegramBotProperties.useWebhook) {
             bot.stopPolling()
         }
@@ -51,6 +55,16 @@ class TelegramBot(
                 BotCommand(it.command, it.description)
             }.toList()
         )
+    }
+
+    private fun setBotStatus(status: Status) {
+        this.status = status
+    }
+
+    enum class Status {
+        READY,
+        NOT_READY,
+        OFFLINE,
     }
 
 }
