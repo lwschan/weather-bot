@@ -34,6 +34,7 @@ kotlinx-coroutines-reactor = { module = "org.jetbrains.kotlinx:kotlinx-coroutine
 micrometer-tracing-bridge-brave = { module = "io.micrometer:micrometer-tracing-bridge-brave" }
 spring-boot-starter-actuator = { module = "org.springframework.boot:spring-boot-starter-actuator" }
 spring-boot-starter-jdbc = { module = "org.springframework.boot:spring-boot-starter-jdbc" }
+spring-boot-starter-undertow = { module = "org.springframework.boot:spring-boot-starter-undertow" }
 spring-boot-starter-web = { module = "org.springframework.boot:spring-boot-starter-web" }
 spring-boot-starter-webflux = { module = "org.springframework.boot:spring-boot-starter-webflux" }
 
@@ -63,3 +64,7 @@ junit-platform-launcher = { module = "org.junit.platform:junit-platform-launcher
 
 # testAndDevelopmentOnly
 spring-boot-docker-compose = { module = "org.springframework.boot:spring-boot-docker-compose" }
+
+# excludes
+spring-boot-starter-tomcat = { module = "org.springframework.boot:spring-boot-starter-tomcat" }
+undertow-websockets-jsr = { module = "io.undertow:undertow-websockets-jsr" }

@@ -1,0 +1,60 @@
+google-maps-services:
+  api-key: ${ENV_GOOGLE_MAPS_PLATFORM_API_KEY}
+  query-rate-limit: 10
+
+logging:
+  level:
+    root: INFO
+    org.springframework: INFO
+    com.google: INFO
+    dev.lewischan.weatherbot: INFO
+
+management:
+  endpoint:
+    health:
+      probes:
+        enabled: true
+      group:
+        readiness:
+          include: readinessState,telegramBotReadinessIndicator
+  health:
+    livenessState:
+      enabled: true
+    readinessState:
+      enabled: true
+
+
+open-meteo-api:
+  weather-api-base-url: ${ENV_OPEN_METEO_WEATHER_API_BASE_URL}
+  air-quality-api-base-url: ${ENV_OPEN_METEO_AIR_QUALITY_API_BASE_URL}
+
+server:
+  shutdown: graceful
+
+spring:
+  application:
+    name: weather-bot
+  datasource:
+    hikari:
+      minimum-idle: 3
+      maximum-pool-size: 5
+    url: jdbc:postgresql://${ENV_DB_HOST}:${ENV_DB_PORT}/${ENV_DB_NAME}
+    username: ${ENV_DB_USERNAME}
+    password: ${ENV_DB_PASSWORD}
+  docker:
+    compose:
+      enabled: false
+  flyway:
+    validate-migration-naming: true
+  threads:
+    virtual:
+      enabled: true
+
+telegram-bot:
+  api-token: ${ENV_TELEGRAM_BOT_API_TOKEN}
+  server-hostname: ${ENV_TELEGRAM_BOT_SERVER_HOSTNAME}
+  use-webhook: ${ENV_TELEGRAM_BOT_USE_WEBHOOK}
+  webhook-secret-token: ${ENV_TELEGRAM_BOT_WEBHOOK_SECRET_TOKEN}
+
+ENV_OPEN_METEO_WEATHER_API_BASE_URL: https://api.open-meteo.com
+ENV_OPEN_METEO_AIR_QUALITY_API_BASE_URL: https://air-quality-api.open-meteo.com
