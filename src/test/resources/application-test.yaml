@@ -1,3 +1,7 @@
+logging:
+  level:
+    org.springframework.test.context.support.AnnotationConfigContextLoaderUtils: warn
+
 spring:
   docker:
     compose:
