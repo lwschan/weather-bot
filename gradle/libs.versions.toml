@@ -5,8 +5,7 @@ google-api-gax-grpc = "2.+"
 google-maps-places = "0.+"
 google-maps-services = "2.+"
 grpc-google-maps-places-v1 = "0.+"
-kotest = "5.+"
-kotest-extensions-spring = "1.+"
+kotest = "6.+"
 kotlin-jvm = "2.+"
 kotlin-plugin-spring = "2.+"
 kotlin-telegram-bot = "6.+"
@@ -52,8 +51,7 @@ spring-boot-configuration-processor = { module = "org.springframework.boot:sprin
 google-api-gax-grpc = { module = "com.google.api:gax-grpc", version.ref = "google-api-gax-grpc" }
 grpc-google-maps-places-v1 = { module = "com.google.maps.api.grpc:grpc-google-maps-places-v1", version.ref = "grpc-google-maps-places-v1" }
 kotest = { module = "io.kotest:kotest-runner-junit5", version.ref = "kotest" }
-kotest-extensions-spring = { module = "io.kotest.extensions:kotest-extensions-spring", version.ref = "kotest-extensions-spring" }
-kotest-framework-datatest = { module = "io.kotest:kotest-framework-datatest", version.ref = "kotest" }
+kotest-extensions-spring = { module = "io.kotest:kotest-extensions-spring", version.ref = "kotest" }
 kotlin-test-junit5 = { module = "org.jetbrains.kotlin:kotlin-test-junit5" }
 mockk = { module = "io.mockk:mockk", version.ref = "mockk"}
 spring-boot-starter-test = { module = "org.springframework.boot:spring-boot-starter-test" }

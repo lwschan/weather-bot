@@ -93,7 +93,6 @@ dependencies {
     testImplementation(libs.grpc.google.maps.places.v1)
     testImplementation(libs.kotest)
     testImplementation(libs.kotest.extensions.spring)
-    testImplementation(libs.kotest.framework.datatest)
     testImplementation(libs.kotlin.test.junit5)
     testImplementation(libs.mockk)
     testImplementation(libs.spring.boot.starter.test)
@@ -106,7 +105,10 @@ dependencies {
 
 kotlin {
     compilerOptions {
-        freeCompilerArgs.addAll("-Xjsr305=strict")
+        freeCompilerArgs.addAll(
+            "-Xjsr305=strict",
+            "-Xannotation-default-target=param-property"
+        )
     }
 }
 

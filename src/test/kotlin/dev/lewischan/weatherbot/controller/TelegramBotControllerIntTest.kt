@@ -7,6 +7,7 @@ import com.github.kotlintelegrambot.entities.Update
 import dev.lewischan.weatherbot.BaseIntTest
 import dev.lewischan.weatherbot.configuration.TelegramBotProperties
 import io.kotest.core.test.AssertionMode
+import io.kotest.engine.concurrency.TestExecutionMode
 import io.mockk.clearMocks
 import io.mockk.coVerify
 import org.springframework.http.MediaType
