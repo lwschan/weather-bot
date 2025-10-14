@@ -24,19 +24,18 @@ class TelegramBotController(
 
     @PostMapping("/{botApiToken}")
     suspend fun webhook(
-        @RequestHeader(name = "X-Telegram-Bot-Api-Secret-Token") webhookSecretToken: String,
+        @RequestHeader(name = "X-Telegram-Bot-Api-Secret-Token", required = false) webhookSecretToken: String?,
         @PathVariable botApiToken: String,
         @RequestBody update: String
     ): ResponseEntity<Unit> {
         logger.info("Handling webhook request for Telegram on thread ${Thread.currentThread()}")
 
-        if (botApiToken != telegramBotProperties.apiToken) {
+        if (telegramBotProperties.apiToken != botApiToken) {
             logger.info("Received request with invalid bot API token")
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build()
         }
 
-        if (telegramBotProperties.webhookSecretToken != null
-            && webhookSecretToken != telegramBotProperties.webhookSecretToken) {
+        if (telegramBotProperties.webhookSecretToken != webhookSecretToken) {
             logger.info("Received request with invalid webhook secret token")
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build()
         }

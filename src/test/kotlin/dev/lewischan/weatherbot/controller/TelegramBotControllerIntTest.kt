@@ -49,14 +49,13 @@ class TelegramBotControllerIntTest(
             .uri("/telegram/${telegramBotProperties.apiToken}")
             .bodyValue(objectMapper.writeValueAsString(Update(random.nextLong())))
             .header("Content-Type", MediaType.APPLICATION_JSON_VALUE)
-            .header("X-Telegram-Bot-Api-Secret-Token", "")
             .accept(MediaType.APPLICATION_JSON)
             .exchange().expectStatus().isUnauthorized()
 
         coVerify(exactly = 0) { bot.processUpdate(any(String::class)) }
     }
 
-    test("when token is invalid, telegram endpoint should reject the request with unauthorized") {
+    test("when token and secret token are invalid, telegram endpoint should reject the request with unauthorized") {
         webTestClient.post()
             .uri("/telegram/12345")
             .bodyValue(objectMapper.writeValueAsString(Update(random.nextLong())))
