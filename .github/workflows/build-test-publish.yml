@@ -42,7 +42,7 @@ jobs:
         retention-days: 1
 
     - name: Publish Test Report
-      uses: mikepenz/action-junit-report@v5
+      uses: mikepenz/action-junit-report@v6.0.0
       if: success() || failure()
       with:
         report_paths: '**/build/test-results/test/TEST-*.xml'
