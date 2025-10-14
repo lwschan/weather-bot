@@ -19,16 +19,16 @@ jobs:
       checks: write
 
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v5
 
     - name: Setup JDK 21
-      uses: actions/setup-java@v4
+      uses: actions/setup-java@v5
       with:
         java-version: '21'
         distribution: 'zulu'
 
     - name: Setup Gradle
-      uses: gradle/actions/setup-gradle@v4
+      uses: gradle/actions/setup-gradle@v5
 
     - name: Build with Gradle Wrapper
       run: ./gradlew build
@@ -42,7 +42,7 @@ jobs:
         retention-days: 1
 
     - name: Publish Test Report
-      uses: mikepenz/action-junit-report@v5
+      uses: mikepenz/action-junit-report@v6.0.0
       if: success() || failure()
       with:
         report_paths: '**/build/test-results/test/TEST-*.xml'
@@ -55,12 +55,12 @@ jobs:
       contents: read
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
         with:
           fetch-depth: 0
 
       - name: Download Build Artifacts
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v5
         with:
           name: 'build'
           path: 'build'
@@ -82,7 +82,7 @@ jobs:
       id-token: write
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
         with:
           fetch-depth: 0
 
@@ -93,7 +93,7 @@ jobs:
         uses: docker/setup-buildx-action@v3
         
       - name: Download Build Artifacts
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v5
         with:
           name: 'build'
           path: 'build'
@@ -135,7 +135,7 @@ jobs:
           echo "$CONTAINER_BUILD_SUMMARY" >> $GITHUB_STEP_SUMMARY
 
       - name: Generate Artifact Attestation
-        uses: actions/attest-build-provenance@v2
+        uses: actions/attest-build-provenance@v3
         if: ${{ github.ref == 'refs/heads/main' || contains(github.event.pull_request.labels.*.name, 'publish-container') }}
         with:
           subject-name: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME}}
@@ -149,13 +149,13 @@ jobs:
       contents: write
 
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v5
 
     - name: Set up JDK 21
-      uses: actions/setup-java@v4
+      uses: actions/setup-java@v5
       with:
         java-version: '21'
         distribution: 'zulu'
 
     - name: Generate and Submit Dependency Graph
-      uses: gradle/actions/dependency-submission@v4
+      uses: gradle/actions/dependency-submission@v5
