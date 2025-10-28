@@ -10,7 +10,7 @@ COPY ${JAR_FILE} application.jar
 RUN java -Djarmode=tools -jar application.jar extract --layers --destination extracted
 
 # This is the runtime container
-FROM azul/zulu-openjdk-alpine:21-jre-headless
+FROM azul/zulu-openjdk-alpine:25-jre-headless
 WORKDIR /application
 # Create a non-root user and group
 # Set permissions for the non-root user
