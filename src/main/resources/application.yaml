@@ -23,7 +23,6 @@ management:
     readinessState:
       enabled: true
 
-
 open-meteo-api:
   weather-api-base-url: ${ENV_OPEN_METEO_WEATHER_API_BASE_URL}
   air-quality-api-base-url: ${ENV_OPEN_METEO_AIR_QUALITY_API_BASE_URL}
@@ -48,7 +47,7 @@ spring:
     validate-migration-naming: true
   threads:
     virtual:
-      enabled: false
+      enabled: true
 
 telegram-bot:
   api-token: ${ENV_TELEGRAM_BOT_API_TOKEN}

@@ -7,8 +7,8 @@ plugins {
 }
 
 java {
-    sourceCompatibility = JavaVersion.VERSION_21
-    targetCompatibility = JavaVersion.VERSION_21
+    sourceCompatibility = JavaVersion.VERSION_25
+    targetCompatibility = JavaVersion.VERSION_25
 }
 
 dependencyLocking {
@@ -26,7 +26,10 @@ buildscript {
     configurations.all {
         resolutionStrategy {
             componentSelection {
-                all {
+                all allComponentSelection@ {
+                    if (candidate.group.startsWith("org.jetbrains.kotlin")) {
+                        return@allComponentSelection
+                    }
                     if (Regex("(?i)Beta|Alpha|RC|M").containsMatchIn(candidate.version)) {
                         reject("Rejecting ${candidate.version} as it's an excluded version")
                     }
@@ -45,6 +48,9 @@ configurations {
         resolutionStrategy {
             componentSelection {
                 all allComponentSelection@ {
+                    if (candidate.group.startsWith("org.jetbrains.kotlin")) {
+                        return@allComponentSelection
+                    }
                     if (candidate.group == "com.google.guava" && candidate.module == "listenablefuture") {
                         return@allComponentSelection
                     }

@@ -15,7 +15,7 @@ class StartCommandHandler : CommandHandler() {
         val text = """
             Hello! I am a weather bot!
             
-            To find out what I can do, tap on /help@${getBot().getMe().get().username!!}.
+            Tap on /help@${getBot().getMe().get().username!!} for more information.
         """.trimIndent()
 
         getBot().replyMessage(
