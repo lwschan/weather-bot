@@ -26,7 +26,7 @@ class WeatherCommandHandler(
     private val locationService: LocationService
 ) : CommandHandler() {
     override val command = "w"
-    override val description = "Get current weather, provide an address if this is not for your default location."
+    override val description = "Get the current weather for your default location or include an address."
 
     override fun handleCommand(message: Message) {
         val address = getCommandQuery(message)

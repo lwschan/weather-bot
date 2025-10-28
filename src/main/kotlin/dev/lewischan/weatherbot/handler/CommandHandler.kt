@@ -5,6 +5,7 @@ import com.github.kotlintelegrambot.entities.Message
 import dev.lewischan.weatherbot.bot.TelegramBotProvider
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
+import java.util.UUID
 
 abstract class CommandHandler {
     abstract val command: String
@@ -23,11 +24,13 @@ abstract class CommandHandler {
     }
 
     fun execute(message: Message) {
-        logger.info("Handling Telegram bot command: $command for message: ${message.text}")
+        val messageId = UUID.randomUUID()
+        logger.info("[$messageId] Handling Telegram bot command: $command for message: ${message.text}")
         try {
             handleCommand(message)
         } catch (exception: Exception) {
             logger.error(exception.message, exception)
         }
+        logger.info("[$messageId] Finished handling Telegram bot command: $command for message: ${message.text}")
     }
 }

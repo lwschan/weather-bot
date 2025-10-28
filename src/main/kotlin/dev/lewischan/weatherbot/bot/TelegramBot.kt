@@ -42,9 +42,8 @@ class TelegramBot(
     fun stop() {
         logger.info("Stopping bot")
 
-        setBotStatus(Status.NOT_READY)
-
         if (!telegramBotProperties.useWebhook) {
+            setBotStatus(Status.NOT_READY)
             bot.stopPolling()
         }
     }

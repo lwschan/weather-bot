@@ -15,7 +15,7 @@ class SetDefaultLocationCommandHandler(
     val telegramUserService: TelegramUserService
 ) : CommandHandler() {
     override val command: String = "s"
-    override val description: String = "Set a default weather location"
+    override val description: String = "Set a default location for weather requests"
 
     override fun handleCommand(message: Message) {
         val chatId = ChatId.fromId(message.chat.id)
