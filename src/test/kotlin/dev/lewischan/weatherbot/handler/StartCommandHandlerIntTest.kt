@@ -40,7 +40,7 @@ class StartCommandHandlerIntTest(
             chatId = ChatId.fromId(chatId),
             text = match {
                 it shouldContain "Hello! I am a weather bot!"
-                it shouldContain "To find out what I can do, tap on /help@test_bot"
+                it shouldContain "Tap on /help@test_bot for more information."
                 true
             },
             parseMode = ParseMode.HTML
