@@ -47,7 +47,7 @@ spring:
     validate-migration-naming: true
   threads:
     virtual:
-      enabled: false
+      enabled: true
 
 telegram-bot:
   api-token: ${ENV_TELEGRAM_BOT_API_TOKEN}
