@@ -1,5 +1,5 @@
 # Perform the extraction in a separate builder container
-FROM azul/zulu-openjdk-alpine:21 AS builder
+FROM azul/zulu-openjdk-alpine:25 AS builder
 WORKDIR /builder
 # This points to the built jar file in the target folder
 # Adjust this to 'build/libs/*.jar' if you're using Gradle
