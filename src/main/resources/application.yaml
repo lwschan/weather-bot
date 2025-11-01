@@ -22,6 +22,14 @@ management:
       enabled: true
     readinessState:
       enabled: true
+  otlp:
+    metrics:
+      export:
+        url: http://kubernetes-monitoring-alloy-receiver.monitoring.svc.cluster.local:4317
+    tracing:
+      transport: grpc
+    logging:
+      transport: grpc
 
 open-meteo-api:
   weather-api-base-url: ${ENV_OPEN_METEO_WEATHER_API_BASE_URL}
