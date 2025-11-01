@@ -27,7 +27,7 @@ management:
       export:
         url: ${ENV_OTLP_METRICS_EXPORT_URL}
     tracing:
-      transport: grpc
+      transport: http
     logging:
       export:
         enabled: false # Logs are scraped by alloy-logs automatically
