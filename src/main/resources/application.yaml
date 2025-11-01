@@ -25,7 +25,7 @@ management:
   otlp:
     metrics:
       export:
-        url: http://kubernetes-monitoring-alloy-receiver.monitoring.svc.cluster.local:4317
+        url: ${ENV_OTLP_METRICS_EXPORT_URL}
     tracing:
       transport: grpc
     logging:
