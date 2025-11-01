@@ -48,10 +48,11 @@ configurations {
         resolutionStrategy {
             componentSelection {
                 all allComponentSelection@ {
-                    if (candidate.group.startsWith("org.jetbrains.kotlin")) {
-                        return@allComponentSelection
-                    }
-                    if (candidate.group == "com.google.guava" && candidate.module == "listenablefuture") {
+                    if (
+                        candidate.group.startsWith("org.jetbrains.kotlin")
+                        || (candidate.group == "io.opentelemetry.proto" && candidate.module == "opentelemetry-proto")
+                        || (candidate.group == "com.google.guava" && candidate.module == "listenablefuture")
+                    ) {
                         return@allComponentSelection
                     }
                     if (Regex("(?i)Beta|Alpha|RC|M").containsMatchIn(candidate.version)) {
@@ -74,6 +75,7 @@ dependencies {
     implementation(libs.kotlin.reflect)
     implementation(libs.kotlin.telegram.bot)
     implementation(libs.kotlinx.coroutines.reactor)
+    implementation(libs.micrometer.registry.otlp)
     implementation(libs.micrometer.tracing.bridge.brave)
     implementation(libs.spring.boot.starter.actuator)
     implementation(libs.spring.boot.starter.jdbc)

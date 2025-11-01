@@ -1,5 +1,5 @@
 # Perform the extraction in a separate builder container
-FROM azul/zulu-openjdk-alpine:25 AS builder
+FROM eclipse-temurin:25-jdk-alpine AS builder
 WORKDIR /builder
 # This points to the built jar file in the target folder
 # Adjust this to 'build/libs/*.jar' if you're using Gradle
@@ -10,7 +10,7 @@ COPY ${JAR_FILE} application.jar
 RUN java -Djarmode=tools -jar application.jar extract --layers --destination extracted
 
 # This is the runtime container
-FROM azul/zulu-openjdk-alpine:25-jre-headless
+FROM eclipse-temurin:25-jre-alpine
 WORKDIR /application
 # Create a non-root user and group
 # Set permissions for the non-root user
