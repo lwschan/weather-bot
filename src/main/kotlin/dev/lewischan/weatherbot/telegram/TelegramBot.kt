@@ -1,10 +1,12 @@
-package dev.lewischan.weatherbot.bot
+package dev.lewischan.weatherbot.telegram
 
 import com.github.kotlintelegrambot.Bot
 import com.github.kotlintelegrambot.entities.BotCommand
 import dev.lewischan.weatherbot.configuration.TelegramBotProperties
 import dev.lewischan.weatherbot.handler.CommandHandler
 import jakarta.annotation.PreDestroy
+import kotlinx.coroutines.async
+import kotlinx.coroutines.coroutineScope
 import org.slf4j.LoggerFactory
 
 class TelegramBot(
@@ -21,7 +23,11 @@ class TelegramBot(
     }
 
     suspend fun processUpdate(update: String) {
-        bot.processUpdate(update)
+        coroutineScope {
+            async {
+                bot.processUpdate(update)
+            }
+        }.await()
     }
 
     fun start() {
