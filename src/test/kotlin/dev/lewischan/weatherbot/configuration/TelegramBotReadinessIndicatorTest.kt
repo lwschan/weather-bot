@@ -1,6 +1,6 @@
 package dev.lewischan.weatherbot.configuration
 
-import dev.lewischan.weatherbot.bot.TelegramBot
+import dev.lewischan.weatherbot.telegram.TelegramBot
 import io.kotest.core.spec.style.FunSpec
 import io.kotest.datatest.withData
 import io.kotest.matchers.shouldBe
