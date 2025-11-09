@@ -1,9 +1,17 @@
 plugins {
+    idea
     alias(libs.plugins.spring.boot)
     alias(libs.plugins.spring.dependency.management)
     jacoco
     kotlin("jvm") version libs.versions.kotlin.jvm
     kotlin("plugin.spring") version libs.versions.kotlin.plugin.spring
+}
+
+idea {
+    module {
+        isDownloadSources = true
+        isDownloadJavadoc = true
+    }
 }
 
 java {
