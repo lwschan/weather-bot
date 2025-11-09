@@ -1,4 +1,4 @@
-package dev.lewischan.weatherbot.handler
+package dev.lewischan.weatherbot.telegram.command
 
 import com.github.kotlintelegrambot.Bot
 import com.github.kotlintelegrambot.entities.ChatId
@@ -19,12 +19,12 @@ import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 
 @Component
-class WeatherCommandHandler(
+class WeatherCommand(
     private val userDefaultLocationService: UserDefaultLocationService,
     private val telegramUserService: TelegramUserService,
     private val weatherService: WeatherService,
     private val locationService: LocationService
-) : CommandHandler() {
+) : Command() {
     override val command = "w"
     override val description = "Get the current weather for your default location or include an address."
 
