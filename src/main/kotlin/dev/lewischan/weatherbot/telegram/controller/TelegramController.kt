@@ -1,7 +1,7 @@
-package dev.lewischan.weatherbot.controller
+package dev.lewischan.weatherbot.telegram.controller
 
+import dev.lewischan.weatherbot.telegram.configuration.TelegramBotProperties
 import dev.lewischan.weatherbot.telegram.TelegramBot
-import dev.lewischan.weatherbot.configuration.TelegramBotProperties
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.http.HttpStatus
@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController
 
 @RestController
 @RequestMapping("/telegram")
-class TelegramBotController(
+class TelegramController(
     val telegramBotProperties: TelegramBotProperties,
     val telegramBot: TelegramBot
 ) {

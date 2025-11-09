@@ -4,7 +4,8 @@ import com.github.kotlintelegrambot.Bot
 import com.github.kotlintelegrambot.entities.ChatId
 import com.github.kotlintelegrambot.entities.Message
 import com.github.kotlintelegrambot.entities.ParseMode
-import dev.lewischan.weatherbot.BaseIntTest
+import dev.lewischan.weatherbot.UseBaseIntTest
+import io.kotest.core.spec.style.FunSpec
 import io.kotest.matchers.string.shouldContain
 import io.mockk.clearMocks
 import io.mockk.every
@@ -12,10 +13,11 @@ import io.mockk.mockk
 import io.mockk.verify
 import java.security.SecureRandom
 
+@UseBaseIntTest
 class StartCommandIntTest(
     private val startCommand: Command,
     private val bot: Bot
-) : BaseIntTest({
+) : FunSpec({
 
     val random = SecureRandom()
 

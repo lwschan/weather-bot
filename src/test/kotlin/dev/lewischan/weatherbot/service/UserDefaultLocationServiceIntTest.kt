@@ -1,14 +1,16 @@
 package dev.lewischan.weatherbot.service
 
-import dev.lewischan.weatherbot.BaseIntTest
+import dev.lewischan.weatherbot.UseBaseIntTest
 import dev.lewischan.weatherbot.model.Location
+import io.kotest.core.spec.style.FunSpec
 import io.kotest.matchers.shouldBe
 import java.security.SecureRandom
 
+@UseBaseIntTest
 class UserDefaultLocationServiceIntTest(
     private val userService: TelegramUserService,
     private val userDefaultLocationService: UserDefaultLocationService
-) : BaseIntTest({
+) : FunSpec({
 
     val random = SecureRandom()
 

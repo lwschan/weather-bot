@@ -3,9 +3,10 @@ package dev.lewischan.weatherbot.telegram.command
 import com.github.kotlintelegrambot.Bot
 import com.github.kotlintelegrambot.entities.ChatId
 import com.github.kotlintelegrambot.entities.Message
-import dev.lewischan.weatherbot.BaseIntTest
+import dev.lewischan.weatherbot.UseBaseIntTest
 import dev.lewischan.weatherbot.service.TelegramUserService
 import dev.lewischan.weatherbot.service.UserDefaultLocationService
+import io.kotest.core.spec.style.FunSpec
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNotBe
 import io.mockk.clearMocks
@@ -14,12 +15,13 @@ import io.mockk.mockk
 import io.mockk.verify
 import java.security.SecureRandom
 
+@UseBaseIntTest
 class SetDefaultLocationCommandIntTest(
     private val setDefaultLocationCommand: Command,
     private val bot: Bot,
     private val telegramUserService: TelegramUserService,
     private val userDefaultLocationService: UserDefaultLocationService
-) : BaseIntTest({
+) : FunSpec({
 
     val random = SecureRandom()
 

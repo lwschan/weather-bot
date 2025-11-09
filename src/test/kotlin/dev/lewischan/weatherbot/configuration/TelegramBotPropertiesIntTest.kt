@@ -1,11 +1,14 @@
 package dev.lewischan.weatherbot.configuration
 
-import dev.lewischan.weatherbot.BaseIntTest
+import dev.lewischan.weatherbot.UseBaseIntTest
+import dev.lewischan.weatherbot.telegram.configuration.TelegramBotProperties
+import io.kotest.core.spec.style.FunSpec
 import io.kotest.matchers.shouldBe
 
+@UseBaseIntTest
 class TelegramBotPropertiesIntTest(
     private val telegramBotProperties: TelegramBotProperties
-) : BaseIntTest({
+) : FunSpec({
 
     test("telegram bot properties should be set correctly") {
         telegramBotProperties.apiToken shouldBe "123456789:ABCDEFGHIJKLMNOPQRSTUVWXYZ123456"
