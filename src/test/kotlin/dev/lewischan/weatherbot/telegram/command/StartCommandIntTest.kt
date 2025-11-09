@@ -1,4 +1,4 @@
-package dev.lewischan.weatherbot.handler
+package dev.lewischan.weatherbot.telegram.command
 
 import com.github.kotlintelegrambot.Bot
 import com.github.kotlintelegrambot.entities.ChatId
@@ -12,8 +12,8 @@ import io.mockk.mockk
 import io.mockk.verify
 import java.security.SecureRandom
 
-class StartCommandHandlerIntTest(
-    private val startCommandHandler: CommandHandler,
+class StartCommandIntTest(
+    private val startCommand: Command,
     private val bot: Bot
 ) : BaseIntTest({
 
@@ -34,7 +34,7 @@ class StartCommandHandlerIntTest(
         every { message.chat.id } returns chatId
         every { message.text } returns ""
 
-        startCommandHandler.execute(message)
+        startCommand.execute(message)
 
         verify(exactly = 1) { bot.sendMessage(
             chatId = ChatId.fromId(chatId),
