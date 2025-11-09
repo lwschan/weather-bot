@@ -1,4 +1,4 @@
-package dev.lewischan.weatherbot.handler
+package dev.lewischan.weatherbot.telegram.command
 
 import com.github.kotlintelegrambot.Bot
 import com.github.kotlintelegrambot.entities.Message
@@ -7,7 +7,7 @@ import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import java.util.UUID
 
-abstract class CommandHandler {
+abstract class Command {
     abstract val command: String
     abstract val description: String
 

@@ -1,4 +1,4 @@
-package dev.lewischan.weatherbot.handler
+package dev.lewischan.weatherbot.telegram.command
 
 import com.github.kotlintelegrambot.entities.BotCommand
 import com.github.kotlintelegrambot.entities.ChatId
@@ -8,7 +8,7 @@ import dev.lewischan.weatherbot.extension.replyMessage
 import org.springframework.stereotype.Component
 
 @Component
-class HelpCommandHandler : CommandHandler() {
+class HelpCommand : Command() {
     override val command = "help"
     override val description = "Get help"
 

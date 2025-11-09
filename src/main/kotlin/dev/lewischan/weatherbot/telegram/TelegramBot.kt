@@ -3,16 +3,14 @@ package dev.lewischan.weatherbot.telegram
 import com.github.kotlintelegrambot.Bot
 import com.github.kotlintelegrambot.entities.BotCommand
 import dev.lewischan.weatherbot.configuration.TelegramBotProperties
-import dev.lewischan.weatherbot.handler.CommandHandler
+import dev.lewischan.weatherbot.telegram.command.Command
 import jakarta.annotation.PreDestroy
-import kotlinx.coroutines.async
-import kotlinx.coroutines.coroutineScope
 import org.slf4j.LoggerFactory
 
 class TelegramBot(
     private val telegramBotProperties: TelegramBotProperties,
     private val bot: Bot,
-    commandHandlers: List<CommandHandler>,
+    commandHandlers: List<Command>,
     var status: Status = Status.NOT_READY
 ) {
     private val logger = LoggerFactory.getLogger(this::class.java)
@@ -23,11 +21,7 @@ class TelegramBot(
     }
 
     suspend fun processUpdate(update: String) {
-        coroutineScope {
-            async {
-                bot.processUpdate(update)
-            }
-        }.await()
+        bot.processUpdate(update)
     }
 
     fun start() {
@@ -54,7 +48,7 @@ class TelegramBot(
         }
     }
 
-    private fun registerCommands(commandHandlers: List<CommandHandler>) {
+    private fun registerCommands(commandHandlers: List<Command>) {
         bot.setMyCommands(
             commandHandlers.stream().map {
                 BotCommand(it.command, it.description)
