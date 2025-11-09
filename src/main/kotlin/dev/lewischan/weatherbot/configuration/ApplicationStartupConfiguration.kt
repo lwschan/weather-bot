@@ -1,6 +1,6 @@
 package dev.lewischan.weatherbot.configuration
 
-import dev.lewischan.weatherbot.bot.TelegramBot
+import dev.lewischan.weatherbot.telegram.TelegramBot
 import org.slf4j.LoggerFactory
 import org.springframework.boot.context.event.ApplicationReadyEvent
 import org.springframework.context.ApplicationListener
