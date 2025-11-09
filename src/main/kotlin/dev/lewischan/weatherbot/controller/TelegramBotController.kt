@@ -1,6 +1,6 @@
 package dev.lewischan.weatherbot.controller
 
-import dev.lewischan.weatherbot.bot.TelegramBot
+import dev.lewischan.weatherbot.telegram.TelegramBot
 import dev.lewischan.weatherbot.configuration.TelegramBotProperties
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -41,6 +41,7 @@ class TelegramBotController(
         }
 
         telegramBot.processUpdate(update)
+
         return ResponseEntity.ok().build()
     }
 
