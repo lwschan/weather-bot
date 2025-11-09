@@ -2,7 +2,7 @@ package dev.lewischan.weatherbot.telegram
 
 import com.github.kotlintelegrambot.Bot
 import com.github.kotlintelegrambot.entities.BotCommand
-import dev.lewischan.weatherbot.configuration.TelegramBotProperties
+import dev.lewischan.weatherbot.telegram.configuration.TelegramBotProperties
 import dev.lewischan.weatherbot.telegram.command.Command
 import jakarta.annotation.PreDestroy
 import org.slf4j.LoggerFactory

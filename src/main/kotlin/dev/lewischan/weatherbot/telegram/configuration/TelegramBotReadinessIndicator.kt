@@ -1,4 +1,4 @@
-package dev.lewischan.weatherbot.configuration
+package dev.lewischan.weatherbot.telegram.configuration
 
 import dev.lewischan.weatherbot.bot.TelegramBot
 import org.springframework.boot.availability.ApplicationAvailability

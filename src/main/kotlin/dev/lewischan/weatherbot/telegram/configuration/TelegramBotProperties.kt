@@ -1,4 +1,4 @@
-package dev.lewischan.weatherbot.configuration
+package dev.lewischan.weatherbot.telegram.configuration
 
 import org.springframework.boot.context.properties.ConfigurationProperties
 

@@ -2,18 +2,20 @@ package dev.lewischan.weatherbot.service
 
 import com.github.tomakehurst.wiremock.WireMockServer
 import com.github.tomakehurst.wiremock.client.WireMock.*
-import dev.lewischan.weatherbot.BaseIntTest
+import dev.lewischan.weatherbot.UseBaseIntTest
 import dev.lewischan.weatherbot.model.Condition
 import dev.lewischan.weatherbot.model.Location
+import io.kotest.core.spec.style.FunSpec
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNotBe
 import wiremock.org.eclipse.jetty.http.HttpStatus
 import java.time.ZonedDateTime
 
+@UseBaseIntTest
 class OpenMeteoWeatherServiceIntTest(
     private val openMeteoWeatherService: OpenMeteoWeatherService,
     private val wireMockServer: WireMockServer
-) : BaseIntTest({
+) : FunSpec({
 
     beforeSpec {
         val testCurrentWeatherResponse = javaClass.getResourceAsStream("/test-current-weather-response.json")
