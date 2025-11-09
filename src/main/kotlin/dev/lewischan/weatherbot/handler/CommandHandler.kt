@@ -2,7 +2,7 @@ package dev.lewischan.weatherbot.handler
 
 import com.github.kotlintelegrambot.Bot
 import com.github.kotlintelegrambot.entities.Message
-import dev.lewischan.weatherbot.bot.TelegramBotProvider
+import dev.lewischan.weatherbot.telegram.TelegramBotProvider
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import java.util.UUID

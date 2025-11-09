@@ -6,8 +6,8 @@ import com.github.kotlintelegrambot.dispatch
 import com.github.kotlintelegrambot.dispatcher.command
 import com.github.kotlintelegrambot.webhook
 import dev.lewischan.weatherbot.handler.CommandHandler
-import dev.lewischan.weatherbot.bot.TelegramBot
-import dev.lewischan.weatherbot.bot.TelegramBotProvider
+import dev.lewischan.weatherbot.telegram.TelegramBot
+import dev.lewischan.weatherbot.telegram.TelegramBotProvider
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
 import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean

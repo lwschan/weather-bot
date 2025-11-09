@@ -1,4 +1,4 @@
-package dev.lewischan.weatherbot.bot
+package dev.lewischan.weatherbot.telegram
 
 import com.github.kotlintelegrambot.Bot
 import dev.lewischan.weatherbot.configuration.TelegramBotProperties
