@@ -1,4 +1,4 @@
-package dev.lewischan.weatherbot.configuration
+package dev.lewischan.weatherbot.telegram.configuration
 
 import dev.lewischan.weatherbot.telegram.TelegramBot
 import org.springframework.boot.actuate.availability.ReadinessStateHealthIndicator

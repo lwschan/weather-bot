@@ -1,6 +1,7 @@
 package dev.lewischan.weatherbot.configuration
 
 import dev.lewischan.weatherbot.telegram.TelegramBot
+import dev.lewischan.weatherbot.telegram.configuration.TelegramBotReadinessIndicator
 import io.kotest.core.spec.style.FunSpec
 import io.kotest.datatest.withData
 import io.kotest.matchers.shouldBe
@@ -21,7 +22,8 @@ class TelegramBotReadinessIndicatorTest : FunSpec({
             val telegramBot = mockk<TelegramBot>()
             every { telegramBot.status } returns botStatus
 
-            val readinessIndicator = TelegramBotReadinessIndicator(applicationAvailability, telegramBot)
+            val readinessIndicator =
+                TelegramBotReadinessIndicator(applicationAvailability, telegramBot)
             readinessIndicator.health().status.code shouldBe expectedServiceStatus.code
         }
     }

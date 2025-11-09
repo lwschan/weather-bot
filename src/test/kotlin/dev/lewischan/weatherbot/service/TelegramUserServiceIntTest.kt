@@ -1,17 +1,19 @@
 package dev.lewischan.weatherbot.service
 
-import dev.lewischan.weatherbot.BaseIntTest
+import dev.lewischan.weatherbot.UseBaseIntTest
 import dev.lewischan.weatherbot.domain.ExternalPlatform
 import dev.lewischan.weatherbot.error.UserAlreadyExistsException
+import io.kotest.core.spec.style.FunSpec
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.matchers.longs.shouldBeGreaterThan
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNotBe
 import java.security.SecureRandom
 
+@UseBaseIntTest
 class TelegramUserServiceIntTest(
     private val telegramUserService: TelegramUserService
-) : BaseIntTest({
+) : FunSpec({
 
     test("createUser should create a new user") {
         val externalUserId = SecureRandom().nextLong(0, Long.MAX_VALUE)
@@ -39,9 +41,5 @@ class TelegramUserServiceIntTest(
             foundUser.externalUserId shouldBe user.externalUserId
         }
     }
-
-
-
-
 
 })
