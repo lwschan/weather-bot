@@ -1,13 +1,13 @@
-package dev.lewischan.weatherbot.configuration
+package dev.lewischan.weatherbot.telegram.configuration
 
 import com.github.kotlintelegrambot.Bot
 import com.github.kotlintelegrambot.bot
 import com.github.kotlintelegrambot.dispatch
 import com.github.kotlintelegrambot.dispatcher.command
 import com.github.kotlintelegrambot.webhook
-import dev.lewischan.weatherbot.handler.CommandHandler
-import dev.lewischan.weatherbot.bot.TelegramBot
-import dev.lewischan.weatherbot.bot.TelegramBotProvider
+import dev.lewischan.weatherbot.telegram.TelegramBot
+import dev.lewischan.weatherbot.telegram.TelegramBotProvider
+import dev.lewischan.weatherbot.telegram.command.Command
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
 import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean
@@ -21,7 +21,7 @@ class TelegramBotConfiguration {
     fun telegramBot(
         telegramBotProperties: TelegramBotProperties,
         bot: Bot,
-        commandHandlers: List<CommandHandler>
+        commandHandlers: List<Command>
     ): TelegramBot {
         TelegramBotProvider.set(bot)
 
@@ -36,7 +36,7 @@ class TelegramBotConfiguration {
     @ConditionalOnMissingBean
     fun bot(
         telegramBotProperties: TelegramBotProperties,
-        commandHandlers: List<CommandHandler>
+        commandHandlers: List<Command>
     ): Bot {
         return bot {
             token = telegramBotProperties.apiToken
