@@ -79,10 +79,7 @@ dependencies {
     implementation(libs.micrometer.tracing.bridge.brave)
     implementation(libs.spring.boot.starter.actuator)
     implementation(libs.spring.boot.starter.jdbc)
-    implementation(libs.spring.boot.starter.undertow) {
-        // Exclude Undertow Websockets JSR module as websocket support is not needed
-        exclude(group = libs.undertow.websockets.jsr.get().group, module = libs.undertow.websockets.jsr.get().name)
-    }
+    implementation(libs.spring.boot.starter.jetty)
     implementation(libs.spring.boot.starter.web) {
         // Exclude Tomcat as the embedded server since Undertow is used
         exclude(group = libs.spring.boot.starter.tomcat.get().group, module = libs.spring.boot.starter.tomcat.get().name)
