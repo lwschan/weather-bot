@@ -38,7 +38,6 @@ class OpenMeteoApiConfiguration {
 
         val requestFactory = HttpComponentsClientHttpRequestFactory()
         requestFactory.setReadTimeout(Duration.ofSeconds(3))
-        requestFactory.setConnectTimeout(Duration.ofSeconds(3))
         requestFactory.setConnectionRequestTimeout(Duration.ofSeconds(3))
 
         return RestClient.builder()

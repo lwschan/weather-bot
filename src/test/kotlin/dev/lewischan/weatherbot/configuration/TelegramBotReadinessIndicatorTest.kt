@@ -3,12 +3,11 @@ package dev.lewischan.weatherbot.configuration
 import dev.lewischan.weatherbot.bot.TelegramBot
 import io.kotest.core.spec.style.FunSpec
 import io.kotest.datatest.withData
-import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.shouldBe
 import io.mockk.every
 import io.mockk.mockk
-import org.springframework.boot.actuate.health.Status
 import org.springframework.boot.availability.ApplicationAvailability
+import org.springframework.boot.health.contributor.Status
 
 class TelegramBotReadinessIndicatorTest : FunSpec({
 
