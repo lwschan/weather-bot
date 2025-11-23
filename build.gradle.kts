@@ -70,7 +70,6 @@ dependencies {
     implementation(libs.flyway.postgresql)
     implementation(libs.google.maps.places)
     implementation(libs.google.maps.services)
-    implementation(libs.jackson.datatype.jsr310)
     implementation(libs.jackson.module.kotlin)
     implementation(libs.kotlin.reflect)
     implementation(libs.kotlin.telegram.bot)

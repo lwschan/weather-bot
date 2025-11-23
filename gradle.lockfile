@@ -8,7 +8,6 @@ ch.qos.logback:logback-core:1.5.21=compileClasspath,productionRuntimeClasspath,r
 com.fasterxml.jackson.core:jackson-annotations:2.20=compileClasspath,productionRuntimeClasspath,runtimeClasspath,testAndDevelopmentOnly,testCompileClasspath,testRuntimeClasspath
 com.fasterxml.jackson.core:jackson-core:2.20.1=compileClasspath,productionRuntimeClasspath,runtimeClasspath,testCompileClasspath,testRuntimeClasspath
 com.fasterxml.jackson.core:jackson-databind:2.20.1=compileClasspath,productionRuntimeClasspath,runtimeClasspath,testCompileClasspath,testRuntimeClasspath
-com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.20.1=compileClasspath,productionRuntimeClasspath,runtimeClasspath,testCompileClasspath,testRuntimeClasspath
 com.fasterxml.jackson.module:jackson-module-kotlin:2.20.1=compileClasspath,productionRuntimeClasspath,runtimeClasspath,testCompileClasspath,testRuntimeClasspath
 com.fasterxml.jackson:jackson-bom:2.20.1=compileClasspath,productionRuntimeClasspath,runtimeClasspath,testCompileClasspath,testRuntimeClasspath
 com.github.ajalt.colormath:colormath-jvm:3.6.0=testCompileClasspath,testRuntimeClasspath
