@@ -80,7 +80,7 @@ dependencies {
     implementation(libs.spring.boot.starter.actuator)
     implementation(libs.spring.boot.starter.jdbc)
     implementation(libs.spring.boot.starter.jetty)
-    implementation(libs.spring.boot.starter.web) {
+    implementation(libs.spring.boot.starter.webmvc) {
         // Exclude Tomcat as the embedded server since Undertow is used
         exclude(group = libs.spring.boot.starter.tomcat.get().group, module = libs.spring.boot.starter.tomcat.get().name)
     }
@@ -100,7 +100,10 @@ dependencies {
     testImplementation(libs.kotest.extensions.spring)
     testImplementation(libs.kotlin.test.junit5)
     testImplementation(libs.mockk)
-    testImplementation(libs.spring.boot.starter.test)
+    testImplementation(libs.spring.boot.starter.actuator.test)
+    testImplementation(libs.spring.boot.starter.jdbc.test)
+    testImplementation(libs.spring.boot.starter.webmvc.test)
+    testImplementation(libs.spring.boot.starter.webflux.test)
     testImplementation(libs.wiremock)
 
     testRuntimeOnly(libs.junit.platform.launcher)

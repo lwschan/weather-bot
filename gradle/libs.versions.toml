@@ -10,7 +10,7 @@ kotlin-jvm = "2.+"
 kotlin-plugin-spring = "2.+"
 kotlin-telegram-bot = "6.+"
 mockk = "1.+"
-spring-boot = "3.+"
+spring-boot = "4.+"
 spring-dependency-management = "1.+"
 wiremock = "3.+"
 
@@ -35,7 +35,7 @@ micrometer-tracing-bridge-brave = { module = "io.micrometer:micrometer-tracing-b
 spring-boot-starter-actuator = { module = "org.springframework.boot:spring-boot-starter-actuator" }
 spring-boot-starter-jdbc = { module = "org.springframework.boot:spring-boot-starter-jdbc" }
 spring-boot-starter-jetty = { module = "org.springframework.boot:spring-boot-starter-jetty" }
-spring-boot-starter-web = { module = "org.springframework.boot:spring-boot-starter-web" }
+spring-boot-starter-webmvc = { module = "org.springframework.boot:spring-boot-starter-webmvc" }
 spring-boot-starter-webflux = { module = "org.springframework.boot:spring-boot-starter-webflux" }
 
 # developmentOnly
@@ -55,7 +55,10 @@ kotest = { module = "io.kotest:kotest-runner-junit5", version.ref = "kotest" }
 kotest-extensions-spring = { module = "io.kotest:kotest-extensions-spring", version.ref = "kotest" }
 kotlin-test-junit5 = { module = "org.jetbrains.kotlin:kotlin-test-junit5" }
 mockk = { module = "io.mockk:mockk", version.ref = "mockk"}
-spring-boot-starter-test = { module = "org.springframework.boot:spring-boot-starter-test" }
+spring-boot-starter-actuator-test = { module = "org.springframework.boot:spring-boot-starter-actuator-test" }
+spring-boot-starter-jdbc-test = { module = "org.springframework.boot:spring-boot-starter-jdbc-test" }
+spring-boot-starter-webmvc-test = { module = "org.springframework.boot:spring-boot-starter-webmvc-test" }
+spring-boot-starter-webflux-test = { module = "org.springframework.boot:spring-boot-starter-webflux-test" }
 wiremock = { module = "org.wiremock:wiremock-standalone", version.ref = "wiremock" }
 
 # testRuntimeOnly
