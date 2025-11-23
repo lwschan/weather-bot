@@ -77,6 +77,7 @@ dependencies {
     implementation(libs.micrometer.registry.otlp)
     implementation(libs.micrometer.tracing.bridge.brave)
     implementation(libs.spring.boot.starter.actuator)
+    implementation(libs.spring.boot.starter.flyway)
     implementation(libs.spring.boot.starter.jdbc)
     implementation(libs.spring.boot.starter.jetty)
     implementation(libs.spring.boot.starter.webmvc) {
@@ -100,6 +101,7 @@ dependencies {
     testImplementation(libs.kotlin.test.junit5)
     testImplementation(libs.mockk)
     testImplementation(libs.spring.boot.starter.actuator.test)
+    testImplementation(libs.spring.boot.starter.flyway.test)
     testImplementation(libs.spring.boot.starter.jdbc.test)
     testImplementation(libs.spring.boot.starter.webmvc.test)
     testImplementation(libs.spring.boot.starter.webflux.test)
