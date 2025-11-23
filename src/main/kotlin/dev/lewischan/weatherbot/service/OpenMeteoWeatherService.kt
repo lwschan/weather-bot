@@ -55,7 +55,7 @@ class OpenMeteoWeatherService(
     fun currentWeatherMapper(openMeteoForecast: OpenMeteoForecast): CurrentWeather {
         val today = ZonedDateTime.ofInstant(openMeteoForecast.current.time, openMeteoForecast.timezone)
         val todayIndex = openMeteoForecast.daily.time.indexOfFirst { instant ->
-            ZonedDateTime.ofInstant(instant, openMeteoForecast.timezone).toLocalDate() == today.toLocalDate()
+            ZonedDateTime.ofInstant(instant, openMeteoForecast.timezone).toLocalDate().equals(today.toLocalDate())
         }
         val todayHigh = openMeteoForecast.daily.temperatureTwoMetresMax[todayIndex]
         val todayLow = openMeteoForecast.daily.temperatureTwoMetresMin[todayIndex]

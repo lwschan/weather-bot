@@ -70,7 +70,6 @@ dependencies {
     implementation(libs.flyway.postgresql)
     implementation(libs.google.maps.places)
     implementation(libs.google.maps.services)
-    implementation(libs.jackson.datatype.jsr310)
     implementation(libs.jackson.module.kotlin)
     implementation(libs.kotlin.reflect)
     implementation(libs.kotlin.telegram.bot)
@@ -78,12 +77,10 @@ dependencies {
     implementation(libs.micrometer.registry.otlp)
     implementation(libs.micrometer.tracing.bridge.brave)
     implementation(libs.spring.boot.starter.actuator)
+    implementation(libs.spring.boot.starter.flyway)
     implementation(libs.spring.boot.starter.jdbc)
-    implementation(libs.spring.boot.starter.undertow) {
-        // Exclude Undertow Websockets JSR module as websocket support is not needed
-        exclude(group = libs.undertow.websockets.jsr.get().group, module = libs.undertow.websockets.jsr.get().name)
-    }
-    implementation(libs.spring.boot.starter.web) {
+    implementation(libs.spring.boot.starter.jetty)
+    implementation(libs.spring.boot.starter.webmvc) {
         // Exclude Tomcat as the embedded server since Undertow is used
         exclude(group = libs.spring.boot.starter.tomcat.get().group, module = libs.spring.boot.starter.tomcat.get().name)
     }
@@ -103,7 +100,11 @@ dependencies {
     testImplementation(libs.kotest.extensions.spring)
     testImplementation(libs.kotlin.test.junit5)
     testImplementation(libs.mockk)
-    testImplementation(libs.spring.boot.starter.test)
+    testImplementation(libs.spring.boot.starter.actuator.test)
+    testImplementation(libs.spring.boot.starter.flyway.test)
+    testImplementation(libs.spring.boot.starter.jdbc.test)
+    testImplementation(libs.spring.boot.starter.webmvc.test)
+    testImplementation(libs.spring.boot.starter.webflux.test)
     testImplementation(libs.wiremock)
 
     testRuntimeOnly(libs.junit.platform.launcher)
