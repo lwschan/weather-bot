@@ -14,7 +14,6 @@ import dev.lewischan.weatherbot.service.TelegramUserService
 import dev.lewischan.weatherbot.service.UserDefaultLocationService
 import dev.lewischan.weatherbot.service.WeatherService
 import org.springframework.stereotype.Component
-import org.springframework.web.context.request.RequestContextHolder
 import java.time.Instant
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
