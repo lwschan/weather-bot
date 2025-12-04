@@ -1,15 +1,17 @@
 package dev.lewischan.weatherbot.repository
 
-import dev.lewischan.weatherbot.BaseIntTest
+import dev.lewischan.weatherbot.UseBaseIntTest
 import dev.lewischan.weatherbot.domain.ExternalPlatform
+import io.kotest.core.spec.style.FunSpec
 import io.kotest.matchers.longs.shouldBeGreaterThan
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNotBe
 import java.util.*
 
+@UseBaseIntTest
 class UserRepositoryIntTest(
     private val userRepository: UserRepository
-) : BaseIntTest({
+) : FunSpec({
 
     test("create user should create user successfully") {
         val externalUserId = UUID.randomUUID()

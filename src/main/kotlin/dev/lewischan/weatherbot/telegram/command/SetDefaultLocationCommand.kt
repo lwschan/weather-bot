@@ -1,4 +1,4 @@
-package dev.lewischan.weatherbot.handler
+package dev.lewischan.weatherbot.telegram.command
 
 import com.github.kotlintelegrambot.entities.ChatId
 import com.github.kotlintelegrambot.entities.Message
@@ -9,11 +9,11 @@ import dev.lewischan.weatherbot.service.UserDefaultLocationService
 import org.springframework.stereotype.Component
 
 @Component
-class SetDefaultLocationCommandHandler(
+class SetDefaultLocationCommand(
     val userDefaultLocationService: UserDefaultLocationService,
     val locationService: LocationService,
     val telegramUserService: TelegramUserService
-) : CommandHandler() {
+) : Command() {
     override val command: String = "s"
     override val description: String = "Set a default location for weather requests"
 

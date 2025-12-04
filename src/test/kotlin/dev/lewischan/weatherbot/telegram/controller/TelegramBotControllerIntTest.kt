@@ -1,24 +1,25 @@
-package dev.lewischan.weatherbot.controller
+package dev.lewischan.weatherbot.telegram.controller
 
 import com.fasterxml.jackson.databind.PropertyNamingStrategies
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.github.kotlintelegrambot.Bot
 import com.github.kotlintelegrambot.entities.Update
-import dev.lewischan.weatherbot.BaseIntTest
-import dev.lewischan.weatherbot.configuration.TelegramBotProperties
+import dev.lewischan.weatherbot.UseBaseIntTest
+import dev.lewischan.weatherbot.telegram.configuration.TelegramBotProperties
+import io.kotest.core.spec.style.FunSpec
 import io.kotest.core.test.AssertionMode
-import io.kotest.engine.concurrency.TestExecutionMode
 import io.mockk.clearMocks
 import io.mockk.coVerify
 import org.springframework.http.MediaType
 import org.springframework.test.web.reactive.server.WebTestClient
 import java.security.SecureRandom
 
+@UseBaseIntTest
 class TelegramBotControllerIntTest(
     private val webTestClient: WebTestClient,
     private val telegramBotProperties: TelegramBotProperties,
     private val bot: Bot
-) : BaseIntTest({
+) : FunSpec({
 
     afterEach {
         clearMocks(bot)
