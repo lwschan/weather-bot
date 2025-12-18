@@ -27,9 +27,6 @@ buildscript {
         resolutionStrategy {
             componentSelection {
                 all allComponentSelection@ {
-                    if (candidate.group.startsWith("org.jetbrains.kotlin")) {
-                        return@allComponentSelection
-                    }
                     if (Regex("(?i)Beta|Alpha|RC|M").containsMatchIn(candidate.version)) {
                         reject("Rejecting ${candidate.version} as it's an excluded version")
                     }
@@ -49,8 +46,7 @@ configurations {
             componentSelection {
                 all allComponentSelection@ {
                     if (
-                        candidate.group.startsWith("org.jetbrains.kotlin")
-                        || (candidate.group == "io.opentelemetry.proto" && candidate.module == "opentelemetry-proto")
+                        (candidate.group == "io.opentelemetry.proto" && candidate.module == "opentelemetry-proto")
                         || (candidate.group == "com.google.guava" && candidate.module == "listenablefuture")
                     ) {
                         return@allComponentSelection
