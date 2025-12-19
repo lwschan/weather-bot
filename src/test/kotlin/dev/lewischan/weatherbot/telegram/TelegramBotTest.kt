@@ -1,7 +1,7 @@
-package dev.lewischan.weatherbot.bot
+package dev.lewischan.weatherbot.telegram
 
 import com.github.kotlintelegrambot.Bot
-import dev.lewischan.weatherbot.configuration.TelegramBotProperties
+import dev.lewischan.weatherbot.telegram.configuration.TelegramBotProperties
 import io.kotest.core.spec.style.FunSpec
 import io.kotest.core.test.AssertionMode
 import io.mockk.mockk

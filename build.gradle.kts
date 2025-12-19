@@ -1,9 +1,17 @@
 plugins {
+    idea
     alias(libs.plugins.spring.boot)
     alias(libs.plugins.spring.dependency.management)
     jacoco
     kotlin("jvm") version libs.versions.kotlin.jvm
     kotlin("plugin.spring") version libs.versions.kotlin.plugin.spring
+}
+
+idea {
+    module {
+        isDownloadSources = true
+        isDownloadJavadoc = true
+    }
 }
 
 java {
@@ -69,6 +77,7 @@ dependencies {
     implementation(libs.jackson.module.kotlin)
     implementation(libs.kotlin.reflect)
     implementation(libs.kotlin.telegram.bot)
+    implementation(libs.kotlinx.coroutines.core)
     implementation(libs.kotlinx.coroutines.reactor)
     implementation(libs.micrometer.registry.otlp)
     implementation(libs.micrometer.tracing.bridge.brave)

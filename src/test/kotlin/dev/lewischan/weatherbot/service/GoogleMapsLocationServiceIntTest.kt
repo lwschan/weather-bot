@@ -6,16 +6,18 @@ import com.google.maps.places.v1.PlacesClient
 import com.google.maps.places.v1.SearchTextResponse
 import com.google.type.LatLng
 import com.google.type.LocalizedText
-import dev.lewischan.weatherbot.BaseIntTest
+import dev.lewischan.weatherbot.UseBaseIntTest
+import io.kotest.core.spec.style.FunSpec
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNotBe
 import io.mockk.verify
 
+@UseBaseIntTest
 class GoogleMapsLocationServiceIntTest(
     private val googleMapsLocationService: GoogleMapsLocationService,
     private val mockPlaces: MockPlaces,
     private val searchPlacesClient: PlacesClient
-) : BaseIntTest({
+) : FunSpec({
 
     afterEach {
         mockPlaces.reset()

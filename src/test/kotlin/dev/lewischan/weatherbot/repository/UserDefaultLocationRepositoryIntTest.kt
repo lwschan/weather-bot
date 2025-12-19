@@ -1,8 +1,9 @@
 package dev.lewischan.weatherbot.repository
 
-import dev.lewischan.weatherbot.BaseIntTest
+import dev.lewischan.weatherbot.UseBaseIntTest
 import dev.lewischan.weatherbot.domain.ExternalPlatform
 import dev.lewischan.weatherbot.model.Location
+import io.kotest.core.spec.style.FunSpec
 import io.kotest.matchers.equality.shouldBeEqualUsingFields
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNotBe
@@ -10,10 +11,11 @@ import org.springframework.beans.factory.annotation.Autowired
 import java.security.SecureRandom
 import java.util.*
 
+@UseBaseIntTest
 class UserDefaultLocationRepositoryIntTest @Autowired constructor(
     private val userDefaultLocationRepository: UserDefaultLocationRepository,
     private val userRepository: UserRepository
-) : BaseIntTest({
+) : FunSpec({
 
     context("when user default location is created") {
         val externalUserId = UUID.randomUUID()

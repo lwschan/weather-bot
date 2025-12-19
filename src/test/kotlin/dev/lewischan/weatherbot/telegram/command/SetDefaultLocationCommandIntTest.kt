@@ -1,11 +1,12 @@
-package dev.lewischan.weatherbot.handler
+package dev.lewischan.weatherbot.telegram.command
 
 import com.github.kotlintelegrambot.Bot
 import com.github.kotlintelegrambot.entities.ChatId
 import com.github.kotlintelegrambot.entities.Message
-import dev.lewischan.weatherbot.BaseIntTest
+import dev.lewischan.weatherbot.UseBaseIntTest
 import dev.lewischan.weatherbot.service.TelegramUserService
 import dev.lewischan.weatherbot.service.UserDefaultLocationService
+import io.kotest.core.spec.style.FunSpec
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNotBe
 import io.mockk.clearMocks
@@ -14,12 +15,13 @@ import io.mockk.mockk
 import io.mockk.verify
 import java.security.SecureRandom
 
-class SetDefaultLocationCommandHandlerIntTest(
-    private val setDefaultLocationCommandHandler: CommandHandler,
+@UseBaseIntTest
+class SetDefaultLocationCommandIntTest(
+    private val setDefaultLocationCommand: Command,
     private val bot: Bot,
     private val telegramUserService: TelegramUserService,
     private val userDefaultLocationService: UserDefaultLocationService
-) : BaseIntTest({
+) : FunSpec({
 
     val random = SecureRandom()
 
@@ -44,7 +46,7 @@ class SetDefaultLocationCommandHandlerIntTest(
         every { message.from!!.id } returns userId
 
         test("it should create user and save default location") {
-            setDefaultLocationCommandHandler.execute(message)
+            setDefaultLocationCommand.execute(message)
 
             val user = telegramUserService.findByExternalUserId(userId)
             user shouldNotBe null
@@ -69,7 +71,7 @@ class SetDefaultLocationCommandHandlerIntTest(
             val user = telegramUserService.findByExternalUserId(userId)
             user shouldNotBe null
 
-            setDefaultLocationCommandHandler.execute(message)
+            setDefaultLocationCommand.execute(message)
 
             val defaultLocation = userDefaultLocationService.findByUserId(user!!.id)
             defaultLocation shouldNotBe null
@@ -100,7 +102,7 @@ class SetDefaultLocationCommandHandlerIntTest(
         every { message.from!!.id } returns userId
 
         test("it should return an error message") {
-            setDefaultLocationCommandHandler.execute(message)
+            setDefaultLocationCommand.execute(message)
 
             verify(exactly = 1) { bot.sendMessage(
                 chatId = ChatId.fromId(chatId),
@@ -126,7 +128,7 @@ class SetDefaultLocationCommandHandlerIntTest(
         every { message.from!!.id } returns userId
 
         test("it should return an invalid address error message") {
-            setDefaultLocationCommandHandler.execute(message)
+            setDefaultLocationCommand.execute(message)
 
             verify(exactly = 1) { bot.sendMessage(
                 chatId = ChatId.fromId(chatId),

@@ -1,6 +1,6 @@
-package dev.lewischan.weatherbot.configuration
+package dev.lewischan.weatherbot.telegram.configuration
 
-import dev.lewischan.weatherbot.bot.TelegramBot
+import dev.lewischan.weatherbot.telegram.TelegramBot
 import org.springframework.boot.availability.ApplicationAvailability
 import org.springframework.boot.availability.AvailabilityState
 import org.springframework.boot.availability.ReadinessState
