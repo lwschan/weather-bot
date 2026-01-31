@@ -1,3 +1,7 @@
+google-maps:
+  api-key: ${ENV_GOOGLE_MAPS_PLATFORM_API_KEY}
+  api-base-url: https://maps.googleapis.com
+
 google-maps-services:
   api-key: ${ENV_GOOGLE_MAPS_PLATFORM_API_KEY}
   query-rate-limit: 10

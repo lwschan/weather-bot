@@ -1,11 +1,11 @@
-package dev.lewischan.weatherbot.configuration
+package dev.lewischan.weatherbot.google.maps.configuration
 
 import org.springframework.boot.context.properties.ConfigurationProperties
 import org.springframework.boot.context.properties.bind.ConstructorBinding
 
-@ConfigurationProperties(prefix = "google-maps-services")
+@ConfigurationProperties(prefix = "google-maps")
 data class GoogleMapsServicesProperties @ConstructorBinding constructor(
     val apiKey: String,
-    val queryRateLimit: Int,
-    val geocodeApiBaseUrl: String = "https://maps.googleapis.com"
+    val apiBaseUrl: String
 )
+

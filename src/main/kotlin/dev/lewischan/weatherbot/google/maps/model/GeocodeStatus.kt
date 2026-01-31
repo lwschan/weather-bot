@@ -1,0 +1,14 @@
+package dev.lewischan.weatherbot.google.maps.model
+
+import com.fasterxml.jackson.annotation.JsonValue
+
+enum class GeocodeStatus(@JsonValue val value: String) {
+    OK("OK"),
+    ZERO_RESULTS("ZERO_RESULTS"),
+    OVER_DAILY_LIMIT("OVER_DAILY_LIMIT"),
+    OVER_QUERY_LIMIT("OVER_QUERY_LIMIT"),
+    REQUEST_DENIED("REQUEST_DENIED"),
+    INVALID_REQUEST("INVALID_REQUEST"),
+    UNKNOWN_ERROR("UNKNOWN_ERROR")
+}
+

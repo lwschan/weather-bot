@@ -19,6 +19,15 @@ java {
     targetCompatibility = JavaVersion.VERSION_25
 }
 
+kotlin {
+    compilerOptions {
+        freeCompilerArgs.addAll(
+            "-Xjsr305=strict",
+            "-Xannotation-default-target=param-property"
+        )
+    }
+}
+
 dependencyLocking {
     lockAllConfigurations()
     lockMode = LockMode.STRICT
@@ -115,15 +124,6 @@ dependencies {
     testRuntimeOnly(libs.junit.platform.launcher)
 
     testAndDevelopmentOnly(libs.spring.boot.docker.compose)
-}
-
-kotlin {
-    compilerOptions {
-        freeCompilerArgs.addAll(
-            "-Xjsr305=strict",
-            "-Xannotation-default-target=param-property"
-        )
-    }
 }
 
 tasks.withType<Test>().configureEach {
