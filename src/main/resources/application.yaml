@@ -8,6 +8,9 @@ logging:
     org.springframework: INFO
     com.google: INFO
     dev.lewischan.weatherbot: INFO
+  structured:
+    format:
+      console: logstash
 
 management:
   endpoint:
