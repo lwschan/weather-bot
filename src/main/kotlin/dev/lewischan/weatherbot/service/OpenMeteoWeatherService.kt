@@ -13,7 +13,6 @@ import dev.lewischan.weatherbot.model.openmeteo.OpenMeteoForecast
 import org.springframework.stereotype.Service
 import org.springframework.web.client.RestClient
 import org.springframework.web.client.body
-import java.time.LocalDate
 import java.time.ZoneId
 import java.time.ZonedDateTime
 
