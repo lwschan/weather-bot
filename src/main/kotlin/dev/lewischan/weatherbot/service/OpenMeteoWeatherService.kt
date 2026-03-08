@@ -13,6 +13,8 @@ import dev.lewischan.weatherbot.model.openmeteo.OpenMeteoForecast
 import org.springframework.stereotype.Service
 import org.springframework.web.client.RestClient
 import org.springframework.web.client.body
+import java.time.LocalDate
+import java.time.ZoneId
 import java.time.ZonedDateTime
 
 @Service
@@ -55,7 +57,8 @@ class OpenMeteoWeatherService(
     fun currentWeatherMapper(openMeteoForecast: OpenMeteoForecast): CurrentWeather {
         val today = ZonedDateTime.ofInstant(openMeteoForecast.current.time, openMeteoForecast.timezone)
         val todayIndex = openMeteoForecast.daily.time.indexOfFirst { instant ->
-            ZonedDateTime.ofInstant(instant, openMeteoForecast.timezone).toLocalDate().equals(today.toLocalDate())
+            instant.atZone(ZoneId.of("UTC")).toLocalDate()
+                .equals(openMeteoForecast.current.time.atZone(ZoneId.of("UTC")).toLocalDate())
         }
         val todayHigh = openMeteoForecast.daily.temperatureTwoMetresMax[todayIndex]
         val todayLow = openMeteoForecast.daily.temperatureTwoMetresMin[todayIndex]
