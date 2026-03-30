@@ -53,6 +53,12 @@ The project follows a standard layered architecture:
 - **Build**: `make build` or `./gradlew build`.
 - **Docker**: `make build-dev-image` to build a local image for testing.
 
+## ⚠️ Git & Source Control Rules
+
+- **No Automatic Commits/Pushes**: **NEVER** commit or push changes automatically unless explicitly directed by the user. 
+- **Branching Strategy**: Always create a new branch for changes. **NEVER** commit directly to `main`.
+- **Review**: Always propose a plan and show the diff before asking to commit.
+
 ## 🤖 Agent Workflow
 
 When making changes:
