@@ -19,33 +19,33 @@ jobs:
       checks: write
 
     steps:
-    - uses: actions/checkout@v6
+      - uses: actions/checkout@v6
 
-    - name: Setup JDK 25
-      uses: actions/setup-java@v5
-      with:
-        java-version-file: '.java-version'
-        distribution: 'temurin'
+      - name: Setup JDK 25
+        uses: actions/setup-java@v5
+        with:
+          java-version-file: '.java-version'
+          distribution: 'temurin'
 
-    - name: Setup Gradle
-      uses: gradle/actions/setup-gradle@v5
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v5
 
-    - name: Build with Gradle Wrapper
-      run: ./gradlew build
+      - name: Build with Gradle Wrapper
+        run: ./gradlew build
 
-    - name: Upload Build Artifacts
-      uses: actions/upload-artifact@v7
-      with:
-        name: 'build'
-        path: 'build'
-        if-no-files-found: 'error'
-        retention-days: 1
+      - name: Upload Build Artifacts
+        uses: actions/upload-artifact@v7
+        with:
+          name: 'build'
+          path: 'build'
+          if-no-files-found: 'error'
+          retention-days: 1
 
-    - name: Publish Test Report
-      uses: mikepenz/action-junit-report@v6
-      if: success() || failure()
-      with:
-        report_paths: '**/build/test-results/test/TEST-*.xml'
+      - name: Publish Test Report
+        uses: mikepenz/action-junit-report@v6
+        if: success() || failure()
+        with:
+          report_paths: '**/build/test-results/test/TEST-*.xml'
 
   sonarcloud:
 
@@ -148,13 +148,13 @@ jobs:
       contents: write
 
     steps:
-    - uses: actions/checkout@v6
+      - uses: actions/checkout@v6
 
-    - name: Set up JDK 25
-      uses: actions/setup-java@v5
-      with:
-        java-version-file: '.java-version'
-        distribution: 'temurin'
+      - name: Set up JDK 25
+        uses: actions/setup-java@v5
+        with:
+          java-version-file: '.java-version'
+          distribution: 'temurin'
 
-    - name: Generate and Submit Dependency Graph
-      uses: gradle/actions/dependency-submission@v5
+      - name: Generate and Submit Dependency Graph
+        uses: gradle/actions/dependency-submission@v5

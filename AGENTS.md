@@ -33,7 +33,7 @@ The project follows a standard layered architecture:
 ## 🔑 Key Conventions
 
 - **Kotlin Extensions**: Use established extensions in `dev.lewischan.weatherbot.extension` for idiomatic code. 
-  - e.g., Use `Bot.sendMessage` instead of the raw Telegram SDK call for consistent error handling.
+  - e.g., Use `Bot.replyMessage` instead of the raw Telegram SDK call for consistent error handling.
 - **Dependency Updates**: Use `make update-dependencies` after modifying `libs.versions.toml`. 
   - **Note**: This project uses **STRICT dependency locking**. The build will fail if `gradle.lockfile` or `buildscript-gradle.lockfile` are out of sync with the dependencies.
 - **Database Migrations**: Add new SQL scripts to `src/main/resources/db/migration/` using the `V<N>__<description>.sql` format.
@@ -42,8 +42,11 @@ The project follows a standard layered architecture:
   - Integration tests extend `BaseIntTest` for pre-configured Spring context.
   - **WireMock Assets**: External API mocks (JSON) are located in `src/test/resources/`.
 - **External APIs**:
-  - Use the established `RestClient` pattern or official SDKs (like Google Maps).
-  - **Google Maps**: Specialized `GEMINI.md` extension is available for advanced location service tools.
+  - Use the established `RestClient` pattern or official SDKs.
+  - **Google Maps Platform (GMP)**:
+    - **Best Practices**: Always prioritize the official Google Maps Services Java SDK.
+    - **Documentation**: Agents should use available documentation retrieval tools to verify current API capabilities before implementation.
+    - **Security**: Never hardcode API keys. Use the established `GoogleMapsServicesProperties` configuration.
 
 ## 🚀 Development Workflows
 
