@@ -13,7 +13,7 @@ import java.time.Duration
 
 @Configuration
 @EnableConfigurationProperties(OpenMeteoApiProperties::class)
-class OpenMeteoApiConfiguration(private val jsonMapper: JsonMapper) {
+class OpenMeteoApiConfiguration {
 
     @Bean
     fun openMeteoWeatherRestClient(
@@ -35,14 +35,14 @@ class OpenMeteoApiConfiguration(private val jsonMapper: JsonMapper) {
             .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
 
         val requestFactory = HttpComponentsClientHttpRequestFactory()
-        requestFactory.setReadTimeout(Duration.ofSeconds(3))
+        requestFactory.setReadTimeout(Duration.ofSeconds(10))
         requestFactory.setConnectionRequestTimeout(Duration.ofSeconds(3))
 
         return RestClient.builder()
             .requestFactory(requestFactory)
             .baseUrl(baseUrl)
             .configureMessageConverters {
-                it -> it.addCustomConverter(JacksonJsonHttpMessageConverter(snakeCaseJsonMapper))
+                it.addCustomConverter(JacksonJsonHttpMessageConverter(snakeCaseJsonMapper))
             }
             .build()
     }
