@@ -44,9 +44,8 @@ class TelegramBotController(
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build()
         }
 
-        withContext(Dispatchers.IO + PropagationContextElement()) {
-            telegramBot.processUpdate(update)
-        }
+        telegramBot.processUpdate(update)
+
         return ResponseEntity.ok().build()
     }
 
