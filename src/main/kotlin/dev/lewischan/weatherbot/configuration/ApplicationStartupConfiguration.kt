@@ -15,6 +15,6 @@ class ApplicationStartupConfiguration(
 
     override fun onApplicationEvent(event: ApplicationReadyEvent) {
         logger.info("Application ready event fired")
-        telegramBot.start()
+        telegramBot.setup()
     }
 }
