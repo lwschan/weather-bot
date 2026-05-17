@@ -5,7 +5,10 @@ import com.github.kotlintelegrambot.entities.BotCommand
 import dev.lewischan.weatherbot.configuration.TelegramBotProperties
 import dev.lewischan.weatherbot.handler.CommandHandler
 import jakarta.annotation.PreDestroy
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import org.slf4j.LoggerFactory
+import org.springframework.core.PropagationContextElement
 
 class TelegramBot(
     private val telegramBotProperties: TelegramBotProperties,
@@ -16,7 +19,9 @@ class TelegramBot(
     private val logger = LoggerFactory.getLogger(this::class.java)
 
     suspend fun processUpdate(update: String) {
-        bot.processUpdate(update)
+        withContext(Dispatchers.IO + PropagationContextElement()) {
+            bot.processUpdate(update)
+        }
     }
 
     fun setup() {
