@@ -3,6 +3,7 @@ package dev.lewischan.weatherbot.controller
 import dev.lewischan.weatherbot.bot.TelegramBot
 import dev.lewischan.weatherbot.configuration.TelegramBotProperties
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -43,9 +44,8 @@ class TelegramBotController(
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build()
         }
 
-        withContext(Dispatchers.IO + PropagationContextElement()) {
-            telegramBot.processUpdate(update)
-        }
+        telegramBot.processUpdate(update)
+
         return ResponseEntity.ok().build()
     }
 
