@@ -2,7 +2,6 @@ package dev.lewischan.weatherbot.controller
 
 import dev.lewischan.weatherbot.bot.TelegramBot
 import dev.lewischan.weatherbot.configuration.TelegramBotProperties
-import io.micrometer.context.ContextSnapshot
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.http.HttpStatus
