@@ -1,4 +1,4 @@
-package dev.lewischan.weatherbot.bot
+package dev.lewischan.weatherbot.infrastructure
 
 import io.kotest.core.spec.style.FunSpec
 import io.kotest.core.test.AssertionMode

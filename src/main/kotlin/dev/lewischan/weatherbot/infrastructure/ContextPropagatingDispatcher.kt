@@ -1,4 +1,4 @@
-package dev.lewischan.weatherbot.bot
+package dev.lewischan.weatherbot.infrastructure
 
 import io.micrometer.context.ContextSnapshotFactory
 import kotlinx.coroutines.CoroutineDispatcher
@@ -17,6 +17,10 @@ class ContextPropagatingDispatcher(
         executor.execute {
             snapshot.setThreadLocals().use { block.run() }
         }
+    }
+
+    fun shutdown() {
+        executor.shutdown()
     }
 
 }

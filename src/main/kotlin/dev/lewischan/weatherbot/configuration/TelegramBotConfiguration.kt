@@ -8,7 +8,7 @@ import com.github.kotlintelegrambot.webhook
 import dev.lewischan.weatherbot.handler.CommandHandler
 import dev.lewischan.weatherbot.bot.TelegramBot
 import dev.lewischan.weatherbot.bot.TelegramBotProvider
-import dev.lewischan.weatherbot.bot.ContextPropagatingDispatcher
+import dev.lewischan.weatherbot.infrastructure.ContextPropagatingDispatcher
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
 import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean
@@ -33,15 +33,21 @@ class TelegramBotConfiguration {
         )
     }
 
+    @Bean(destroyMethod = "shutdown")
+    fun contextPropagatingDispatcher(): ContextPropagatingDispatcher {
+        return ContextPropagatingDispatcher()
+    }
+
     @Bean
     @ConditionalOnMissingBean
     fun bot(
         telegramBotProperties: TelegramBotProperties,
-        commandHandlers: List<CommandHandler>
+        commandHandlers: List<CommandHandler>,
+        contextPropagatingDispatcher: ContextPropagatingDispatcher
     ): Bot {
         return bot {
             token = telegramBotProperties.apiToken
-            coroutineDispatcher = ContextPropagatingDispatcher()
+            coroutineDispatcher = contextPropagatingDispatcher
             dispatch {
                 commandHandlers.forEach {
                     command(it.command) {
