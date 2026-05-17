@@ -63,6 +63,8 @@ spring:
   threads:
     virtual:
       enabled: true
+  reactor:
+    context-propagation: auto
 
 telegram-bot:
   api-token: ${ENV_TELEGRAM_BOT_API_TOKEN}
