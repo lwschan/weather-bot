@@ -13,6 +13,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
 import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+import org.springframework.core.PropagationContextElement
 
 @Configuration
 @EnableConfigurationProperties(TelegramBotProperties::class)
@@ -47,7 +48,7 @@ class TelegramBotConfiguration {
     ): Bot {
         return bot {
             token = telegramBotProperties.apiToken
-            coroutineDispatcher = contextPropagatingDispatcher
+            coroutineDispatcher = contextPropagatingDispatcher + PropagationContextElement()
             dispatch {
                 commandHandlers.forEach {
                     command(it.command) {
