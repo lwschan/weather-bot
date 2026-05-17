@@ -2,12 +2,8 @@ package dev.lewischan.weatherbot.controller
 
 import dev.lewischan.weatherbot.bot.TelegramBot
 import dev.lewischan.weatherbot.configuration.TelegramBotProperties
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.runBlocking
-import kotlinx.coroutines.withContext
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
-import org.springframework.core.PropagationContextElement
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.PathVariable
