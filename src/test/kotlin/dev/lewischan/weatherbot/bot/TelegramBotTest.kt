@@ -19,7 +19,7 @@ class TelegramBotTest : FunSpec({
         val bot = mockk<Bot>(relaxed = true)
         val telegramBot = TelegramBot(webhookProperties, bot, emptyList())
 
-        telegramBot.start()
+        telegramBot.setup()
 
         verify(exactly = 1) {
             bot.setMyCommands(any())
@@ -42,7 +42,7 @@ class TelegramBotTest : FunSpec({
         val bot = mockk<Bot>(relaxed = true)
         val telegramBot = TelegramBot(webhookProperties, bot, emptyList())
 
-        telegramBot.start()
+        telegramBot.setup()
 
         verify(exactly = 1) {
             bot.setMyCommands(any())

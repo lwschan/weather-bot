@@ -10,22 +10,19 @@ import org.slf4j.LoggerFactory
 class TelegramBot(
     private val telegramBotProperties: TelegramBotProperties,
     private val bot: Bot,
-    commandHandlers: List<CommandHandler>,
+    private val commandHandlers: List<CommandHandler>,
     var status: Status = Status.NOT_READY
 ) {
     private val logger = LoggerFactory.getLogger(this::class.java)
-
-    init {
-        registerCommands(commandHandlers)
-        setBotStatus(Status.READY)
-    }
 
     suspend fun processUpdate(update: String) {
         bot.processUpdate(update)
     }
 
-    fun start() {
+    fun setup() {
         logger.info("Starting Telegram Weather Bot")
+
+        registerCommands(commandHandlers)
 
         if (telegramBotProperties.useWebhook) {
             logger.info("Starting webhook")
@@ -36,6 +33,7 @@ class TelegramBot(
         }
 
         logger.info("Telegram bot started successfully")
+        setBotStatus(Status.READY)
     }
 
     @PreDestroy
