@@ -8,6 +8,7 @@ import com.github.kotlintelegrambot.webhook
 import dev.lewischan.weatherbot.handler.CommandHandler
 import dev.lewischan.weatherbot.bot.TelegramBot
 import dev.lewischan.weatherbot.bot.TelegramBotProvider
+import dev.lewischan.weatherbot.bot.ContextPropagatingDispatcher
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
 import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean
@@ -40,6 +41,7 @@ class TelegramBotConfiguration {
     ): Bot {
         return bot {
             token = telegramBotProperties.apiToken
+            coroutineDispatcher = ContextPropagatingDispatcher()
             dispatch {
                 commandHandlers.forEach {
                     command(it.command) {
