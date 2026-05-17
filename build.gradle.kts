@@ -71,10 +71,10 @@ dependencies {
     implementation(libs.kotlin.telegram.bot)
     implementation(libs.kotlinx.coroutines.reactor)
     implementation(libs.spring.boot.starter.actuator)
-    implementation(libs.spring.boot.starter.opentelemetry)
     implementation(libs.spring.boot.starter.flyway)
     implementation(libs.spring.boot.starter.jdbc)
     implementation(libs.spring.boot.starter.jetty)
+    implementation(libs.spring.boot.starter.opentelemetry)
     implementation(libs.spring.boot.starter.webmvc) {
         // Exclude Tomcat as the embedded server since Undertow is used
         exclude(group = libs.spring.boot.starter.tomcat.get().group, module = libs.spring.boot.starter.tomcat.get().name)
