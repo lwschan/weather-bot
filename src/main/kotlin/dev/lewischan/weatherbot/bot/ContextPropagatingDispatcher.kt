@@ -6,7 +6,8 @@ import java.util.concurrent.Executors
 import kotlin.coroutines.CoroutineContext
 
 class ContextPropagatingDispatcher(
-    private val contextSnapshotFactory: ContextSnapshotFactory = ContextSnapshotFactory.builder().build()
+    private val contextSnapshotFactory: ContextSnapshotFactory = ContextSnapshotFactory.builder()
+        .build()
 ) : CoroutineDispatcher() {
 
     private val executor = Executors.newVirtualThreadPerTaskExecutor()
@@ -19,6 +20,3 @@ class ContextPropagatingDispatcher(
     }
 
 }
-
-
-
