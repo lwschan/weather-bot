@@ -2,8 +2,8 @@ plugins {
     alias(libs.plugins.spring.boot)
     alias(libs.plugins.spring.dependency.management)
     jacoco
-    kotlin("jvm")
-    kotlin("plugin.spring")
+    kotlin("jvm") version libs.versions.kotlin.lang
+    kotlin("plugin.spring") version libs.versions.kotlin.lang
 }
 
 java {
