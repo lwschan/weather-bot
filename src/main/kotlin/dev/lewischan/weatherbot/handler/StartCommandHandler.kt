@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component
 class StartCommandHandler : CommandHandler() {
     override val command = "start"
     override val description = "Hello world!"
+    override val requiresBotUsername = true
 
     override fun handleCommand(message: Message) {
         val text = """
