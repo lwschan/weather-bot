@@ -7,6 +7,7 @@ import com.github.kotlintelegrambot.entities.Message
 import com.github.kotlintelegrambot.entities.ParseMode
 import com.github.kotlintelegrambot.types.TelegramBotResult
 import dev.lewischan.weatherbot.BaseIntTest
+import io.kotest.matchers.shouldBe
 import io.kotest.matchers.string.shouldContain
 import io.mockk.clearMocks
 import io.mockk.every
@@ -22,7 +23,7 @@ class HelpCommandHandlerIntTest(
 
     val random = SecureRandom()
 
-    beforeSpec {
+    beforeEach {
         val commands: List<BotCommand> = commandHandlers.map {
             BotCommand(it.command, it.description)
         }.toList()
@@ -40,11 +41,11 @@ class HelpCommandHandlerIntTest(
 
         val message = mockk<Message>()
         every { message.chat.id } returns chatId
-        every { message.text } returns ""
-
-        helpCommandHandler.execute(message)
+        every { message.text } returns "/help@test_bot"
 
         test("Should return the correct response") {
+            helpCommandHandler.execute(message)
+
             verify(exactly = 1) { bot.sendMessage(
                 chatId = ChatId.fromId(chatId),
                 text = match {
@@ -53,6 +54,23 @@ class HelpCommandHandlerIntTest(
                 },
                 parseMode = ParseMode.HTML
             ) }
+        }
+    }
+
+    context("when help command is sent without bot username") {
+        val chatId = random.nextLong(1, Long.MAX_VALUE)
+
+        val message = mockk<Message>()
+        every { message.chat.id } returns chatId
+        every { message.text } returns "/help"
+
+        test("Should not send any response") {
+            helpCommandHandler.execute(message)
+
+            message.text shouldBe "/help"
+            verify(exactly = 0) {
+                bot.sendMessage(any(), any(), any(), any(), any(), any(), any(), any(), any(), any())
+            }
         }
     }
 })

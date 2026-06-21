@@ -5,6 +5,7 @@ import com.github.kotlintelegrambot.entities.ChatId
 import com.github.kotlintelegrambot.entities.Message
 import com.github.kotlintelegrambot.entities.ParseMode
 import dev.lewischan.weatherbot.BaseIntTest
+import io.kotest.matchers.shouldBe
 import io.kotest.matchers.string.shouldContain
 import io.mockk.clearMocks
 import io.mockk.every
@@ -19,7 +20,7 @@ class StartCommandHandlerIntTest(
 
     val random = SecureRandom()
 
-    beforeSpec {
+    beforeEach {
         every { bot.getMe().get().username } returns "test_bot"
     }
 
@@ -32,7 +33,7 @@ class StartCommandHandlerIntTest(
 
         val message = mockk<Message>()
         every { message.chat.id } returns chatId
-        every { message.text } returns ""
+        every { message.text } returns "/start@test_bot"
 
         startCommandHandler.execute(message)
 
@@ -45,5 +46,20 @@ class StartCommandHandlerIntTest(
             },
             parseMode = ParseMode.HTML
         ) }
+    }
+
+    test("start command without bot username should be ignored") {
+        val chatId = random.nextLong()
+
+        val message = mockk<Message>()
+        every { message.chat.id } returns chatId
+        every { message.text } returns "/start"
+
+        startCommandHandler.execute(message)
+
+        message.text shouldBe "/start"
+        verify(exactly = 0) {
+            bot.sendMessage(any(), any(), any(), any(), any(), any(), any(), any(), any(), any())
+        }
     }
 })

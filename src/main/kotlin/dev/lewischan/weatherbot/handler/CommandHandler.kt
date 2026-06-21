@@ -10,6 +10,7 @@ import java.util.UUID
 abstract class CommandHandler {
     abstract val command: String
     abstract val description: String
+    open val requiresBotUsername: Boolean = false
 
     protected abstract fun handleCommand(message: Message)
 
@@ -24,6 +25,11 @@ abstract class CommandHandler {
     }
 
     fun execute(message: Message) {
+        if (requiresBotUsername) {
+            val botUsername = getBot().getMe().get().username ?: return
+            if (!message.text.orEmpty().startsWith("/$command@$botUsername")) return
+        }
+
         val messageId = UUID.randomUUID()
         logger.info("[$messageId] Handling Telegram bot command: $command for message: ${message.text}")
         try {

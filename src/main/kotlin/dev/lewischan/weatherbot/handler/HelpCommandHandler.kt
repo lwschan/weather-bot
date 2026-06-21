@@ -11,6 +11,7 @@ import org.springframework.stereotype.Component
 class HelpCommandHandler : CommandHandler() {
     override val command = "help"
     override val description = "Get help"
+    override val requiresBotUsername = true
 
     override fun handleCommand(message: Message) {
         val botCommands = getBot().getMyCommands().get()
