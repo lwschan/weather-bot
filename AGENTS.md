@@ -5,6 +5,7 @@ This guide is for AI agents and developers who are interacting with this reposit
 ## 🛠️ Technical Stack
 
 - **Language**: [Kotlin](https://kotlinlang.org/) (JVM)
+- **Java**: 25
 - **Framework**: [Spring Boot](https://spring.io/projects/spring-boot)
 - **Build System**: [Gradle](https://gradle.org/) (with Kotlin DSL and Dependency Locking)
 - **Database**: [PostgreSQL](https://www.postgresql.org/)
@@ -19,23 +20,28 @@ This guide is for AI agents and developers who are interacting with this reposit
 
 The project follows a standard layered architecture:
 
-1.  **Bot Layer** (`dev.lewischan.weatherbot.bot`): Handles Telegram bot lifecycle. `TelegramBot` automatically registers all `CommandHandler` implementations via list injection.
+1.  **Bot Layer** (`dev.lewischan.weatherbot.bot`): Handles the Telegram bot lifecycle and publishes the command list to Telegram. `TelegramBotConfiguration` injects all `CommandHandler` beans and registers them with the bot dispatcher.
 2.  **Handler Layer** (`dev.lewischan.weatherbot.handler`): Processes bot commands. To add a new command:
     - Implement `CommandHandler`.
     - Mark with `@Component`.
-    - It will be automatically registered by `TelegramBot`.
+    - It will be automatically registered by `TelegramBotConfiguration` and included in the command list published by `TelegramBot`.
 3.  **Service Layer** (`dev.lewischan.weatherbot.service`): Contains business logic. Services are typically injected by interface (e.g., `WeatherService`).
 4.  **Repository Layer** (`dev.lewischan.weatherbot.repository`): Handles data persistence.
     - **Pattern**: Uses Spring **`JdbcClient`** for lightweight, type-safe SQL execution.
     - **Mapping**: Manual `ResultSet` mapping is preferred over ORM frameworks like JPA.
-5.  **Model Layer** (`dev.lewischan.weatherbot.model`): Defines domain and API models.
+5.  **Domain and Model Layers**:
+    - `dev.lewischan.weatherbot.domain` contains persisted domain entities.
+    - `dev.lewischan.weatherbot.model` contains application and external API models.
+6.  **Configuration Layer** (`dev.lewischan.weatherbot.configuration`): Defines Spring beans, typed configuration properties, and integration clients.
+7.  **Controller Layer** (`dev.lewischan.weatherbot.controller`): Exposes inbound HTTP endpoints, including Telegram webhook handling.
+8.  **Infrastructure Layer** (`dev.lewischan.weatherbot.infrastructure`): Contains cross-cutting runtime infrastructure.
 
 ## 🔑 Key Conventions
 
 - **Kotlin Extensions**: Use established extensions in `dev.lewischan.weatherbot.extension` for idiomatic code. 
   - e.g., Use `Bot.replyMessage` instead of the raw Telegram SDK call for consistent error handling.
-- **Dependency Updates**: Use `make update-dependencies` after modifying `libs.versions.toml`. 
-  - **Note**: This project uses **STRICT dependency locking**. The build will fail if `gradle.lockfile` or `buildscript-gradle.lockfile` are out of sync with the dependencies.
+- **Dependency Updates**: Use `make update-dependencies` after modifying `gradle/libs.versions.toml` or dependency declarations.
+  - **Note**: This project uses **STRICT dependency locking**. Keep `gradle.lockfile`, `buildscript-gradle.lockfile`, and `settings-gradle.lockfile` in sync with dependency changes.
 - **Database Migrations**: Add new SQL scripts to `src/main/resources/db/migration/` using the `V<N>__<description>.sql` format.
 - **Testing**:
   - Unit tests use Kotest and MockK.
@@ -58,8 +64,10 @@ The project follows a standard layered architecture:
 
 ## ⚠️ Git & Source Control Rules
 
-- **No Automatic Commits/Pushes**: **NEVER** commit or push changes automatically unless explicitly directed by the user. 
-- **Branching Strategy**: Always create a new branch for changes. **NEVER** commit directly to `main`.
+- **No Automatic Commits/Pushes**: **NEVER** commit or push changes automatically unless explicitly directed by the user.
+- **Branching Strategy**: **NEVER** make changes directly on `main`. If currently on `main`, create a focused branch before editing. Continue on an existing user-created feature branch unless directed otherwise.
+- **Working Tree Safety**: Preserve unrelated user changes. Do not overwrite or revert files outside the requested scope.
+- **Destructive Commands**: Do not use destructive Git commands such as `git reset --hard` or `git checkout --` unless the user explicitly requests them.
 - **Review**: Always propose a plan and show the diff before asking to commit.
 
 ## 🤖 Agent Workflow
@@ -67,5 +75,5 @@ The project follows a standard layered architecture:
 When making changes:
 1.  **Research**: Map the relevant services and handlers.
 2.  **Strategy**: Plan implementation, including necessary model changes and service updates.
-3.  **Tests**: Always add or update Kotest specs for any behavioral change.
-4.  **Verification**: Run `./gradlew test` to ensure all tests pass.
+3.  **Tests**: Add or update Kotest specs for behavioral changes. Documentation-only and other non-behavioral changes do not require new tests.
+4.  **Verification**: Run the narrowest relevant checks while iterating, then run `./gradlew build` for code changes. `./gradlew test` runs both unit tests and `*IntTest` integration tests but does not replace the complete build verification.
