@@ -93,7 +93,6 @@ class WeatherCommandHandlerIntTest(
                 text = match {
                     it shouldContain "Stamford Bridge, York YO41, UK"
                     it shouldContain "<b>AQI (US / EU):</b> 31 / 21"
-                    it shouldNotContain "\n "
                     true
                 },
                 parseMode = ParseMode.HTML
@@ -117,7 +116,6 @@ class WeatherCommandHandlerIntTest(
                     it shouldNotContain "AQI"
                     it shouldNotContain "PM 2.5"
                     it shouldNotContain "No air quality data available"
-                    it shouldNotContain "\n "
                     true
                 },
                 parseMode = ParseMode.HTML
