@@ -20,5 +20,5 @@ class PirateWeatherWeatherCommandHandler(
     includeAirQuality = false
 ) {
     override val command = "wp"
-    override val description = "Get the current weather from Pirate Weather for your default location or include an address."
+    override val description = "Get current weather, but use Pirate Weather as the provider"
 }
