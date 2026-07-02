@@ -29,11 +29,11 @@ management:
     tracing:
       export:
         otlp:
-          endpoint: ${ENV_OTLP_TRACING_EXPORT_URL}
+          endpoint: ${ENV_OTLP_TRACING_EXPORT_URL:}
   otlp:
     metrics:
       export:
-        url: ${ENV_OTLP_METRICS_EXPORT_URL}
+        url: ${ENV_OTLP_METRICS_EXPORT_URL:}
   tracing:
     sampling:
       probability: 1.0
@@ -41,6 +41,10 @@ management:
 open-meteo-api:
   weather-api-base-url: ${ENV_OPEN_METEO_WEATHER_API_BASE_URL}
   air-quality-api-base-url: ${ENV_OPEN_METEO_AIR_QUALITY_API_BASE_URL}
+
+pirate-weather-api:
+  base-url: ${ENV_PIRATE_WEATHER_API_BASE_URL}
+  api-key: ${ENV_PIRATE_WEATHER_API_KEY:}
 
 server:
   shutdown: graceful
@@ -74,3 +78,4 @@ telegram-bot:
 
 ENV_OPEN_METEO_WEATHER_API_BASE_URL: https://api.open-meteo.com
 ENV_OPEN_METEO_AIR_QUALITY_API_BASE_URL: https://air-quality-api.open-meteo.com
+ENV_PIRATE_WEATHER_API_BASE_URL: https://api.pirateweather.net

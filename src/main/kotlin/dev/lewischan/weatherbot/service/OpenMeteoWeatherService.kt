@@ -10,6 +10,7 @@ import dev.lewischan.weatherbot.model.Location
 import dev.lewischan.weatherbot.model.Temperature
 import dev.lewischan.weatherbot.model.openmeteo.OpenMeteoAirQuality
 import dev.lewischan.weatherbot.model.openmeteo.OpenMeteoForecast
+import org.springframework.context.annotation.Primary
 import org.springframework.stereotype.Service
 import org.springframework.web.client.RestClient
 import org.springframework.web.client.body
@@ -17,6 +18,7 @@ import java.time.ZoneId
 import java.time.ZonedDateTime
 
 @Service
+@Primary
 class OpenMeteoWeatherService(
     private val openMeteoWeatherRestClient: RestClient,
     private val openMeteoAirQualityRestClient: RestClient

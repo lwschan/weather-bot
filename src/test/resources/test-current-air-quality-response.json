@@ -1,0 +1,27 @@
+{
+  "latitude": 53.99,
+  "longitude": -0.91,
+  "timezone": "Europe/London",
+  "current": {
+    "time": 1730390400,
+    "interval": 3600,
+    "european_aqi": 21,
+    "us_aqi": 31,
+    "pm10": 8.1,
+    "pm2_5": 4.2,
+    "carbon_monoxide": 120.0,
+    "nitrogen_dioxide": 3.2,
+    "sulphur_dioxide": 1.1,
+    "ozone": 55.0,
+    "aerosol_optical_depth": 0.1,
+    "dust": 0.0,
+    "uv_index": 2.0,
+    "uv_index_clear_sky": 2.5,
+    "ammonia": null,
+    "alder_pollen": null,
+    "birch_pollen": null,
+    "grass_pollen": null,
+    "mugwort_pollen": null,
+    "olive_pollen": null
+  }
+}
