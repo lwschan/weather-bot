@@ -19,7 +19,8 @@ class HelpCommandHandler : CommandHandler() {
 
         val commandDescriptions = botCommands.filter { it.command != command }
             .sortedWith(
-                compareBy<BotCommand> { it.command == "w" }
+                compareBy<BotCommand> { it.command == "wp" }
+                    .thenBy { it.command == "w" }
                     .thenBy { it.command == "s" }
                     .thenBy { it.command == "start" }
             )
