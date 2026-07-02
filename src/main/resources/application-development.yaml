@@ -3,6 +3,19 @@ logging:
     format:
       console: ""
 
+management:
+  opentelemetry:
+    enabled: false
+  otlp:
+    metrics:
+      export:
+        enabled: false
+  tracing:
+    export:
+      enabled: false
+      otlp:
+        enabled: false
+
 spring:
   config:
     import: optional:file:.env.development[.properties]

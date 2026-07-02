@@ -13,20 +13,17 @@ import dev.lewischan.weatherbot.service.LocationService
 import dev.lewischan.weatherbot.service.TelegramUserService
 import dev.lewischan.weatherbot.service.UserDefaultLocationService
 import dev.lewischan.weatherbot.service.WeatherService
-import org.springframework.stereotype.Component
 import java.time.Instant
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 
-@Component
-class WeatherCommandHandler(
+abstract class BaseWeatherCommandHandler(
     private val userDefaultLocationService: UserDefaultLocationService,
     private val telegramUserService: TelegramUserService,
     private val weatherService: WeatherService,
-    private val locationService: LocationService
+    private val locationService: LocationService,
+    private val includeAirQuality: Boolean
 ) : CommandHandler() {
-    override val command = "w"
-    override val description = "Get the current weather for your default location or include an address."
 
     override fun handleCommand(message: Message) {
         val address = getCommandQuery(message)
@@ -118,14 +115,7 @@ class WeatherCommandHandler(
         airQuality: CurrentAirQuality?
     ) {
         val dailyWeather = weather.dailyWeather
-
-        val airQualityText = airQuality?.let { """
-            <b>AQI (US / EU):</b> ${it.usAqi} / ${it.europeanAqi}
-            <b>PM 2.5:</b> ${it.pmTwoPointFive} μg/m³
-            <b>PM 10:</b> ${it.pmTen} μg/m³
-            <b>UV Index:</b> ${it.uvIndex}
-            <b>UV Index Clear Sky:</b> ${it.uvIndexClearSky}    
-        """.trimStart().trimEnd() } ?: "<i>No air quality data available</i>"
+        val airQualitySection = formatAirQualitySection(airQuality)
 
         val weatherText = """
             ${location.address}
@@ -144,9 +134,7 @@ class WeatherCommandHandler(
             
             <b>Sunrise:</b> ${dailyWeather.sunrise.format(timeFormatter)}
             <b>Sunset:</b> ${dailyWeather.sunset.format(timeFormatter)}
-            
-            $airQualityText
-            
+            ${formatAirQualitySection(airQuality).prependIndent(WEATHER_TEXT_INDENT).dropLast(1)}
             <i>${ZonedDateTime.ofInstant(Instant.now(), weather.time.zone).format(datetimeFormatter)}</i>
             </blockquote>
         """.trimIndent()
@@ -158,7 +146,26 @@ class WeatherCommandHandler(
         )
     }
 
-    private fun getTemperatureEmoji(temperature: Temperature): String{
+    private fun formatAirQualitySection(airQuality: CurrentAirQuality?): String {
+        if (!includeAirQuality) return ""
+
+        val airQualityText = airQuality?.let {
+            """
+                
+                <b>AQI (US / EU):</b> ${it.usAqi} / ${it.europeanAqi}
+                <b>PM 2.5:</b> ${it.pmTwoPointFive} μg/m³
+                <b>PM 10:</b> ${it.pmTen} μg/m³
+                <b>UV Index:</b> ${it.uvIndex}
+                <b>UV Index Clear Sky:</b> ${it.uvIndexClearSky}
+                
+                
+            """.trimIndent().dropLast(1)
+        } ?: "<i>No air quality data available</i>"
+
+        return airQualityText
+    }
+
+    private fun getTemperatureEmoji(temperature: Temperature): String {
         return when (temperature.celsius) {
             in Double.NEGATIVE_INFINITY..-10.0 -> "🥶"
             in -10.0..0.0 -> "❄️"
@@ -171,6 +178,8 @@ class WeatherCommandHandler(
     }
 
     private fun getAirQuality(location: Location): CurrentAirQuality? {
+        if (!includeAirQuality) return null
+
         try {
             return weatherService.getCurrentAirQuality(location)
         } catch (exception: Exception) {
@@ -180,8 +189,8 @@ class WeatherCommandHandler(
     }
 
     companion object {
+        const val WEATHER_TEXT_INDENT = "            "
         val timeFormatter: DateTimeFormatter = DateTimeFormatter.ofPattern("h:mm a")
         val datetimeFormatter: DateTimeFormatter = DateTimeFormatter.ofPattern("dd MMM, h:mm a")
     }
-
 }
