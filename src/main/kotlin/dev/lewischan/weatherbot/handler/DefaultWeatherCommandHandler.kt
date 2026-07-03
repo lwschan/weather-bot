@@ -12,7 +12,7 @@ class DefaultWeatherCommandHandler(
     telegramUserService: TelegramUserService,
     openMeteoWeatherService: OpenMeteoWeatherService,
     locationService: LocationService
-) : BaseWeatherCommandHandler(
+) : BaseCurrentWeatherCommandHandler(
     userDefaultLocationService,
     telegramUserService,
     openMeteoWeatherService,

@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service
 import org.springframework.web.client.RestClient
 import org.springframework.web.client.body
 import java.time.Instant
+import java.time.LocalDate
 import java.time.ZoneId
 import kotlin.math.roundToInt
 
@@ -24,7 +25,23 @@ class PirateWeatherWeatherService(
 ) : WeatherService {
 
     override fun getCurrentWeather(location: Location): CurrentWeather? {
-        val response = pirateWeatherRestClient.get()
+        return getForecast(location)?.let(::currentWeatherMapper)
+    }
+
+    override fun getDailyForecast(location: Location, daysAhead: Int): DailyWeather? {
+        require(daysAhead >= 0) { "daysAhead must not be negative" }
+
+        val forecast = getForecast(location) ?: return null
+        val timezone = runCatching { ZoneId.of(forecast.timezone) }.getOrNull() ?: return null
+        val targetDate = Instant.ofEpochSecond(forecast.currently.time)
+            .atZone(timezone)
+            .toLocalDate()
+            .plusDays(daysAhead.toLong())
+        return dailyWeatherMapper(forecast, timezone, targetDate)
+    }
+
+    private fun getForecast(location: Location): PirateWeatherForecast? {
+        return pirateWeatherRestClient.get()
             .uri(
                 "/forecast/{apiKey}/{latitude},{longitude}?units={units}&version={version}&extraVars={extraVars}&include={include}",
                 mapOf(
@@ -39,8 +56,6 @@ class PirateWeatherWeatherService(
             )
             .retrieve()
             .body<PirateWeatherForecast>()
-
-        return response?.let(::currentWeatherMapper)
     }
 
     override fun getCurrentAirQuality(location: Location): CurrentAirQuality? {
@@ -52,11 +67,7 @@ class PirateWeatherWeatherService(
         val current = forecast.currently
         val currentTime = Instant.ofEpochSecond(current.time).atZone(timezone)
 
-        val daily = forecast.daily.data
-            .firstOrNull { data ->
-                Instant.ofEpochSecond(data.time).atZone(timezone).toLocalDate() == currentTime.toLocalDate()
-            }
-            ?: return null
+        val dailyWeather = dailyWeatherMapper(forecast, timezone, currentTime.toLocalDate()) ?: return null
 
         return CurrentWeather(
             time = currentTime,
@@ -64,19 +75,33 @@ class PirateWeatherWeatherService(
             feelsLikeTemperature = Temperature.celsius(current.apparentTemperature),
             condition = conditionFromIcon(current.icon),
             humidity = Humidity((current.humidity * 100).roundToInt()),
-            dailyWeather = DailyWeather(
-                date = currentTime.toLocalDate(),
-                dailyTemperature = DailyTemperature(
-                    low = Temperature.celsius(daily.temperatureMin),
-                    high = Temperature.celsius(daily.temperatureMax)
-                ),
-                dailyFeelsLikeTemperature = DailyTemperature(
-                    low = Temperature.celsius(daily.apparentTemperatureMin),
-                    high = Temperature.celsius(daily.apparentTemperatureMax)
-                ),
-                sunrise = Instant.ofEpochSecond(daily.sunriseTime).atZone(timezone),
-                sunset = Instant.ofEpochSecond(daily.sunsetTime).atZone(timezone)
-            )
+            dailyWeather = dailyWeather
+        )
+    }
+
+    private fun dailyWeatherMapper(
+        forecast: PirateWeatherForecast,
+        timezone: ZoneId,
+        date: LocalDate
+    ): DailyWeather? {
+        val daily = forecast.daily.data.firstOrNull { data ->
+            Instant.ofEpochSecond(data.time).atZone(timezone).toLocalDate() == date
+        } ?: return null
+
+        return DailyWeather(
+            date = date,
+            condition = conditionFromIcon(daily.icon),
+            precipitationProbability = (daily.precipProbability * 100).roundToInt(),
+            dailyTemperature = DailyTemperature(
+                low = Temperature.celsius(daily.temperatureMin),
+                high = Temperature.celsius(daily.temperatureMax)
+            ),
+            dailyFeelsLikeTemperature = DailyTemperature(
+                low = Temperature.celsius(daily.apparentTemperatureMin),
+                high = Temperature.celsius(daily.apparentTemperatureMax)
+            ),
+            sunrise = Instant.ofEpochSecond(daily.sunriseTime).atZone(timezone),
+            sunset = Instant.ofEpochSecond(daily.sunsetTime).atZone(timezone)
         )
     }
 

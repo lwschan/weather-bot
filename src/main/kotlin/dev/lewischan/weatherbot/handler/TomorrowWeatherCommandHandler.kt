@@ -1,24 +1,24 @@
 package dev.lewischan.weatherbot.handler
 
 import dev.lewischan.weatherbot.service.LocationService
-import dev.lewischan.weatherbot.service.PirateWeatherWeatherService
+import dev.lewischan.weatherbot.service.OpenMeteoWeatherService
 import dev.lewischan.weatherbot.service.TelegramUserService
 import dev.lewischan.weatherbot.service.UserDefaultLocationService
 import org.springframework.stereotype.Component
 
 @Component
-class PirateWeatherWeatherCommandHandler(
+class TomorrowWeatherCommandHandler(
     userDefaultLocationService: UserDefaultLocationService,
     telegramUserService: TelegramUserService,
-    pirateWeatherWeatherService: PirateWeatherWeatherService,
+    openMeteoWeatherService: OpenMeteoWeatherService,
     locationService: LocationService
-) : BaseCurrentWeatherCommandHandler(
+) : BaseForecastWeatherCommandHandler(
     userDefaultLocationService,
     telegramUserService,
-    pirateWeatherWeatherService,
+    openMeteoWeatherService,
     locationService,
-    includeAirQuality = false
+    daysAhead = 1
 ) {
-    override val command = "wp"
-    override val description = "Get current weather, but use Pirate Weather as the provider"
+    override val command = "wt"
+    override val description = "Get tomorrow's weather for your default location or include an address."
 }

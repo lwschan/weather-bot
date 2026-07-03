@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.web.client.RestClient
 import org.springframework.web.client.body
 import wiremock.org.eclipse.jetty.http.HttpStatus
+import java.time.LocalDate
 import java.time.ZonedDateTime
 
 class PirateWeatherWeatherServiceIntTest(
@@ -73,6 +74,35 @@ class PirateWeatherWeatherServiceIntTest(
         currentWeather.dailyWeather.dailyFeelsLikeTemperature.high.celsius shouldBe 36.75
         currentWeather.dailyWeather.sunrise shouldBe ZonedDateTime.parse("2024-10-31T06:00+08:00[Asia/Singapore]")
         currentWeather.dailyWeather.sunset shouldBe ZonedDateTime.parse("2024-10-31T18:00+08:00[Asia/Singapore]")
+    }
+
+    test("get daily forecast should return tomorrow in the location timezone") {
+        val forecast = pirateWeatherWeatherService.getDailyForecast(
+            Location("", 1.3602148, 103.9871849),
+            1
+        )
+
+        forecast shouldNotBe null
+        forecast!!.date shouldBe LocalDate.parse("2024-11-01")
+        forecast.condition shouldBe Condition.RAIN
+        forecast.precipitationProbability shouldBe 80
+        forecast.dailyTemperature.low.celsius shouldBe 24.0
+        forecast.dailyTemperature.high.celsius shouldBe 30.0
+        forecast.sunrise shouldBe ZonedDateTime.parse("2024-11-01T06:00+08:00[Asia/Singapore]")
+        forecast.sunset shouldBe ZonedDateTime.parse("2024-11-01T18:00+08:00[Asia/Singapore]")
+    }
+
+    test("get daily forecast should reject a negative day offset") {
+        shouldThrow<IllegalArgumentException> {
+            pirateWeatherWeatherService.getDailyForecast(Location("", 1.3602148, 103.9871849), -1)
+        }
+    }
+
+    test("get daily forecast should return null when the provider omits the requested day") {
+        pirateWeatherWeatherService.getDailyForecast(
+            Location("", 1.3602148, 103.9871849),
+            2
+        ) shouldBe null
     }
 
     test("full response should deserialize all forecast blocks") {
