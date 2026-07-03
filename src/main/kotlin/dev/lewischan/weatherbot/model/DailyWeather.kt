@@ -5,6 +5,8 @@ import java.time.ZonedDateTime
 
 data class DailyWeather(
     val date: LocalDate,
+    val condition: Condition,
+    val precipitationProbability: Int,
     val dailyTemperature: DailyTemperature,
     val dailyFeelsLikeTemperature: DailyTemperature,
     val sunrise: ZonedDateTime,

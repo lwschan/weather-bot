@@ -4,14 +4,14 @@ import dev.lewischan.weatherbot.service.OpenMeteoWeatherService
 import org.springframework.stereotype.Component
 
 @Component
-class DefaultWeatherCommandHandler(
+class TomorrowWeatherCommandHandler(
     locationResolver: WeatherCommandLocationResolver,
     openMeteoWeatherService: OpenMeteoWeatherService,
-) : BaseCurrentWeatherCommandHandler(
+) : BaseForecastWeatherCommandHandler(
     locationResolver,
     openMeteoWeatherService,
-    includeAirQuality = true
+    daysAhead = 1
 ) {
-    override val command = "w"
-    override val description = "Get the current weather for your default location or include an address."
+    override val command = "wt"
+    override val description = "Get tomorrow's weather for your default location or include an address."
 }

@@ -9,102 +9,38 @@ import dev.lewischan.weatherbot.model.CurrentAirQuality
 import dev.lewischan.weatherbot.model.CurrentWeather
 import dev.lewischan.weatherbot.model.Location
 import dev.lewischan.weatherbot.model.Temperature
-import dev.lewischan.weatherbot.service.LocationService
-import dev.lewischan.weatherbot.service.TelegramUserService
-import dev.lewischan.weatherbot.service.UserDefaultLocationService
 import dev.lewischan.weatherbot.service.WeatherService
 import java.time.Instant
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 
-abstract class BaseWeatherCommandHandler(
-    private val userDefaultLocationService: UserDefaultLocationService,
-    private val telegramUserService: TelegramUserService,
+abstract class BaseCurrentWeatherCommandHandler(
+    private val locationResolver: WeatherCommandLocationResolver,
     private val weatherService: WeatherService,
-    private val locationService: LocationService,
     private val includeAirQuality: Boolean
 ) : CommandHandler() {
 
     override fun handleCommand(message: Message) {
         val address = getCommandQuery(message)
-
-        if (address.isNullOrEmpty()) handleWithDefaultLocation(getBot(), message)
-        else handleWithAddressSearch(getBot(), message, address)
-    }
-
-    private fun handleWithDefaultLocation(bot: Bot, message: Message) {
-        logger.info("Handling weather command for default location")
-
-        if (message.from == null) {
-            bot.replyMessage(
-                chatId = ChatId.fromId(message.chat.id),
-                text = "Encountered an unexpected error.",
-                replyToMessageId = message.messageId
-            )
-            return
-        }
-
-        val user = telegramUserService.findByExternalUserId(message.from!!.id)
-        if (user == null) {
-            bot.replyMessage(
-                chatId = ChatId.fromId(message.chat.id),
-                text = "You do not have a default location, either use the command with an address query or set a default location.",
-                replyToMessageId = message.messageId
-            )
-            return
-        }
-
-        val userDefaultLocation = userDefaultLocationService.findByUserId(user.id)
-        if (userDefaultLocation == null) {
-            bot.replyMessage(
-                chatId = ChatId.fromId(message.chat.id),
-                text = "You do not have a default location, either use the command with an address query or set a default location.",
-                replyToMessageId = message.messageId
-            )
-            return
-        }
-
-        val weather = weatherService.getCurrentWeather(userDefaultLocation.location)
-        if (weather == null) {
-            bot.replyMessage(
-                chatId = ChatId.fromId(message.chat.id),
-                text = "Encountered an error fetching the current weather for ${userDefaultLocation.location.address}.",
-                replyToMessageId = message.messageId
-            )
-            return
-        }
-
-        val airQuality = getAirQuality(userDefaultLocation.location)
-
-        sendCurrentWeatherMessage(bot, message, userDefaultLocation.location, weather, airQuality)
-    }
-
-    private fun handleWithAddressSearch(bot: Bot, message: Message, address: String) {
-        logger.info("Handling weather command for address $address")
-
-        val location = locationService.geocode(address)
-        if (location == null) {
-            bot.replyMessage(
-                chatId = ChatId.fromId(message.chat.id),
-                text = "Could not find a valid address for $address.",
-                replyToMessageId = message.messageId
-            )
-            return
-        }
+        logger.info("Handling current weather command${address?.let { " for address $it" } ?: " for default location"}")
+        val bot = getBot()
+        val location = locationResolver.resolve(bot, message, address) ?: return
 
         val weather = weatherService.getCurrentWeather(location)
         if (weather == null) {
             bot.replyMessage(
                 chatId = ChatId.fromId(message.chat.id),
-                text = "Could not find the current weather for $address.",
+                text = if (address.isNullOrEmpty()) {
+                    "Encountered an error fetching the current weather for ${location.address}."
+                } else {
+                    "Could not find the current weather for $address."
+                },
                 replyToMessageId = message.messageId
             )
             return
         }
 
-        val airQuality = getAirQuality(location)
-
-        sendCurrentWeatherMessage(bot, message, location, weather, airQuality)
+        sendCurrentWeatherMessage(bot, message, location, weather, getAirQuality(location))
     }
 
     private fun sendCurrentWeatherMessage(
@@ -115,8 +51,6 @@ abstract class BaseWeatherCommandHandler(
         airQuality: CurrentAirQuality?
     ) {
         val dailyWeather = weather.dailyWeather
-        val airQualitySection = formatAirQualitySection(airQuality)
-
         val weatherText = """
             ${location.address}
             
@@ -149,7 +83,7 @@ abstract class BaseWeatherCommandHandler(
     private fun formatAirQualitySection(airQuality: CurrentAirQuality?): String {
         if (!includeAirQuality) return ""
 
-        val airQualityText = airQuality?.let {
+        return airQuality?.let {
             """
                 
                 <b>AQI (US / EU):</b> ${it.usAqi} / ${it.europeanAqi}
@@ -161,36 +95,32 @@ abstract class BaseWeatherCommandHandler(
                 
             """.trimIndent().dropLast(1)
         } ?: "<i>No air quality data available</i>"
-
-        return airQualityText
-    }
-
-    private fun getTemperatureEmoji(temperature: Temperature): String {
-        return when (temperature.celsius) {
-            in Double.NEGATIVE_INFINITY..-10.0 -> "🥶"
-            in -10.0..0.0 -> "❄️"
-            in 0.1..15.0 -> "🌬️"
-            in 15.1..25.0 -> "🙂"
-            in 25.1..35.0 -> "☀️"
-            in 35.1..40.0 -> "🥵"
-            else -> "🔥"
-        }
     }
 
     private fun getAirQuality(location: Location): CurrentAirQuality? {
         if (!includeAirQuality) return null
 
-        try {
-            return weatherService.getCurrentAirQuality(location)
+        return try {
+            weatherService.getCurrentAirQuality(location)
         } catch (exception: Exception) {
             logger.error("Error fetching air quality for location $location", exception)
-            return null
+            null
         }
     }
 
+    private fun getTemperatureEmoji(temperature: Temperature): String = when (temperature.celsius) {
+        in Double.NEGATIVE_INFINITY..-10.0 -> "🥶"
+        in -10.0..0.0 -> "❄️"
+        in 0.1..15.0 -> "🌬️"
+        in 15.1..25.0 -> "🙂"
+        in 25.1..35.0 -> "☀️"
+        in 35.1..40.0 -> "🥵"
+        else -> "🔥"
+    }
+
     companion object {
-        const val WEATHER_TEXT_INDENT = "            "
-        val timeFormatter: DateTimeFormatter = DateTimeFormatter.ofPattern("h:mm a")
-        val datetimeFormatter: DateTimeFormatter = DateTimeFormatter.ofPattern("dd MMM, h:mm a")
+        private const val WEATHER_TEXT_INDENT = "            "
+        private val timeFormatter: DateTimeFormatter = DateTimeFormatter.ofPattern("h:mm a")
+        private val datetimeFormatter: DateTimeFormatter = DateTimeFormatter.ofPattern("dd MMM, h:mm a")
     }
 }

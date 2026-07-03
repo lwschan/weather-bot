@@ -24,6 +24,8 @@ import java.security.SecureRandom
 class WeatherCommandHandlerIntTest(
     private val defaultWeatherCommandHandler: DefaultWeatherCommandHandler,
     private val pirateWeatherWeatherCommandHandler: PirateWeatherWeatherCommandHandler,
+    private val tomorrowWeatherCommandHandler: TomorrowWeatherCommandHandler,
+    private val pirateWeatherTomorrowCommandHandler: PirateWeatherTomorrowCommandHandler,
     private val commandHandlers: List<CommandHandler>,
     private val wireMockServer: WireMockServer,
     private val bot: Bot
@@ -74,11 +76,15 @@ class WeatherCommandHandlerIntTest(
         clearMocks(bot)
     }
 
-    test("both weather commands should be registered") {
+    test("all weather commands should be registered") {
         commandHandlers.map { it.command } shouldContain "w"
         commandHandlers.map { it.command } shouldContain "wp"
+        commandHandlers.map { it.command } shouldContain "wt"
+        commandHandlers.map { it.command } shouldContain "wpt"
         defaultWeatherCommandHandler.command shouldBe "w"
         pirateWeatherWeatherCommandHandler.command shouldBe "wp"
+        tomorrowWeatherCommandHandler.command shouldBe "wt"
+        pirateWeatherTomorrowCommandHandler.command shouldBe "wpt"
     }
 
     test("default weather command should use OpenMeteo and include air quality") {
@@ -116,6 +122,56 @@ class WeatherCommandHandlerIntTest(
                     it shouldNotContain "AQI"
                     it shouldNotContain "PM 2.5"
                     it shouldNotContain "No air quality data available"
+                    true
+                },
+                parseMode = ParseMode.HTML
+            )
+        }
+        wireMockServer.verify(
+            getRequestedFor(
+                urlPathEqualTo("/forecast/test-pirate-weather-api-key/53.990129,-0.9140249")
+            )
+        )
+        wireMockServer.verify(0, getRequestedFor(urlPathEqualTo("/v1/air-quality")))
+    }
+
+    test("tomorrow weather command should use OpenMeteo and omit air quality") {
+        val chatId = random.nextLong()
+        val message = addressMessage(chatId, "/wt Stamford Bridge, London")
+
+        tomorrowWeatherCommandHandler.execute(message)
+
+        verify(exactly = 1) {
+            bot.sendMessage(
+                chatId = ChatId.fromId(chatId),
+                text = match {
+                    it shouldContain "<b>Tomorrow · Fri, 01 Nov</b>"
+                    it shouldContain "<b>Rain:</b> 78%"
+                    it shouldContain "<b>H:</b> 32.9°C"
+                    it shouldNotContain "AQI"
+                    true
+                },
+                parseMode = ParseMode.HTML
+            )
+        }
+        wireMockServer.verify(getRequestedFor(urlPathEqualTo("/v1/forecast")))
+        wireMockServer.verify(0, getRequestedFor(urlPathEqualTo("/v1/air-quality")))
+    }
+
+    test("Pirate Weather tomorrow command should return tomorrow forecast") {
+        val chatId = random.nextLong()
+        val message = addressMessage(chatId, "/wpt Stamford Bridge, London")
+
+        pirateWeatherTomorrowCommandHandler.execute(message)
+
+        verify(exactly = 1) {
+            bot.sendMessage(
+                chatId = ChatId.fromId(chatId),
+                text = match {
+                    it shouldContain "<b>Tomorrow · Fri, 01 Nov</b>"
+                    it shouldContain "<code>🌧️ Rain</code>"
+                    it shouldContain "<b>Rain:</b> 80%"
+                    it shouldContain "<b>H:</b> 30.0°C"
                     true
                 },
                 parseMode = ParseMode.HTML

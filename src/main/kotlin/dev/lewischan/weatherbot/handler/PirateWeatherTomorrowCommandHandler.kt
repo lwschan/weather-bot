@@ -4,14 +4,14 @@ import dev.lewischan.weatherbot.service.PirateWeatherWeatherService
 import org.springframework.stereotype.Component
 
 @Component
-class PirateWeatherWeatherCommandHandler(
+class PirateWeatherTomorrowCommandHandler(
     locationResolver: WeatherCommandLocationResolver,
     pirateWeatherWeatherService: PirateWeatherWeatherService,
-) : BaseCurrentWeatherCommandHandler(
+) : BaseForecastWeatherCommandHandler(
     locationResolver,
     pirateWeatherWeatherService,
-    includeAirQuality = false
+    daysAhead = 1
 ) {
-    override val command = "wp"
-    override val description = "Get current weather, but use Pirate Weather as the provider"
+    override val command = "wpt"
+    override val description = "Get tomorrow's weather using Pirate Weather."
 }
