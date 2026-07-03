@@ -9,99 +9,38 @@ import dev.lewischan.weatherbot.model.CurrentAirQuality
 import dev.lewischan.weatherbot.model.CurrentWeather
 import dev.lewischan.weatherbot.model.Location
 import dev.lewischan.weatherbot.model.Temperature
-import dev.lewischan.weatherbot.service.LocationService
-import dev.lewischan.weatherbot.service.TelegramUserService
-import dev.lewischan.weatherbot.service.UserDefaultLocationService
 import dev.lewischan.weatherbot.service.WeatherService
 import java.time.Instant
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 
 abstract class BaseCurrentWeatherCommandHandler(
-    private val userDefaultLocationService: UserDefaultLocationService,
-    private val telegramUserService: TelegramUserService,
+    private val locationResolver: WeatherCommandLocationResolver,
     private val weatherService: WeatherService,
-    private val locationService: LocationService,
     private val includeAirQuality: Boolean
 ) : CommandHandler() {
 
     override fun handleCommand(message: Message) {
         val address = getCommandQuery(message)
+        logger.info("Handling current weather command${address?.let { " for address $it" } ?: " for default location"}")
+        val bot = getBot()
+        val location = locationResolver.resolve(bot, message, address) ?: return
 
-        if (address.isNullOrEmpty()) handleWithDefaultLocation(getBot(), message)
-        else handleWithAddressSearch(getBot(), message, address)
-    }
-
-    private fun handleWithDefaultLocation(bot: Bot, message: Message) {
-        logger.info("Handling current weather command for default location")
-
-        if (message.from == null) {
-            bot.replyMessage(
-                chatId = ChatId.fromId(message.chat.id),
-                text = "Encountered an unexpected error.",
-                replyToMessageId = message.messageId
-            )
-            return
-        }
-
-        val user = telegramUserService.findByExternalUserId(message.from!!.id)
-        if (user == null) {
-            sendMissingDefaultLocationMessage(bot, message)
-            return
-        }
-
-        val userDefaultLocation = userDefaultLocationService.findByUserId(user.id)
-        if (userDefaultLocation == null) {
-            sendMissingDefaultLocationMessage(bot, message)
-            return
-        }
-
-        val location = userDefaultLocation.location
         val weather = weatherService.getCurrentWeather(location)
         if (weather == null) {
             bot.replyMessage(
                 chatId = ChatId.fromId(message.chat.id),
-                text = "Encountered an error fetching the current weather for ${location.address}.",
+                text = if (address.isNullOrEmpty()) {
+                    "Encountered an error fetching the current weather for ${location.address}."
+                } else {
+                    "Could not find the current weather for $address."
+                },
                 replyToMessageId = message.messageId
             )
             return
         }
 
         sendCurrentWeatherMessage(bot, message, location, weather, getAirQuality(location))
-    }
-
-    private fun handleWithAddressSearch(bot: Bot, message: Message, address: String) {
-        logger.info("Handling current weather command for address $address")
-
-        val location = locationService.geocode(address)
-        if (location == null) {
-            bot.replyMessage(
-                chatId = ChatId.fromId(message.chat.id),
-                text = "Could not find a valid address for $address.",
-                replyToMessageId = message.messageId
-            )
-            return
-        }
-
-        val weather = weatherService.getCurrentWeather(location)
-        if (weather == null) {
-            bot.replyMessage(
-                chatId = ChatId.fromId(message.chat.id),
-                text = "Could not find the current weather for $address.",
-                replyToMessageId = message.messageId
-            )
-            return
-        }
-
-        sendCurrentWeatherMessage(bot, message, location, weather, getAirQuality(location))
-    }
-
-    private fun sendMissingDefaultLocationMessage(bot: Bot, message: Message) {
-        bot.replyMessage(
-            chatId = ChatId.fromId(message.chat.id),
-            text = "You do not have a default location, either use the command with an address query or set a default location.",
-            replyToMessageId = message.messageId
-        )
     }
 
     private fun sendCurrentWeatherMessage(

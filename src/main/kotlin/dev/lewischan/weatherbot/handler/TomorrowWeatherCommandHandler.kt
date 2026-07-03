@@ -1,22 +1,15 @@
 package dev.lewischan.weatherbot.handler
 
-import dev.lewischan.weatherbot.service.LocationService
 import dev.lewischan.weatherbot.service.OpenMeteoWeatherService
-import dev.lewischan.weatherbot.service.TelegramUserService
-import dev.lewischan.weatherbot.service.UserDefaultLocationService
 import org.springframework.stereotype.Component
 
 @Component
 class TomorrowWeatherCommandHandler(
-    userDefaultLocationService: UserDefaultLocationService,
-    telegramUserService: TelegramUserService,
+    locationResolver: WeatherCommandLocationResolver,
     openMeteoWeatherService: OpenMeteoWeatherService,
-    locationService: LocationService
 ) : BaseForecastWeatherCommandHandler(
-    userDefaultLocationService,
-    telegramUserService,
+    locationResolver,
     openMeteoWeatherService,
-    locationService,
     daysAhead = 1
 ) {
     override val command = "wt"

@@ -8,96 +8,35 @@ import dev.lewischan.weatherbot.extension.replyMessage
 import dev.lewischan.weatherbot.model.DailyWeather
 import dev.lewischan.weatherbot.model.Location
 import dev.lewischan.weatherbot.model.Temperature
-import dev.lewischan.weatherbot.service.LocationService
-import dev.lewischan.weatherbot.service.TelegramUserService
-import dev.lewischan.weatherbot.service.UserDefaultLocationService
 import dev.lewischan.weatherbot.service.WeatherService
 import java.time.format.DateTimeFormatter
 
 abstract class BaseForecastWeatherCommandHandler(
-    private val userDefaultLocationService: UserDefaultLocationService,
-    private val telegramUserService: TelegramUserService,
+    private val locationResolver: WeatherCommandLocationResolver,
     private val weatherService: WeatherService,
-    private val locationService: LocationService,
     private val daysAhead: Int
 ) : CommandHandler() {
 
     override fun handleCommand(message: Message) {
         val address = getCommandQuery(message)
-
-        if (address.isNullOrEmpty()) handleWithDefaultLocation(getBot(), message)
-        else handleWithAddressSearch(getBot(), message, address)
-    }
-
-    private fun handleWithDefaultLocation(bot: Bot, message: Message) {
-        logger.info("Handling forecast weather command for default location")
-
-        if (message.from == null) {
-            bot.replyMessage(
-                chatId = ChatId.fromId(message.chat.id),
-                text = "Encountered an unexpected error.",
-                replyToMessageId = message.messageId
-            )
-            return
-        }
-
-        val user = telegramUserService.findByExternalUserId(message.from!!.id)
-        if (user == null) {
-            sendMissingDefaultLocationMessage(bot, message)
-            return
-        }
-
-        val userDefaultLocation = userDefaultLocationService.findByUserId(user.id)
-        if (userDefaultLocation == null) {
-            sendMissingDefaultLocationMessage(bot, message)
-            return
-        }
-
-        val location = userDefaultLocation.location
-        handleForecast(
-            bot,
-            message,
-            location,
-            "Encountered an error fetching the weather forecast for ${location.address}."
-        )
-    }
-
-    private fun handleWithAddressSearch(bot: Bot, message: Message, address: String) {
-        logger.info("Handling forecast weather command for address $address")
-
-        val location = locationService.geocode(address)
-        if (location == null) {
-            bot.replyMessage(
-                chatId = ChatId.fromId(message.chat.id),
-                text = "Could not find a valid address for $address.",
-                replyToMessageId = message.messageId
-            )
-            return
-        }
-
-        handleForecast(bot, message, location, "Could not find the weather forecast for $address.")
-    }
-
-    private fun handleForecast(bot: Bot, message: Message, location: Location, errorMessage: String) {
+        logger.info("Handling forecast weather command${address?.let { " for address $it" } ?: " for default location"}")
+        val bot = getBot()
+        val location = locationResolver.resolve(bot, message, address) ?: return
         val forecast = weatherService.getDailyForecast(location, daysAhead)
         if (forecast == null) {
             bot.replyMessage(
                 chatId = ChatId.fromId(message.chat.id),
-                text = errorMessage,
+                text = if (address.isNullOrEmpty()) {
+                    "Encountered an error fetching the weather forecast for ${location.address}."
+                } else {
+                    "Could not find the weather forecast for $address."
+                },
                 replyToMessageId = message.messageId
             )
             return
         }
 
         sendForecastMessage(bot, message, location, forecast)
-    }
-
-    private fun sendMissingDefaultLocationMessage(bot: Bot, message: Message) {
-        bot.replyMessage(
-            chatId = ChatId.fromId(message.chat.id),
-            text = "You do not have a default location, either use the command with an address query or set a default location.",
-            replyToMessageId = message.messageId
-        )
     }
 
     private fun sendForecastMessage(bot: Bot, message: Message, location: Location, forecast: DailyWeather) {

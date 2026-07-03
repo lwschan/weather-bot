@@ -1,22 +1,15 @@
 package dev.lewischan.weatherbot.handler
 
-import dev.lewischan.weatherbot.service.LocationService
 import dev.lewischan.weatherbot.service.PirateWeatherWeatherService
-import dev.lewischan.weatherbot.service.TelegramUserService
-import dev.lewischan.weatherbot.service.UserDefaultLocationService
 import org.springframework.stereotype.Component
 
 @Component
 class PirateWeatherWeatherCommandHandler(
-    userDefaultLocationService: UserDefaultLocationService,
-    telegramUserService: TelegramUserService,
+    locationResolver: WeatherCommandLocationResolver,
     pirateWeatherWeatherService: PirateWeatherWeatherService,
-    locationService: LocationService
 ) : BaseCurrentWeatherCommandHandler(
-    userDefaultLocationService,
-    telegramUserService,
+    locationResolver,
     pirateWeatherWeatherService,
-    locationService,
     includeAirQuality = false
 ) {
     override val command = "wp"
