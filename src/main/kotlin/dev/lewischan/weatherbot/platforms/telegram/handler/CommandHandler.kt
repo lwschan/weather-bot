@@ -1,0 +1,42 @@
+package dev.lewischan.weatherbot.platforms.telegram.handler
+
+import com.github.kotlintelegrambot.Bot
+import com.github.kotlintelegrambot.entities.Message
+import dev.lewischan.weatherbot.platforms.telegram.bot.TelegramBotProvider
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
+import java.util.UUID
+
+abstract class CommandHandler {
+    abstract val command: String
+    abstract val description: String
+    open val requiresBotUsername: Boolean = false
+
+    protected abstract fun handleCommand(message: Message)
+
+    protected val logger: Logger = LoggerFactory.getLogger(javaClass)
+
+    protected fun getBot(): Bot = TelegramBotProvider.get()
+
+    protected fun getCommandQuery(message: Message): String? {
+        return message.text?.replace("/$command", "")
+            ?.replace("@${getBot().getMe().get().username}", "")
+            ?.trim()
+    }
+
+    fun execute(message: Message) {
+        if (requiresBotUsername) {
+            val botUsername = getBot().getMe().get().username ?: return
+            if (!message.text.orEmpty().startsWith("/$command@$botUsername")) return
+        }
+
+        val messageId = UUID.randomUUID()
+        logger.info("[$messageId] Handling Telegram bot command: $command for message: ${message.text}")
+        try {
+            handleCommand(message)
+        } catch (exception: Exception) {
+            logger.error(exception.message, exception)
+        }
+        logger.info("[$messageId] Finished handling Telegram bot command: $command for message: ${message.text}")
+    }
+}
