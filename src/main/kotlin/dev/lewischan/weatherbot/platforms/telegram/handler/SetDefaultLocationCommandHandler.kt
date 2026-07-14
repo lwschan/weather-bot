@@ -2,7 +2,7 @@ package dev.lewischan.weatherbot.platforms.telegram.handler
 
 import com.github.kotlintelegrambot.entities.ChatId
 import com.github.kotlintelegrambot.entities.Message
-import dev.lewischan.weatherbot.locations.LocationService
+import dev.lewischan.weatherbot.core.location.LocationService
 import dev.lewischan.weatherbot.core.service.UserDefaultLocationService
 import dev.lewischan.weatherbot.platforms.telegram.extension.replyMessage
 import dev.lewischan.weatherbot.platforms.telegram.service.TelegramUserService

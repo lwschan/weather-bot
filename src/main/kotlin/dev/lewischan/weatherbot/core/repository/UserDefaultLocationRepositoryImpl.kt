@@ -2,7 +2,7 @@ package dev.lewischan.weatherbot.core.repository
 
 import dev.lewischan.weatherbot.core.domain.UserDefaultLocation
 import dev.lewischan.weatherbot.core.extension.unwrap
-import dev.lewischan.weatherbot.locations.Location
+import dev.lewischan.weatherbot.core.location.Location
 import org.springframework.jdbc.core.simple.JdbcClient
 import org.springframework.stereotype.Component
 import java.sql.ResultSet

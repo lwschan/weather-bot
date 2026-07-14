@@ -4,11 +4,11 @@ import com.github.kotlintelegrambot.Bot
 import com.github.kotlintelegrambot.entities.ChatId
 import com.github.kotlintelegrambot.entities.Message
 import com.github.kotlintelegrambot.entities.ParseMode
-import dev.lewischan.weatherbot.core.model.CurrentAirQuality
-import dev.lewischan.weatherbot.core.model.CurrentWeather
-import dev.lewischan.weatherbot.locations.Location
-import dev.lewischan.weatherbot.core.model.Temperature
-import dev.lewischan.weatherbot.core.service.WeatherService
+import dev.lewischan.weatherbot.core.location.Location
+import dev.lewischan.weatherbot.core.weather.WeatherService
+import dev.lewischan.weatherbot.core.weather.model.CurrentAirQuality
+import dev.lewischan.weatherbot.core.weather.model.CurrentWeather
+import dev.lewischan.weatherbot.core.weather.model.Temperature
 import dev.lewischan.weatherbot.platforms.telegram.extension.replyMessage
 import java.time.Instant
 import java.time.ZonedDateTime

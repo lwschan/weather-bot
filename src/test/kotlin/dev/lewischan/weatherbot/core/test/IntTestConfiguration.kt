@@ -8,7 +8,7 @@ import com.google.maps.GeoApiContext
 import com.google.maps.places.v1.MockPlaces
 import com.google.maps.places.v1.PlacesClient
 import com.google.maps.places.v1.PlacesSettings
-import dev.lewischan.weatherbot.locations.googlemaps.GoogleMapsServicesProperties
+import dev.lewischan.weatherbot.providers.location.googlemaps.GoogleMapsServicesProperties
 import io.mockk.mockk
 import io.mockk.spyk
 import org.springframework.beans.factory.annotation.Value

@@ -23,14 +23,14 @@ The project is organized by application core, location, external platform, and p
 1.  **Core** (`dev.lewischan.weatherbot.core`): Contains the application entry point and platform-independent configuration, domain entities, models, repositories, services, helpers, extensions, and infrastructure.
     - Repository implementations use Spring **`JdbcClient`** with manual `ResultSet` mapping rather than ORM frameworks.
     - `WeatherBotApplication` scans `dev.lewischan.weatherbot` so core, platform, and provider beans are discovered.
-2.  **Locations** (`dev.lewischan.weatherbot.locations`): Contains shared location models and services. Google Maps configuration and integration are under `dev.lewischan.weatherbot.locations.googlemaps`.
+2.  **Core Location and Weather**: Shared location models and services are under `dev.lewischan.weatherbot.core.location`. The weather service contract is under `dev.lewischan.weatherbot.core.weather`, with shared weather models under `dev.lewischan.weatherbot.core.weather.model`.
 3.  **Telegram Platform** (`dev.lewischan.weatherbot.platforms.telegram`): Contains Telegram-specific bot, configuration, controller, error, extension, handler, and service packages. `TelegramBotConfiguration` injects all `CommandHandler` beans and registers them with the bot dispatcher. To add a new command:
     - Implement `CommandHandler`.
     - Mark with `@Component`.
     - It will be automatically registered by `TelegramBotConfiguration` and included in the command list published by `TelegramBot`.
-4.  **OpenMeteo Provider** (`dev.lewischan.weatherbot.providers.openmeteo`): Contains OpenMeteo configuration, API models, and weather service integration.
-5.  **PirateWeather Provider** (`dev.lewischan.weatherbot.providers.pirateweather`): Contains PirateWeather configuration, API models, and weather service integration.
-6.  **Tests**: Mirror production ownership, including location integration tests under `dev.lewischan.weatherbot.locations`. Shared integration-test infrastructure is under `dev.lewischan.weatherbot.core.test`.
+4.  **Location Providers** (`dev.lewischan.weatherbot.providers.location`): Google Maps configuration and integration are under `dev.lewischan.weatherbot.providers.location.googlemaps`.
+5.  **Weather Providers** (`dev.lewischan.weatherbot.providers.weather`): OpenMeteo and PirateWeather configuration, API models, and service integrations are under `dev.lewischan.weatherbot.providers.weather.openmeteo` and `dev.lewischan.weatherbot.providers.weather.pirateweather`. Telegram handlers select the concrete provider services directly.
+6.  **Tests**: Mirror production ownership, including core weather model tests and provider integration tests under their corresponding packages. Shared integration-test infrastructure is under `dev.lewischan.weatherbot.core.test`.
 
 ## 🔑 Key Conventions
 

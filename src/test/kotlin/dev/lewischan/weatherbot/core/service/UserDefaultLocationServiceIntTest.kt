@@ -1,6 +1,6 @@
 package dev.lewischan.weatherbot.core.service
 
-import dev.lewischan.weatherbot.locations.Location
+import dev.lewischan.weatherbot.core.location.Location
 import dev.lewischan.weatherbot.core.test.BaseIntTest
 import dev.lewischan.weatherbot.platforms.telegram.service.TelegramUserService
 import io.kotest.matchers.shouldBe

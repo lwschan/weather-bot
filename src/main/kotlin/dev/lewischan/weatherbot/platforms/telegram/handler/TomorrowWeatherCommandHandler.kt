@@ -1,6 +1,6 @@
 package dev.lewischan.weatherbot.platforms.telegram.handler
 
-import dev.lewischan.weatherbot.providers.openmeteo.service.OpenMeteoWeatherService
+import dev.lewischan.weatherbot.providers.weather.openmeteo.service.OpenMeteoWeatherService
 import org.springframework.stereotype.Component
 
 @Component

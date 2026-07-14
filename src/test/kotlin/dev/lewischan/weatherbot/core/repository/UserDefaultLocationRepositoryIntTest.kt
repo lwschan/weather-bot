@@ -1,7 +1,7 @@
 package dev.lewischan.weatherbot.core.repository
 
 import dev.lewischan.weatherbot.core.domain.ExternalPlatform
-import dev.lewischan.weatherbot.locations.Location
+import dev.lewischan.weatherbot.core.location.Location
 import dev.lewischan.weatherbot.core.test.BaseIntTest
 import io.kotest.matchers.equality.shouldBeEqualUsingFields
 import io.kotest.matchers.shouldBe
