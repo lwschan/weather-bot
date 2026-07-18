@@ -18,27 +18,23 @@ This guide is for AI agents and developers who are interacting with this reposit
 
 ## 🏗️ Architecture
 
-The project follows a standard layered architecture:
+The project is organized by application core, location, external platform, and provider ownership. Each area retains layered subpackages where appropriate:
 
-1.  **Bot Layer** (`dev.lewischan.weatherbot.bot`): Handles the Telegram bot lifecycle and publishes the command list to Telegram. `TelegramBotConfiguration` injects all `CommandHandler` beans and registers them with the bot dispatcher.
-2.  **Handler Layer** (`dev.lewischan.weatherbot.handler`): Processes bot commands. To add a new command:
+1.  **Core** (`dev.lewischan.weatherbot.core`): Contains the application entry point and platform-independent configuration, domain entities, models, repositories, services, helpers, extensions, and infrastructure.
+    - Repository implementations use Spring **`JdbcClient`** with manual `ResultSet` mapping rather than ORM frameworks.
+    - `WeatherBotApplication` scans `dev.lewischan.weatherbot` so core, platform, and provider beans are discovered.
+2.  **Core Location and Weather**: Shared location models and services are under `dev.lewischan.weatherbot.core.location`. The weather service contract is under `dev.lewischan.weatherbot.core.weather`, with shared weather models under `dev.lewischan.weatherbot.core.weather.model`.
+3.  **Telegram Platform** (`dev.lewischan.weatherbot.platforms.telegram`): Contains Telegram-specific bot, configuration, controller, error, extension, handler, and service packages. `TelegramBotConfiguration` injects all `CommandHandler` beans and registers them with the bot dispatcher. To add a new command:
     - Implement `CommandHandler`.
     - Mark with `@Component`.
     - It will be automatically registered by `TelegramBotConfiguration` and included in the command list published by `TelegramBot`.
-3.  **Service Layer** (`dev.lewischan.weatherbot.service`): Contains business logic. Services are typically injected by interface (e.g., `WeatherService`).
-4.  **Repository Layer** (`dev.lewischan.weatherbot.repository`): Handles data persistence.
-    - **Pattern**: Uses Spring **`JdbcClient`** for lightweight, type-safe SQL execution.
-    - **Mapping**: Manual `ResultSet` mapping is preferred over ORM frameworks like JPA.
-5.  **Domain and Model Layers**:
-    - `dev.lewischan.weatherbot.domain` contains persisted domain entities.
-    - `dev.lewischan.weatherbot.model` contains application and external API models.
-6.  **Configuration Layer** (`dev.lewischan.weatherbot.configuration`): Defines Spring beans, typed configuration properties, and integration clients.
-7.  **Controller Layer** (`dev.lewischan.weatherbot.controller`): Exposes inbound HTTP endpoints, including Telegram webhook handling.
-8.  **Infrastructure Layer** (`dev.lewischan.weatherbot.infrastructure`): Contains cross-cutting runtime infrastructure.
+4.  **Location Providers** (`dev.lewischan.weatherbot.providers.location`): Google Maps configuration and integration are under `dev.lewischan.weatherbot.providers.location.googlemaps`.
+5.  **Weather Providers** (`dev.lewischan.weatherbot.providers.weather`): OpenMeteo and PirateWeather configuration, API models, and service integrations are under `dev.lewischan.weatherbot.providers.weather.openmeteo` and `dev.lewischan.weatherbot.providers.weather.pirateweather`. Telegram handlers select the concrete provider services directly.
+6.  **Tests**: Mirror production ownership, including core weather model tests and provider integration tests under their corresponding packages. Shared integration-test infrastructure is under `dev.lewischan.weatherbot.core.test`.
 
 ## 🔑 Key Conventions
 
-- **Kotlin Extensions**: Use established extensions in `dev.lewischan.weatherbot.extension` for idiomatic code. 
+- **Kotlin Extensions**: Use established extensions in `dev.lewischan.weatherbot.core.extension` and platform-specific extensions such as `dev.lewischan.weatherbot.platforms.telegram.extension` for idiomatic code.
   - e.g., Use `Bot.replyMessage` instead of the raw Telegram SDK call for consistent error handling.
 - **Dependency Updates**: Use `make update-dependencies` after modifying `gradle/libs.versions.toml` or dependency declarations.
   - **Note**: This project uses **STRICT dependency locking**. Keep `gradle.lockfile`, `buildscript-gradle.lockfile`, and `settings-gradle.lockfile` in sync with dependency changes.

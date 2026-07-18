@@ -1,0 +1,42 @@
+package dev.lewischan.weatherbot.core.repository
+
+import dev.lewischan.weatherbot.core.domain.ExternalPlatform
+import dev.lewischan.weatherbot.core.test.BaseIntTest
+import io.kotest.matchers.longs.shouldBeGreaterThan
+import io.kotest.matchers.shouldBe
+import io.kotest.matchers.shouldNotBe
+import java.util.*
+
+class UserRepositoryIntTest(
+    private val userRepository: UserRepository
+) : BaseIntTest({
+
+    test("create user should create user successfully") {
+        val externalUserId = UUID.randomUUID()
+        val user = userRepository.createUser(
+            ExternalPlatform.TELEGRAM, externalUserId
+        )
+        user.id shouldBeGreaterThan 0
+        user.externalPlatform shouldBe ExternalPlatform.TELEGRAM
+        user.externalUserId shouldBe externalUserId
+    }
+
+    test("when exists findUserByExternalUserId should return user") {
+        val externalUserId = UUID.randomUUID()
+        val createdUser = userRepository.createUser(
+            ExternalPlatform.TELEGRAM, externalUserId
+        )
+        val user = userRepository.findByExternalUserId(ExternalPlatform.TELEGRAM, externalUserId)
+        user shouldNotBe null
+        user!!.id shouldBe createdUser.id
+        user.externalPlatform shouldBe createdUser.externalPlatform
+        user.externalUserId shouldBe createdUser.externalUserId
+    }
+
+    test("when not exist findUserByExternalUserId should return null") {
+        val userId = UUID.randomUUID()
+        val user = userRepository.findByExternalUserId(ExternalPlatform.TELEGRAM, userId)
+        user shouldBe null
+    }
+
+})
