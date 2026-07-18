@@ -4,6 +4,7 @@ plugins {
     jacoco
     kotlin("jvm") version libs.versions.kotlin.lang
     kotlin("plugin.spring") version libs.versions.kotlin.lang
+    kotlin("kapt") version libs.versions.kotlin.lang
 }
 
 java {
@@ -37,7 +38,7 @@ buildscript {
 }
 
 configurations {
-    compileOnly {
+    named("kapt") {
         extendsFrom(configurations.annotationProcessor.get())
     }
 
