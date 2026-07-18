@@ -43,7 +43,7 @@ spring-boot-devtools = { module = "org.springframework.boot:spring-boot-devtools
 micrometer-registry-prometheus = { module = "io.micrometer:micrometer-registry-prometheus" }
 postgresql = { module = "org.postgresql:postgresql" }
 
-# annotationProcessor
+# annotations
 spring-boot-configuration-processor = { module = "org.springframework.boot:spring-boot-configuration-processor" }
 
 # testImplementation

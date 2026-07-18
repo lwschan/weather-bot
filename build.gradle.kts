@@ -38,10 +38,6 @@ buildscript {
 }
 
 configurations {
-    named("kapt") {
-        extendsFrom(configurations.annotationProcessor.get())
-    }
-
     all {
         resolutionStrategy {
             componentSelection {
@@ -59,6 +55,10 @@ configurations {
             }
         }
     }
+}
+
+kapt {
+    keepJavacAnnotationProcessors = true
 }
 
 dependencies {
@@ -87,7 +87,7 @@ dependencies {
     runtimeOnly(libs.micrometer.registry.prometheus)
     runtimeOnly(libs.postgresql)
 
-    annotationProcessor(libs.spring.boot.configuration.processor)
+    kapt(libs.spring.boot.configuration.processor)
 
     testImplementation("${libs.google.api.gax.grpc.get()}:testlib")
     testImplementation("${libs.google.maps.places.get()}:tests")
