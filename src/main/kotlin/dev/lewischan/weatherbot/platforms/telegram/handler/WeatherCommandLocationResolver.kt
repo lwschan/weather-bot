@@ -3,6 +3,7 @@ package dev.lewischan.weatherbot.platforms.telegram.handler
 import com.github.kotlintelegrambot.Bot
 import com.github.kotlintelegrambot.entities.ChatId
 import com.github.kotlintelegrambot.entities.Message
+import com.github.kotlintelegrambot.entities.ReplyParameters
 import dev.lewischan.weatherbot.core.location.Location
 import dev.lewischan.weatherbot.core.location.LocationService
 import dev.lewischan.weatherbot.core.service.UserDefaultLocationService
@@ -27,7 +28,7 @@ class WeatherCommandLocationResolver(
             bot.replyMessage(
                 chatId = ChatId.fromId(message.chat.id),
                 text = "Encountered an unexpected error.",
-                replyToMessageId = message.messageId
+                replyParameters = ReplyParameters(messageId = message.messageId)
             )
             return null
         }
@@ -44,7 +45,7 @@ class WeatherCommandLocationResolver(
             bot.replyMessage(
                 chatId = ChatId.fromId(message.chat.id),
                 text = "Could not find a valid address for $address.",
-                replyToMessageId = message.messageId
+                replyParameters = ReplyParameters(messageId = message.messageId)
             )
         }
         return location
@@ -54,7 +55,7 @@ class WeatherCommandLocationResolver(
         bot.replyMessage(
             chatId = ChatId.fromId(message.chat.id),
             text = "You do not have a default location, either use the command with an address query or set a default location.",
-            replyToMessageId = message.messageId
+            replyParameters = ReplyParameters(messageId = message.messageId)
         )
     }
 }

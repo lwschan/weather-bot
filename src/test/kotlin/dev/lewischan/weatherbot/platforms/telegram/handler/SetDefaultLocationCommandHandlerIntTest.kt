@@ -3,6 +3,7 @@ package dev.lewischan.weatherbot.platforms.telegram.handler
 import com.github.kotlintelegrambot.Bot
 import com.github.kotlintelegrambot.entities.ChatId
 import com.github.kotlintelegrambot.entities.Message
+import com.github.kotlintelegrambot.entities.ReplyParameters
 import dev.lewischan.weatherbot.core.service.UserDefaultLocationService
 import dev.lewischan.weatherbot.core.test.BaseIntTest
 import dev.lewischan.weatherbot.platforms.telegram.service.TelegramUserService
@@ -55,14 +56,16 @@ class SetDefaultLocationCommandHandlerIntTest(
             defaultLocation.location.latitude shouldBe 53.990129
             defaultLocation.location.longitude shouldBe -0.9140249
 
-            verify(exactly = 1) { bot.sendMessage(
-                chatId = ChatId.fromId(chatId),
-                replyToMessageId = messageId,
-                text = match {
-                    it shouldBe "Saved Stamford Bridge, York YO41, UK as your default location."
-                    true
-                }
-            ) }
+            verify(exactly = 1) {
+                bot.sendMessage(
+                    chatId = ChatId.fromId(chatId),
+                    replyParameters = ReplyParameters(messageId = messageId),
+                    text = match {
+                        it shouldBe "Saved Stamford Bridge, York YO41, UK as your default location."
+                        true
+                    }
+                )
+            }
         }
 
         test("when user already exists, it should just save default location") {
@@ -77,14 +80,16 @@ class SetDefaultLocationCommandHandlerIntTest(
             defaultLocation.location.latitude shouldBe 53.990129
             defaultLocation.location.longitude shouldBe -0.9140249
 
-            verify(exactly = 1) { bot.sendMessage(
-                chatId = ChatId.fromId(chatId),
-                replyToMessageId = messageId,
-                text = match {
-                    it shouldBe "Saved Stamford Bridge, York YO41, UK as your default location."
-                    true
-                }
-            ) }
+            verify(exactly = 1) {
+                bot.sendMessage(
+                    chatId = ChatId.fromId(chatId),
+                    replyParameters = ReplyParameters(messageId = messageId),
+                    text = match {
+                        it shouldBe "Saved Stamford Bridge, York YO41, UK as your default location."
+                        true
+                    }
+                )
+            }
         }
     }
 
@@ -102,14 +107,16 @@ class SetDefaultLocationCommandHandlerIntTest(
         test("it should return an error message") {
             setDefaultLocationCommandHandler.execute(message)
 
-            verify(exactly = 1) { bot.sendMessage(
-                chatId = ChatId.fromId(chatId),
-                replyToMessageId = messageId,
-                text = match {
-                    it shouldBe "Include an address along with this command to set it as your default location for weather requests."
-                    true
-                }
-            ) }
+            verify(exactly = 1) {
+                bot.sendMessage(
+                    chatId = ChatId.fromId(chatId),
+                    replyParameters = ReplyParameters(messageId = messageId),
+                    text = match {
+                        it shouldBe "Include an address along with this command to set it as your default location for weather requests."
+                        true
+                    }
+                )
+            }
         }
     }
 
@@ -128,14 +135,16 @@ class SetDefaultLocationCommandHandlerIntTest(
         test("it should return an invalid address error message") {
             setDefaultLocationCommandHandler.execute(message)
 
-            verify(exactly = 1) { bot.sendMessage(
-                chatId = ChatId.fromId(chatId),
-                replyToMessageId = messageId,
-                text = match {
-                    it shouldBe "Error: could not find a valid address for $addressQuery."
-                    true
-                }
-            ) }
+            verify(exactly = 1) {
+                bot.sendMessage(
+                    chatId = ChatId.fromId(chatId),
+                    replyParameters = ReplyParameters(messageId = messageId),
+                    text = match {
+                        it shouldBe "Error: could not find a valid address for $addressQuery."
+                        true
+                    }
+                )
+            }
         }
     }
 

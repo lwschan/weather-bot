@@ -4,6 +4,7 @@ import com.github.kotlintelegrambot.Bot
 import com.github.kotlintelegrambot.entities.ChatId
 import com.github.kotlintelegrambot.entities.Message
 import com.github.kotlintelegrambot.entities.ParseMode
+import com.github.kotlintelegrambot.entities.ReplyParameters
 import dev.lewischan.weatherbot.core.location.Location
 import dev.lewischan.weatherbot.core.weather.WeatherService
 import dev.lewischan.weatherbot.core.weather.model.CurrentAirQuality
@@ -35,7 +36,7 @@ abstract class BaseCurrentWeatherCommandHandler(
                 } else {
                     "Could not find the current weather for $address."
                 },
-                replyToMessageId = message.messageId
+                replyParameters = ReplyParameters(messageId = message.messageId)
             )
             return
         }

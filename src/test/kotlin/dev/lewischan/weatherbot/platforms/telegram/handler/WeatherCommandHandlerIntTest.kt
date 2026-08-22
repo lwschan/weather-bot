@@ -4,6 +4,7 @@ import com.github.kotlintelegrambot.Bot
 import com.github.kotlintelegrambot.entities.ChatId
 import com.github.kotlintelegrambot.entities.Message
 import com.github.kotlintelegrambot.entities.ParseMode
+import com.github.kotlintelegrambot.entities.ReplyParameters
 import com.github.tomakehurst.wiremock.WireMockServer
 import com.github.tomakehurst.wiremock.client.WireMock.aResponse
 import com.github.tomakehurst.wiremock.client.WireMock.get
@@ -196,7 +197,7 @@ class WeatherCommandHandlerIntTest(
             bot.sendMessage(
                 chatId = ChatId.fromId(chatId),
                 text = "Could not find a valid address for Random Address.",
-                replyToMessageId = 1L
+                replyParameters = ReplyParameters(messageId = 1L)
             )
         }
     }
