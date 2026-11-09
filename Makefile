@@ -57,7 +57,7 @@ update-dependencies:
 # Update Gradle wrapper
 .PHONY: update-gradle
 update-gradle:
-	$(GRADLEW) wrapper --gradle-version $(new-version)
+	$(GRADLEW) wrapper --gradle-version $(new-version) --gradle-distribution-sha256-sum $(checksum)
 
 # Help command to list available targets
 .PHONY: help
